@@ -57,7 +57,7 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Plan Name</th>
-                                            <th>Duration</th>
+                                            <th>Duration (in days)</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>

@@ -97,15 +97,15 @@
                                 </div>
 
                                 <!-- UTR -->
-                                <div class="input-block mb-3 row" id="utrField" style="display: none;">
-                                    <label class="col-form-label col-md-2">UTR
-                                    </label>
+                                <div class="input-block mb-3 row" id="utrField" style="display: {{ old('utr') ? '' : 'none' }};">
+                                    <label class="col-form-label col-md-2">UTR</label>
                                     <div class="col-md-10">
                                         <input type="text" name="utr" id="utr" class="form-control" placeholder="Enter UTR Number"
                                             value="{{ old('utr') }}" maxLength="10">
                                         @error('utr') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
+
                                 
                                 <!-- Submit Button -->
                                 <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>

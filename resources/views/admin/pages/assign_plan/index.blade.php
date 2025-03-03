@@ -63,6 +63,7 @@
                                             <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Payment Method</th>
+                                            <th>UTR</th>
                                             <th>Created Date & Time</th>
                                             {{-- <th>Status</th> --}}
                                             {{-- <th>Action</th> --}}
@@ -93,6 +94,7 @@
             { data: 'start_date', name: 'start_date' },
             { data: 'end_date', name: 'end_date' },
             { data: 'payment_method', name: 'payment_method' },
+            { data: 'utr', name: 'utr' },
             { data: 'created_at_formatted', name: 'created_at' },
             {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             {{-- { data: 'action', name: 'action', orderable: false, searchable: false }, --}}

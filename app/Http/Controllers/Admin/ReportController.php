@@ -29,8 +29,10 @@ class ReportController extends Controller
                 // Apply date range filter if provided
                 if ($request->date_range) {
                     $dates = explode(' - ', $request->date_range);
-                    $startDate = \Carbon\Carbon::parse($dates[0])->startOfDay();
-                    $endDate = \Carbon\Carbon::parse($dates[1])->endOfDay();
+                    // $startDate = \Carbon\Carbon::parse($dates[0])->startOfDay();
+                    // $endDate = \Carbon\Carbon::parse($dates[1])->endOfDay();
+                    $startDate = \Carbon\Carbon::parse($dates[0]);
+                    $endDate = \Carbon\Carbon::parse($dates[1]);
 
                     $query->whereBetween('end_date', [$startDate, $endDate]);
                 }
@@ -40,7 +42,7 @@ class ReportController extends Controller
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('member_name', function($row){
-                        return $row->user->name ?? 'N/A';
+                        return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
                     }) 
                     ->addColumn('plan', function($row) { 
                         return $row->plan->name ?? 'N/A';
@@ -52,13 +54,18 @@ class ReportController extends Controller
                         return  $row->end_date;
                     })
                     ->addColumn('days_remaining', function ($row) {
-                        $remaining = now()->diffInDays($row->end_date, false);
+                        $remaining = (int) now()->diffInDays($row->end_date, false);
                         return $remaining > 0 ? "$remaining Days Left" : "Expired";
                     })
                     ->addColumn('status', function ($row) {
-                        $status = now()->greaterThan($row->end_date) ? 'Expired' : 'Active';
                         $statusClass = now()->greaterThan($row->end_date) ? 'danger' : 'success';
-                        return '<span class="badge bg-' . $statusClass . '">' . $status . '</span>';
+                        $status = now()->greaterThan($row->end_date) ? 'Expired' : 'Active';
+            
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                    </a>
+                                </div>';
                     })
                     ->addColumn('created_at_formatted', function($row){
                         return  $row->created_at->format('Y-m-d H:i:s');
