@@ -148,7 +148,7 @@ class UserController extends Controller implements HasMiddleware
             $input = $request->all();
         
             $user = User::create($input);
-            $user->assignRole($request->input('roles'));
+            $user->assignRole('Member');
 
             if($user){
                 $this->uploadMedia($request->file('image'), $user, 'images');
@@ -263,6 +263,22 @@ class UserController extends Controller implements HasMiddleware
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
                 ->with('error', 'Something went wrong');
+        }
+    }
+
+    public function userInfo(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+            return response()->json([
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'status' => $user->status ? 'Active' : 'Inactive'
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Something went wrong!']);
         }
     }
 }

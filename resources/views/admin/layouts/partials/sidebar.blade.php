@@ -25,10 +25,13 @@
                 @endif
             </ul> --}}
             <ul class="sidebar-vertical">
+                <!-- Dashboard -->
                 <li class="">
                     <a href="{{route('admin.dashboard') }}"><i class="la la-cube"></i> <span>Dashboard</span>
                     </a>
                 </li>
+
+                <!-- User -->
                 <li class="submenu">
                     <a href="#"><i class="la la-user"></i> <span>User</span>
                         <span class="menu-arrow"></span>
@@ -41,16 +44,38 @@
                     </ul>
                 </li>
 
-
+                <!-- Plan -->
                 <li class="submenu">
-                    <a href="#"><i class="las la-pen-square"></i>
-                        <span>Plan</span>
+                    <a href="#"><i class="la la-tasks"></i> <span>Plan</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
                         <li><a class="{{Route::is('admin.plan.create') ? 'active' : ''}}" href="{{route('admin.plan.create')}}">Add</a>
                         </li>
                         <li><a class="{{Route::is('admin.plan.index') ? 'active' : ''}}" href="{{route('admin.plan.index')}}">List</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Assign Plan -->
+                <li class="submenu">
+                    <a href="#"><i class="la la-user-check"></i> <span>Assign Plan</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a class="{{Route::is('admin.assign-plan.create') ? 'active' : ''}}" href="{{route('admin.assign-plan.create')}}">Add</a>
+                        </li>
+                        <li><a class="{{Route::is('admin.assign-plan.index') ? 'active' : ''}}" href="{{route('admin.assign-plan.index')}}">List</a>
+                    </ul>
+                </li>
+
+                <!-- Reports -->
+                <li class="submenu">
+                    <a href="#"><i class="la la-clipboard-list"></i> <span>Reports</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a class="{{Route::is('admin.reports.renewals') ? 'active' : ''}}" href="{{route('admin.reports.renewals')}}">Membership Renewal</a>
                         </li>
                     </ul>
                 </li>

@@ -27,6 +27,13 @@ class UserSeeder extends Seeder
         'user-delete',
         'user-view',
         'user-status',
+
+        'assign-plan-list',
+        'assign-plan-create',
+        'assign-plan-edit',
+        'assign-plan-delete',
+        'assign-plan-view',
+        'assign-plan-status',
         
         'brand-list',
         'brand-create',
@@ -53,6 +60,7 @@ class UserSeeder extends Seeder
         ]);
 
         $role = Role::create(['name' => 'Super Admin']);
+        $member = Role::create(['name' => 'Member']);
 
         $permissions = Permission::pluck('id', 'id')->all();
 
