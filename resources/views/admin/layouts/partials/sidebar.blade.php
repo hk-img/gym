@@ -40,6 +40,19 @@
                         </li>
                     </ul>
                 </li>
+
+
+                <li class="submenu">
+                    <a href="#"><i class="la la-user"></i> <span>Plan</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a class="{{Route::is('admin.plan.create') ? 'active' : ''}}" href="{{route('admin.plan.create')}}">Add</a>
+                        </li>
+                        <li><a class="{{Route::is('admin.plan.index') ? 'active' : ''}}" href="{{route('admin.plan.index')}}">List</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

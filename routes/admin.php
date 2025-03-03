@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExShowroomPriceController;
 use App\Http\Controllers\Admin\HelpController;
+use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\SiteSettingController;
 use App\Http\Controllers\Admin\TagController;
@@ -155,5 +156,8 @@ Route::get('template-list', [OptionController::class,'templateList'])->name('opt
 Route::get('get-single-template/{templateId?}', [OptionController::class,'getSingleTemplate'])->name('option.getsingletemplate');
 Route::get('tag-list', [OptionController::class,'tagList'])->name('option.taglist');
 Route::get('brand-listt', [OptionController::class,'brandList'])->name('option.brandlist');
+
+Route::resource('plan', PlanController::class);
+Route::get('plan/change-status/{id}/{status}', [PlanController::class,'changeStatus'])->name('plan.changeStatus');
 
 require __DIR__.'/auth.php';
