@@ -41,7 +41,7 @@
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-10">
-                                    <input type="text" class="form-control" name="name"
+                                    <input type="text" class="form-control" name="name" onkeypress="return onlyLetters(event)"
                                         value="{{ old('name', $data->name) }}" id="name"  placeholder="Enter Member Name">
                                     @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>
@@ -53,7 +53,7 @@
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-10">
-                                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter Mob. Number"
+                                    <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter Mob. Number" onkeypress="return onlyNumbers(event)"
                                         value="{{ old('phone', $data->phone) }}" maxLength="10">
                                     @error('phone') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>

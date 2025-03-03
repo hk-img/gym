@@ -59,52 +59,52 @@ class AssignPlanController extends Controller
                     ->addColumn('plan', function ($row) {
                         return $row->plan->name;
                     })
-                    ->addColumn('status', function ($row) {
-                        $encodedId = base64_encode($row->id);
-                        $status = $row->status == 1 ? 'success' : 'danger';
-                        $text = $row->status == 1 ? 'Active' : 'Inactive';
-                        $changeStatusActiveRoute = route('admin.assign-plan.changeStatus', ['id' => $encodedId, 'status' => '1']);
-                        $changeStatusInactiveRoute = route('admin.assign-plan.changeStatus', ['id' => $encodedId, 'status' => '2']);
+                    // ->addColumn('status', function ($row) {
+                    //     $encodedId = base64_encode($row->id);
+                    //     $status = $row->status == 1 ? 'success' : 'danger';
+                    //     $text = $row->status == 1 ? 'Active' : 'Inactive';
+                    //     $changeStatusActiveRoute = route('admin.assign-plan.changeStatus', ['id' => $encodedId, 'status' => '1']);
+                    //     $changeStatusInactiveRoute = route('admin.assign-plan.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
-                        return '<div class="dropdown action-label">
-                                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                        data-bs-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
-                                                class="fa-regular fa-circle-dot text-success"></i> Active</a>
-                                        <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
-                                                class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
-                                    </div>
-                                </div>';
-                        })
-                    ->addColumn('action', function ($row) {
-                        $encodedId = base64_encode($row->id);
-                        $editRoute = route('admin.assign-plan.edit', $encodedId);
-                        $deleteRoute = route('admin.assign-plan.destroy', $encodedId);  // Assume the delete route
+                    //     return '<div class="dropdown action-label">
+                    //                 <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                    //                     data-bs-toggle="dropdown" aria-expanded="false"><i
+                    //                         class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
+                    //                 <div class="dropdown-menu">
+                    //                     <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
+                    //                             class="fa-regular fa-circle-dot text-success"></i> Active</a>
+                    //                     <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
+                    //                             class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
+                    //                 </div>
+                    //             </div>';
+                    //     })
+                    // ->addColumn('action', function ($row) {
+                    //     $encodedId = base64_encode($row->id);
+                    //     $editRoute = route('admin.assign-plan.edit', $encodedId);
+                    //     $deleteRoute = route('admin.assign-plan.destroy', $encodedId);  // Assume the delete route
                     
-                        // Edit button
-                        $editButton = auth()->user()->can('user-edit') ? 
-                            '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
+                    //     // Edit button
+                    //     $editButton = auth()->user()->can('user-edit') ? 
+                    //         '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
                     
-                        // Delete button
-                        $deleteButton = auth()->user()->can('user-delete') ? 
-                            "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-user-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
+                    //     // Delete button
+                    //     $deleteButton = auth()->user()->can('user-delete') ? 
+                    //         "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-user-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
                     
-                        // Return action buttons with form for deletion
-                        return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false"><i class="material-icons">more_vert</i></a>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        ' . $editButton . '
-                                        ' . $deleteButton . '
-                                    </div>
-                                </div>
-                                <form action="' . $deleteRoute . '" method="POST" id="delete-user-' . $row->id . '" style="display: none;">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
-                                </form>';
-                    })
+                    //     // Return action buttons with form for deletion
+                    //     return '<div class="dropdown dropdown-action">
+                    //                 <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                    //                     aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                    //                 <div class="dropdown-menu dropdown-menu-right">
+                    //                     ' . $editButton . '
+                    //                     ' . $deleteButton . '
+                    //                 </div>
+                    //             </div>
+                    //             <form action="' . $deleteRoute . '" method="POST" id="delete-user-' . $row->id . '" style="display: none;">
+                    //                 ' . csrf_field() . '
+                    //                 ' . method_field('DELETE') . '
+                    //             </form>';
+                    // })
                     ->rawColumns(['user_type','member_name', 'plan','status', 'action'])
                     ->make(true);
             }
@@ -155,6 +155,7 @@ class AssignPlanController extends Controller
             $input['end_date'] = $endDate;
             
             $assignPlan = AssignPlan::create($input);
+            $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate]);
 
             DB::commit();
         

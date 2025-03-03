@@ -55,6 +55,7 @@
 
     <!-- Custom JS -->
     <script src="{{asset('assets/js/app.js')}}" type="text/javascript"></script>
+    <script src="{{asset('utils.js')}}" type="text/javascript"></script>
     {{-- <script src="../../../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js')}}" data-cf-settings="|49" defer></script> --}}
 
     <!--custom validation -->

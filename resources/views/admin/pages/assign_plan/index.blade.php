@@ -64,8 +64,8 @@
                                             <th>End Date</th>
                                             <th>Payment Method</th>
                                             <th>Created Date & Time</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
+                                            {{-- <th>Status</th> --}}
+                                            {{-- <th>Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -94,8 +94,8 @@
             { data: 'end_date', name: 'end_date' },
             { data: 'payment_method', name: 'payment_method' },
             { data: 'created_at_formatted', name: 'created_at' },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false },
+            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
+            {{-- { data: 'action', name: 'action', orderable: false, searchable: false }, --}}
         ];
 
         const filterSelectors = [

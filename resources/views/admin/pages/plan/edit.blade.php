@@ -42,18 +42,18 @@
                                 </label>
                                 <div class="col-md-10">
                                     <input type="text" class="form-control" name="name"
-                                        value="{{ old('name', $data->name) }}" id="name"  placeholder="Enter Member Name">
+                                        value="{{ old('name', $data->name) }}" id="name"  placeholder="Enter Member Name" onkeypress="return onlyLetters(event)">
                                     @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>
                             </div>
 
                             <!-- Duration -->
                             <div class="input-block mb-3 row">
-                                <label class="col-form-label col-md-2">Duration
+                                <label class="col-form-label col-md-2">Duration (in days)
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-10">
-                                    <input type="text" name="duration" id="duration" class="form-control" placeholder="Enter Mob. Number"
+                                    <input type="text" name="duration" id="duration" class="form-control" placeholder="Enter Duration (in days)"  onkeypress="return onlyNumbers(event)"  maxlength="5"
                                         value="{{ old('duration', $data->duration) }}" maxLength="10">
                                     @error('duration') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>

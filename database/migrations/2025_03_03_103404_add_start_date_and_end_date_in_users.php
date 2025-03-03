@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('plans', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->integer('duration');
-            $table->integer('status')->default(1);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->date('start_date')->nullable()->after('status');
+            $table->date('end_date')->nullable()->after('start_date');
         });
     }
 
@@ -25,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('start_date');
+            $table->dropColumn('end_date');
+        });
     }
 };
