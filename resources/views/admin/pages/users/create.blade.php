@@ -62,7 +62,7 @@
                                 <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">Address<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
-                                        <textarea rows="5" cols="5" class="form-control " name="address" placeholder="Enter Full Address" ></textarea>
+                                        <textarea rows="5" cols="5" class="form-control " name="address" placeholder="Enter Full Address" >{{ old('address') }}</textarea>
                                         @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
