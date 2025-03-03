@@ -49,4 +49,7 @@ Route::get('user-list', [OptionController::class,'userList'])->name('option.user
 Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
 Route::get('brand-listt', [OptionController::class,'brandList'])->name('option.brandlist');
 
+Route::resource('plan', PlanController::class);
+Route::get('plan/change-status/{id}/{status}', [PlanController::class,'changeStatus'])->name('plan.changeStatus');
+
 require __DIR__.'/auth.php';
