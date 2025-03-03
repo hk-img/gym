@@ -43,7 +43,8 @@
 
 
                 <li class="submenu">
-                    <a href="#"><i class="la la-user"></i> <span>Plan</span>
+                    <a href="#"><i class="las la-pen-square"></i>
+                        <span>Plan</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
