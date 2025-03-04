@@ -1,5 +1,16 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | Edit')
+@section('page_title', 'Member Manager | View')
+@push('custom-style')
+    <style>
+    .profile-info-left{
+        height:119px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+    }
+    </style>
+@endpush
 @section('content')
 <div class="page-wrapper">
     <div class="content container-fluid">
@@ -38,9 +49,10 @@
                                         <div class="profile-info-left">
                                             <h3 class="user-name m-t-0 mb-0">{{ $user->name }}</h3>
                                             <h6 class="text-muted">+91 {{$user->phone }}</h6>
-                                            <small class="text-muted">Web Designer</small>
-                                            <div class="staff-id">Employee ID : FT-0001</div>
-                                            <div class="small doj text-muted">Date of Join : 1st Jan 2013</div>
+                                            {{-- <small class="text-muted">Web Designer</small>
+                                            <div class="staff-id">Employee ID : FT-0001</div> --}}
+                                            <div class="small doj text-muted">Member Since : {{ Carbon\Carbon::parse($user->created_at)->format('M Y') }}</div>
+
                                             {{-- <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send
                                                     Message</a></div> --}}
                                         </div>
