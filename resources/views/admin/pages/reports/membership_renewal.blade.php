@@ -103,7 +103,7 @@
         
         const userColumns = [
             { data: 'DT_RowIndex', name: 'DT_RowIndex' },
-            { data: 'created_at_formatted', name: 'created_at' }
+            { data: 'created_at_formatted', name: 'created_at' },
             { data: 'member_name', name: 'member_name' },
             { data: 'plan', name: 'plan' },
             { data: 'start_date', name: 'start_date' },

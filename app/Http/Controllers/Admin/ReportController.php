@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AssignPlan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
@@ -29,13 +30,14 @@ class ReportController extends Controller
                 // Apply date range filter if provided
                 if ($request->date_range) {
                     $dates = explode(' - ', $request->date_range);
-                    // $startDate = \Carbon\Carbon::parse($dates[0])->startOfDay();
-                    // $endDate = \Carbon\Carbon::parse($dates[1])->endOfDay();
-                    $startDate = \Carbon\Carbon::parse($dates[0]);
-                    $endDate = \Carbon\Carbon::parse($dates[1]);
-
-                    $query->whereBetween('end_date', [$startDate, $endDate]);
+                    
+                    // Ensure date parsing is correct
+                    $startDate = \Carbon\Carbon::parse(trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::parse(trim($dates[1]))->endOfDay();
+                
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
+                
 
                 $data = $query->latest()->get();
 
@@ -47,11 +49,11 @@ class ReportController extends Controller
                     ->addColumn('plan', function($row) { 
                         return $row->plan->name ?? 'N/A';
                     })
-                    ->addColumn('start_date', function($row) {
-                        return $row->start_date;
+                    ->addColumn('start_date', function ($row) {
+                        return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
                     })
-                    ->addColumn('end_date_formatted', function($row){
-                        return  $row->end_date;
+                    ->addColumn('end_date_formatted', function ($row) {
+                        return Carbon::parse($row->end_date)->format('d M Y');
                     })
                     ->addColumn('days_remaining', function ($row) {
                         $remaining = (int) now()->diffInDays($row->end_date, false);

@@ -156,7 +156,7 @@
                         var isAttributeList = $(selector).hasClass('attributeList');
                         var formattedData = data.map(function(item) {
                             if(selector == '.userList'){
-                                var name = `${item.name} ${item.phone ? '- ('+ item.phone +')' : ''} ${item.email ? '- ('+ item.email +')' : ''}`
+                                var name = `${item.name} ${item.phone ? '- ('+ '+91 '+ item.phone +')' : ''} ${item.email ? '- ('+ item.email +')' : ''}`
                             }else{
                                 var name = item.name
                             }
@@ -278,115 +278,6 @@
             });
         }
 
-        {{-- document.addEventListener('DOMContentLoaded', () => {
-            const editorElement = document.querySelector('#ckeditor');
-            if (editorElement) {
-                const {
-                    ClassicEditor,
-                    Essentials,
-                    Bold,
-                    Italic,
-                    Underline,
-                    Strikethrough,
-                    BlockQuote,
-                    Link,
-                    List,
-                    Table,
-                    MediaEmbed,
-                    Image,
-                    ImageToolbar,
-                    ImageCaption,
-                    ImageStyle,
-                    ImageResize,
-                    TableToolbar,
-                    Alignment,
-                    Heading,
-                    Highlight,
-                    CodeBlock,
-                    Font,
-                    Paragraph,
-                    SourceEditing
-                } = CKEDITOR;
-
-                ClassicEditor
-                    .create(editorElement, {
-                        licenseKey: "{{env('CKEDITOR')}}",
-                        plugins: [
-                            Essentials,
-                            Bold,
-                            Italic,
-                            Underline,
-                            Strikethrough,
-                            BlockQuote,
-                            Link,
-                            List,
-                            Table,
-                            MediaEmbed,
-                            Image,
-                            ImageToolbar,
-                            ImageCaption,
-                            ImageStyle,
-                            ImageResize,
-                            TableToolbar,
-                            Alignment,
-                            Heading,
-                            Highlight,
-                            CodeBlock,
-                            Font,
-                            Paragraph,
-                            SourceEditing
-                        ],
-                        toolbar: [
-                            'undo', 'redo', '|', 
-                            'heading', '|', 
-                            'bold', 'italic', 'underline', 'strikethrough', '|', 
-                            'blockQuote', '|', 
-                            'link', 'insertTable', 'mediaEmbed', '|', 
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                            'alignment', '|',
-                            'highlight', 'codeBlock', '|',
-                            'sourceEditing'
-                        ],
-                        image: {
-                            toolbar: [
-                                'imageTextAlternative', '|',
-                                'imageStyle:full', 'imageStyle:side'
-                            ],
-                            styles: [
-                                'full',
-                                'side'
-                            ],
-                            resizeOptions: [
-                                {
-                                    name: 'resizeImage:original',
-                                    value: null,
-                                    label: 'Original'
-                                },
-                                {
-                                    name: 'resizeImage:50',
-                                    value: '50',
-                                    label: '50%'
-                                },
-                                {
-                                    name: 'resizeImage:75',
-                                    value: '75',
-                                    label: '75%'
-                                }
-                            ]
-                        },
-                        table: {
-                            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-                        }
-                    })
-                    .then(editor => {
-                        window.editor = editor;
-                    })
-                    .catch(error => {
-                        console.error('CKEditor initialization error:', error);
-                    });
-            }
-        }); --}}
-        
         document.addEventListener('DOMContentLoaded', () => {
             const editorElement = document.querySelector('#ckeditor');
             if (editorElement) {

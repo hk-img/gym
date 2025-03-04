@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Traits\Traits;
+use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -63,6 +64,32 @@ class UserController extends Controller implements HasMiddleware
 
                         return $name;
                     })
+                    ->addColumn('start_date', function ($row) {
+                        return $row->start_date != null ? Carbon::parse($row->start_date)->format('d M Y') : 'N/A';
+                    })
+                    ->addColumn('phone', function ($row) {
+                        return $row->country_code ?? '+91'.' '.$row->phone;
+                    })
+                    ->addColumn('end_date', function ($row) {
+                        return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
+                    })
+                    ->addColumn('membership_status', function ($row) {
+
+                        if($row->start_date != null && $row->end_date != null){
+                            $statusClass = now()->greaterThan($row->end_date) ? 'danger' : 'success';
+                            $status = now()->greaterThan($row->end_date) ? 'Expired' : 'Active';
+                            $returnData = '<div class="action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                            </a>
+                                        </div>';
+                        }else{
+                            $returnData = 'N/A';
+
+                        }
+            
+                        return $returnData;
+                    })
                     ->addColumn('status', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $status = $row->status == 1 ? 'success' : 'danger';
@@ -109,7 +136,7 @@ class UserController extends Controller implements HasMiddleware
                                     ' . method_field('DELETE') . '
                                 </form>';
                     })
-                    ->rawColumns(['name','status', 'action'])
+                    ->rawColumns(['name','start_date','end_date','membership_status','status', 'action'])
                     ->make(true);
             }
             return view('admin.pages.users.index');
@@ -272,7 +299,7 @@ class UserController extends Controller implements HasMiddleware
             $user = User::find($id);
             return response()->json([
                 'email' => $user->email,
-                'phone' => $user->phone,
+                'phone' => $user->country_code ?? '+91'.' '.$user->phone,
                 'status' => $user->status ? 'Active' : 'Inactive'
             ]);
 
