@@ -236,7 +236,7 @@ class PlanController extends Controller implements HasMiddleware
             $plan = Plan::find($id);
             return response()->json([
                 'name' => $plan->name,
-                'duration' => $plan->duration,
+                'duration' => $plan->duration. ' Days',
                 'price' => $plan->price,
             ]);
 

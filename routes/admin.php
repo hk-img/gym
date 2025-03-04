@@ -29,6 +29,7 @@ Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
     Route::resource('users', UserController::class);
     Route::get('users/change-status/{id}/{status}', [UserController::class,'changeStatus'])->name('users.changeStatus');
     Route::get('users/info/{id}', [UserController::class,'userInfo'])->name('users.info');
+    Route::get('users/user-renewal-history/{id}', [UserController::class,'userRenewalHistory'])->name('users.userRenewalHistory');
     
     /** Plan */
     Route::resource('plan', PlanController::class);
@@ -41,7 +42,8 @@ Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
 
     /** Reports */
     Route::get('reports/membership-renewals', [ReportController::class,'membershipRenewals'])->name('reports.renewals');
-   
+    Route::get('/admin/reports/revenue', [ReportController::class, 'getMonthlyRevenue'])->name('reports.revenue');
+
     Route::delete('admin/images/remove/{id}', [ImageController::class, 'destroy'])->name('images.destroy');    
 });
 

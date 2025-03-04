@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
     
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AssignPlan;
 use App\Models\User;
 use App\Traits\Traits;
 use Carbon\Carbon;
@@ -185,7 +186,8 @@ class UserController extends Controller implements HasMiddleware
     public function show($id)
     {
         try {
-            $user = User::find($id);
+            $id = base64_decode($id);
+            $user = User::findOrFail($id);
             return view('admin.pages.users.show',compact('user'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -297,6 +299,86 @@ class UserController extends Controller implements HasMiddleware
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Something went wrong!']);
+        }
+    }
+
+    public function userRenewalHistory(Request $request, $id)
+    {
+        try {
+            if ($request->ajax()) {
+
+                $query = AssignPlan::query();
+
+                // Filter by user ID
+                if ($id) {
+                    $query->where('user_id', $id);    
+                }
+
+                $data = $query->latest()->get();
+        
+                return DataTables::of($data)
+                    ->addIndexColumn() // Adds the iteration column
+                    ->addColumn('created_at_formatted', function ($row) {
+                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                    })
+                    ->addColumn('user_type', function ($row) {
+                        $status = $row->user_type == 'new' ? 'success' : 'danger';
+                        $text = $row->user_type;
+            
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.'
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('member_name', function ($row) {
+                        return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
+                    })
+                    ->addColumn('plan', function ($row) {
+                        return $row->plan->name;
+                    })
+                    ->addColumn('price', function ($row) {
+                        return '₹ '.$row->plan->price;
+                    })
+                    ->addColumn('start_date', function ($row) {
+                        return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
+                    })
+                    ->addColumn('end_date', function ($row) {
+                        return Carbon::parse($row->end_date)->format('d M Y');
+                    })
+                    ->addColumn('payment_method', function ($row) {
+                        $status = $row->payment_method == 'online' ? 'success' : 'danger';
+                        $text = $row->payment_method;
+            
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.'
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('utr', function ($row) {            
+                        return $row->utr ?? 'N/A';
+                    })
+                    ->addColumn('membership_status', function ($row) {
+                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
+                            $status = $row->membership_status;
+                            $returnData = '<div class="action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                            </a>
+                                        </div>';
+                        
+            
+                        return $returnData;
+                    })
+                    ->rawColumns(['user_type','member_name', 'plan','status','payment_method','membership_status'])
+                    ->make(true);
+            }
+            return view('admin.pages.assign_plan.index');
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
+            ->with('error', 'Something went wrong');
         }
     }
 }

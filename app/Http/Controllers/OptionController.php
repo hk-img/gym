@@ -35,9 +35,19 @@ class OptionController extends Controller
 	public function planList(Request $request)
 	{
 		$term = $request->input('term');
-		$query = Plan::query();
-		$brands = $query->where('name', 'LIKE', '%'.$term.'%')->where('status', 1)->limit($this->limit)->get();
+		
+		$plans = Plan::where('name', 'LIKE', '%' . $term . '%')
+					->where('status', 1)
+					->limit($this->limit)
+					->get()
+					->map(function ($plan) {
+						return [
+							'id' => $plan->id,
+							'name' => $plan->name. ' ('.$plan->duration.' Days'.')'
+						];
+					});
 
-		return response()->json($brands);
+		return response()->json($plans);
 	}
+
 }

@@ -28,14 +28,10 @@ class ReportController extends Controller
                     // });
 
                 // Apply date range filter if provided
-                if ($request->date_range) {
-                    $dates = explode(' - ', $request->date_range);
-                    
-                    // Ensure date parsing is correct
-                    $startDate = \Carbon\Carbon::parse(trim($dates[0]))->startOfDay();
-                    $endDate = \Carbon\Carbon::parse(trim($dates[1]))->endOfDay();
-                
-                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                if ($request->month) {
+                    $month = $request->input('month');
+                    $query->whereYear('created_at', substr($month, 0, 4))
+                    ->whereMonth('created_at', substr($month, 5, 2));
                 }
                 
 
@@ -47,7 +43,10 @@ class ReportController extends Controller
                         return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
                     }) 
                     ->addColumn('plan', function($row) { 
-                        return $row->plan->name ?? 'N/A';
+                        return $row->plan->name.' ('.$row->plan->duration.' Days'.')' ?? 'N/A';
+                    })
+                    ->addColumn('price', function($row) { 
+                        return '₹ '.$row->plan->price ?? 'N/A';
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
@@ -82,5 +81,22 @@ class ReportController extends Controller
             return redirect()->route('admin.dashboard')->with('error', 'Something went wrong');
         }
     }
+
+    public function getMonthlyRevenue(Request $request)
+    {
+        $month = $request->input('month', now()->format('Y-m'));
+
+        $revenue = AssignPlan::with('plan') // Load related plan
+            ->whereYear('created_at', substr($month, 0, 4)) // Filter by year
+            ->whereMonth('created_at', substr($month, 5, 2)) // Filter by month
+            ->get()
+            ->sum(function ($assignPlan) {
+                return $assignPlan->plan ? (float) $assignPlan->plan->price : 0; // Cast to float
+            });
+
+        return response()->json(['revenue' => $revenue]);
+    }
+
+
 
 }
