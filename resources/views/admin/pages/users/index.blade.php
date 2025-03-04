@@ -19,13 +19,17 @@
             </div>
             <!-- /Page Header -->
 
-            <!-- Search Filter -->
-            {{-- <div class="row filter-row">
+            <!-- Filter Row -->
+            <div class="row filter-row">
                 <div class="col-sm-6 col-md-3">
                     <div class="input-block mb-3 form-focus select-focus">
-                        <select class="form-control roleList">
+                        <select class="form-control membershipStatus">
+                            <option selected disabled>Select Membership Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
                         </select>
-                        <label class="focus-label">Role</label>
+                        <label class="focus-label">Membership Status</label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3 d-flex gap-3">
@@ -36,8 +40,8 @@
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
                     </div>
                 </div>
-            </div> --}}
-            <!-- /Search Filter -->
+            </div>
+            <!-- /Filter Row -->
             
             <!-- Table -->
             <div class="row">
@@ -56,13 +60,12 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
-                                            <th>Created Date & Time</th>
+                                            <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Membership Status</th>
-                                            <th>Status</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -87,14 +90,14 @@
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
-            { data: 'start_date', name: 'start_date' },
             { data: 'end_date', name: 'end_date' },
             { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];
 
         const filterSelectors = [
+            { name: 'membership_status', selector: '.membershipStatus'},
         ];
 
         document.addEventListener('DOMContentLoaded', function() {

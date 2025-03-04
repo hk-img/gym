@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -61,5 +60,12 @@ class User extends Authenticatable implements HasMedia
         return $query->whereDoesntHave('roles', function ($query) {
             $query->where('name', 'Super Admin');
         });
+    }
+
+    // Accessors
+    public function MembershipStatus(): Attribute{
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+        );
     }
 }

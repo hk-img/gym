@@ -33,6 +33,7 @@ Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
     /** Plan */
     Route::resource('plan', PlanController::class);
     Route::get('plan/change-status/{id}/{status}', [PlanController::class,'changeStatus'])->name('plan.changeStatus');
+    Route::get('plan/info/{id}', [PlanController::class,'planInfo'])->name('plan.info');
 
     /** Assign Plan */
     Route::resource('assign-plan', AssignPlanController::class);

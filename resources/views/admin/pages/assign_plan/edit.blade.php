@@ -50,7 +50,6 @@
                             <div id="userInfo" class="mb-3 row">
                                 <label class="col-form-label col-md-2">User Info</label>
                                 <div class="col-md-10">
-                                    {{-- <p><strong>Email:</strong> <span id="userEmail"></span></p> --}}
                                     <p><strong>Phone:</strong> <span id="userPhone">{{$data->user->phone}}</span></p>
                                     <p><strong>Status:</strong> <span id="userStatus">{{$data->user->status ? 'Active' : 'Inactive'}}</span></p>
                                 </div>
@@ -62,13 +61,21 @@
                                 <label class="col-form-label col-md-2">Plan<span class="text-danger"> *</span></label>
                                 <div class="col-md-10">
                                     <select class="planList form-control" name="plan_id">
-                                        {{-- <option value="" disabled selected>Select Plan</option>
-                                        <option value="1">Plan A</option>
-                                        <option value="2">Plan A</option>
-                                        <option value="3">Plan B</option>
-                                        <option value="4">Plan C</option> --}}
+                                        
                                     </select>
                                     @error('plan_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                </div>
+                            </div>
+
+                            <!-- Plan Info -->
+                            <div id="planInfo" class="mb-3 row" style="display: none;">
+                                <label class="col-form-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <div class="d-flex gap-4">
+                                        <p><strong>Name:</strong> <span id="planName">{{$data->name}}</span></p>
+                                        <p><strong>Duration:</strong> <span id="planDuration">{{$data->duration}}</span></p>
+                                        <p><strong>Price:</strong> <span id="planPrice">{{$data->price}}</span></p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -101,7 +108,7 @@
                             <!-- UTR -->
                             <div class="input-block mb-3 row" id="utrField" style="display: {{$data->payment_method == 'online' ? '' : 'none'}};">
                                 <label class="col-form-label col-md-2">UTR
-                                </label>
+                                <span class="text-danger"> *</span></label>
                                 <div class="col-md-10">
                                     <input type="text" name="utr" id="utr" class="form-control" placeholder="Enter UTR Number"
                                         value="{{ old('utr', $data->utr) }}" maxLength="10">
@@ -166,6 +173,28 @@
                     });
                 } else {
                     $('#userInfo').hide();
+                }
+            });
+
+            // Fetch plan details when a plan is selected
+            $('#planSelect').change(function () {
+                let planId = $(this).val();
+                var baseUrl = "{{ route('admin.plan.info', ':planId') }}";
+                var url  = baseUrl.replace(':planId',planId);
+                if (planId) {
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: { id: planId },
+                        success: function (plan) {
+                            $('#planName').text(plan.name);
+                            $('#planDuration').text(plan.duration);
+                            $('#planPrice').text(plan.price);
+                            $('#planInfo').show();
+                        }
+                    });
+                } else {
+                    $('#planInfo').hide();
                 }
             });
 

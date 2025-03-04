@@ -38,11 +38,10 @@ class UserController extends Controller implements HasMiddleware
             if ($request->ajax()) {
 
                 $query = User::query();
-
-                if ($request->role) {
-                    $query->whereHas('roles', function ($q) use ($request) {
-                        $q->where('id', $request->role);
-                    });
+                
+                // Filter by membership status
+                if ($request->membership_status) {
+                    $query->where('membership_status', $request->membership_status);    
                 }
 
                 $data = $query->with('media')->latest()->excludeSuperAdmin()->get();
@@ -74,53 +73,49 @@ class UserController extends Controller implements HasMiddleware
                         return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
                     })
                     ->addColumn('membership_status', function ($row) {
-
-                        if($row->start_date != null && $row->end_date != null){
-                            $statusClass = now()->greaterThan($row->end_date) ? 'danger' : 'success';
-                            $status = now()->greaterThan($row->end_date) ? 'Expired' : 'Active';
+                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
+                            $status = $row->membership_status;
                             $returnData = '<div class="action-label">
                                             <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
                                                 <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
                                             </a>
                                         </div>';
-                        }else{
-                            $returnData = 'N/A';
-
-                        }
+                        
             
                         return $returnData;
                     })
-                    ->addColumn('status', function ($row) {
-                        $encodedId = base64_encode($row->id);
-                        $status = $row->status == 1 ? 'success' : 'danger';
-                        $text = $row->status == 1 ? 'Active' : 'Inactive';
-                        $changeStatusActiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '1']);
-                        $changeStatusInactiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '2']);
+                    // ->addColumn('status', function ($row) {
+                    //     $encodedId = base64_encode($row->id);
+                    //     $status = $row->status == 1 ? 'success' : 'danger';
+                    //     $text = $row->status == 1 ? 'Active' : 'Inactive';
+                    //     $changeStatusActiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '1']);
+                    //     $changeStatusInactiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
-                        return '<div class="dropdown action-label">
-                                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                        data-bs-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
-                                                class="fa-regular fa-circle-dot text-success"></i> Active</a>
-                                        <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
-                                                class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
-                                    </div>
-                                </div>';
-                    })
+                    //     return '<div class="dropdown action-label">
+                    //                 <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                    //                     data-bs-toggle="dropdown" aria-expanded="false"><i
+                    //                         class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
+                    //                 <div class="dropdown-menu">
+                    //                     <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
+                    //                             class="fa-regular fa-circle-dot text-success"></i> Active</a>
+                    //                     <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
+                    //                             class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
+                    //                 </div>
+                    //             </div>';
+                    // })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.users.edit', $encodedId);
-                        $deleteRoute = route('admin.users.destroy', $encodedId);  // Assume the delete route
+                        $viewRoute = route('admin.users.show', $encodedId);
                     
                         // Edit button
                         $editButton = auth()->user()->can('user-edit') ? 
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
-                    
-                        // Delete button
-                        $deleteButton = auth()->user()->can('user-delete') ? 
-                            "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-user-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
+
+                        // View button
+                        $viewButton = auth()->user()->can('user-view') ? 
+                            '<a href="' . $viewRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
+;
                     
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -128,13 +123,9 @@ class UserController extends Controller implements HasMiddleware
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
-                                        ' . $deleteButton . '
+                                        ' . $viewButton . '
                                     </div>
-                                </div>
-                                <form action="' . $deleteRoute . '" method="POST" id="delete-user-' . $row->id . '" style="display: none;">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
-                                </form>';
+                                </div>';
                     })
                     ->rawColumns(['name','start_date','end_date','membership_status','status', 'action'])
                     ->make(true);

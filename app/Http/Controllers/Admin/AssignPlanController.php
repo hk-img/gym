@@ -44,6 +44,32 @@ class AssignPlanController extends Controller
 
                 $query = AssignPlan::query();
 
+                // Apply date range filter if provided
+                if ($request->date_range) {
+                    $dates = explode(' - ', $request->date_range);
+                    
+                    // Ensure date parsing is correct
+                    $startDate = \Carbon\Carbon::parse(trim($dates[0]))->startOfDay();
+                    $endDate = \Carbon\Carbon::parse(trim($dates[1]))->endOfDay();
+                
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
+                }
+
+                // Filter by user type (new or old)
+                if ($request->user_type) {
+                    $query->where('user_type', $request->user_type);    
+                }
+
+                // Filter by payment method (online or offline)
+                if ($request->payment_method) {
+                    $query->where('payment_method', $request->payment_method);    
+                }
+
+                // Filter by membership status
+                if ($request->membership_status) {
+                    $query->where('membership_status', $request->membership_status);    
+                }
+
                 $data = $query->latest()->get();
         
                 return DataTables::of($data)
@@ -86,7 +112,19 @@ class AssignPlanController extends Controller
                     ->addColumn('utr', function ($row) {            
                         return $row->utr ?? 'N/A';
                     })
-                    ->rawColumns(['user_type','member_name', 'plan','status','payment_method','action'])
+                    ->addColumn('membership_status', function ($row) {
+                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
+                            $status = $row->membership_status;
+                            $returnData = '<div class="action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                            </a>
+                                        </div>';
+                        
+            
+                        return $returnData;
+                    })
+                    ->rawColumns(['user_type','member_name', 'plan','status','payment_method','membership_status'])
                     ->make(true);
             }
             return view('admin.pages.assign_plan.index');

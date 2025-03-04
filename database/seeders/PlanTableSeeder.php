@@ -22,7 +22,7 @@ class PlanTableSeeder extends Seeder
                 'duration' => 90
             ],
             [
-                'name' => 'halfyearly',
+                'name' => 'half yearly',
                 'duration' => 180
             ],
             [

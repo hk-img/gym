@@ -228,4 +228,20 @@ class PlanController extends Controller implements HasMiddleware
         }
     }
 
+    public function planInfo(Request $request, $id)
+    {
+        try {
+            $plan = Plan::find($id);
+            return response()->json([
+                'name' => $plan->name,
+                'duration' => $plan->duration,
+                'price' => $plan->price,
+            ]);
+
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Something went wrong!']);
+        }
+    }
+
 }
