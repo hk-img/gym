@@ -56,9 +56,10 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
-                                            <th>Created Date & Time</th>
+                                            <th>Date & Time</th>
                                             <th>Plan Name</th>
                                             <th>Duration (in days)</th>
+                                            <th>Price</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -84,6 +85,7 @@
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'duration', name: 'duration' },
+            { data: 'price', name: 'price' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];

@@ -37,9 +37,9 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li><a class="{{Route::is('admin.users.create') ? 'active' : ''}}" href="{{route('admin.users.create')}}">Add</a>
+                        <li class="px-3"><a class="{{Route::is('admin.users.create') ? 'active' : ''}}" href="{{route('admin.users.create')}}">Add</a>
                         </li>
-                        <li><a class="{{Route::is('admin.users.index') ? 'active' : ''}}" href="{{route('admin.users.index')}}">List</a>
+                        <li class="px-3"><a class="{{Route::is('admin.users.index') ? 'active' : ''}}" href="{{route('admin.users.index')}}">List</a>
                         </li>
                     </ul>
                 </li>
@@ -50,9 +50,9 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li><a class="{{Route::is('admin.plan.create') ? 'active' : ''}}" href="{{route('admin.plan.create')}}">Add</a>
+                        <li class="px-3"><a class="{{Route::is('admin.plan.create') ? 'active' : ''}}" href="{{route('admin.plan.create')}}">Add</a>
                         </li>
-                        <li><a class="{{Route::is('admin.plan.index') ? 'active' : ''}}" href="{{route('admin.plan.index')}}">List</a>
+                        <li class="px-3"><a class="{{Route::is('admin.plan.index') ? 'active' : ''}}" href="{{route('admin.plan.index')}}">List</a>
                         </li>
                     </ul>
                 </li>
@@ -63,9 +63,9 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li><a class="{{Route::is('admin.assign-plan.create') ? 'active' : ''}}" href="{{route('admin.assign-plan.create')}}">Add</a>
+                        <li class="px-3"><a class="{{Route::is('admin.assign-plan.create') ? 'active' : ''}}" href="{{route('admin.assign-plan.create')}}">Add</a>
                         </li>
-                        <li><a class="{{Route::is('admin.assign-plan.index') ? 'active' : ''}}" href="{{route('admin.assign-plan.index')}}">List</a>
+                        <li class="px-3"><a class="{{Route::is('admin.assign-plan.index') ? 'active' : ''}}" href="{{route('admin.assign-plan.index')}}">List</a>
                     </ul>
                 </li>
 
@@ -75,7 +75,7 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li><a class="{{Route::is('admin.reports.renewals') ? 'active' : ''}}" href="{{route('admin.reports.renewals')}}">Membership Renewal</a>
+                        <li class="px-3"><a class="{{Route::is('admin.reports.renewals') ? 'active' : ''}}" href="{{route('admin.reports.renewals')}}">Membership Renewal</a>
                         </li>
                     </ul>
                 </li>
