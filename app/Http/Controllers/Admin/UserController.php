@@ -293,7 +293,7 @@ class UserController extends Controller implements HasMiddleware
             return response()->json([
                 'email' => $user->email,
                 'phone' => $user->country_code ?? '+91'.' '.$user->phone,
-                'status' => $user->status ? 'Active' : 'Inactive'
+                'status' => ucfirst($user->membership_status)
             ]);
 
         } catch (\Throwable $e) {

@@ -237,7 +237,7 @@ class PlanController extends Controller implements HasMiddleware
             return response()->json([
                 'name' => $plan->name,
                 'duration' => $plan->duration. ' Days',
-                'price' => $plan->price,
+                'price' => '₹ '.$plan->price,
             ]);
 
         } catch (\Throwable $e) {
