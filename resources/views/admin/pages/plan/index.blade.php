@@ -56,6 +56,7 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
+                                            <th>Created Date & Time</th>
                                             <th>Plan Name</th>
                                             <th>Duration (in days)</th>
                                             <th>Status</th>
@@ -79,7 +80,8 @@
 @push('custom-script')
     <script>
         const userColumns = [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
+            { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+            { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'duration', name: 'duration' },
             { data: 'status', name: 'status', orderable: false, searchable: false },

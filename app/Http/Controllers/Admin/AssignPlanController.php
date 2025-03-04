@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Validation\Rule;
 use PhpParser\Node\Expr\Assign;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
@@ -114,7 +115,12 @@ class AssignPlanController extends Controller
             'plan_id' => 'required|exists:plans,id',
             'user_type' => 'required|in:new,old',
             'payment_method' => 'required|in:online,offline',
-            'utr' => 'required_if:payment_method,online|unique:assign_plans,utr',
+                'utr' => [
+                'required_if:payment_method,online',
+                'nullable',
+                Rule::unique('assign_plans', 'utr')->ignore(null),
+            ],
+
         ]);
 
         DB::beginTransaction();

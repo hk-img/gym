@@ -56,10 +56,10 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
+                                            <th>Created Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
                                             <th>Address</th>
-                                            <th>Created Date & Time</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -82,10 +82,10 @@
     <script>
         const userColumns = [
             { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
+            { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
             { data: 'address', name: 'address' },
-            { data: 'created_at_formatted', name: 'created_at' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];

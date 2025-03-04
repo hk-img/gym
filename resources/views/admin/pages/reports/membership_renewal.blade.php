@@ -57,13 +57,13 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
+                                            <th>Created Date & Time</th>
                                             <th>Member Name</th>
                                             <th>Plan</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Days Remaining</th>
                                             <th>Status</th>
-                                            <th>Created Date & Time</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -103,13 +103,13 @@
         
         const userColumns = [
             { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+            { data: 'created_at_formatted', name: 'created_at' }
             { data: 'member_name', name: 'member_name' },
             { data: 'plan', name: 'plan' },
             { data: 'start_date', name: 'start_date' },
             { data: 'end_date_formatted', name: 'end_date' },
             { data: 'days_remaining', name: 'days_remaining' },
             { data: 'status', name: 'status', orderable: false, searchable: false },
-            { data: 'created_at_formatted', name: 'created_at' }
         ];
 
         const filterSelectors = [

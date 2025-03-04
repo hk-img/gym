@@ -95,9 +95,8 @@
                                         @error('payment_method') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
-
                                 <!-- UTR -->
-                                <div class="input-block mb-3 row" id="utrField" style="display: {{ old('utr') ? '' : 'none' }};">
+                                <div class="input-block mb-3 row" id="utrField" style="display: {{ $errors->has('utr') ? '' : 'none' }};">
                                     <label class="col-form-label col-md-2">UTR</label>
                                     <div class="col-md-10">
                                         <input type="text" name="utr" id="utr" class="form-control" placeholder="Enter UTR Number"
