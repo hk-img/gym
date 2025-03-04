@@ -14,20 +14,24 @@ class PlanTableSeeder extends Seeder
     {
         DB::table('plans')->insert([
             [
-                'name' => 'monthly',
+                'name' => 'Monthly',
                 'duration' => 30,
+                'price' => 1000
             ],
             [
-                'name' => 'quarterly',
-                'duration' => 90
+                'name' => 'Quarterly',
+                'duration' => 90,
+                'price' => 3000
             ],
             [
-                'name' => 'half yearly',
-                'duration' => 180
+                'name' => 'Half Yearly',
+                'duration' => 180,
+                'price' => 4000
             ],
             [
-                'name' => 'yearly',
-                'duration' => 365
+                'name' => 'Yearly',
+                'duration' => 365,
+                'price' => 5000
             ]
         ]);
     }

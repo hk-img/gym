@@ -121,7 +121,8 @@ class PlanController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|max:250|unique:plans,name,',
             'duration' => 'required',
-            'status' => 'required',
+            // 'status' => 'required',
+            'price' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -172,7 +173,8 @@ class PlanController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|max:250|unique:plans,name,' . $id ,
             'duration' => 'required',
-            'status' => 'required',
+            // 'status' => 'required',
+            'price' => 'required',
         ]);
         DB::beginTransaction();
         try {        

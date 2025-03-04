@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row g-3 mt-2">
+                                {{-- <div class="row g-3 mt-2">
                                     <!-- Status -->
                                     <div class="col-md-6">
                                         <label class="form-label">Status <span class="text-danger">*</span></label>
@@ -59,6 +59,13 @@
                                             <option value="0" {{ old('status') === '0' ? 'selected' : '' }}>Inactive</option>
                                         </select>
                                         @error('status') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div> --}}
+                                <div class="row g-3 mt-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Price <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="price" value="{{ old('price') }}" placeholder="Enter Price" onkeypress="return onlyNumbers(event)">
+                                        @error('price') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
 
