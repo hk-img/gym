@@ -65,7 +65,7 @@
                                             </li>
                                             <li>
                                                 <div class="title">Price:</div>
-                                                <div class="text">{{$lastestPlan != null ? '₹ '.$lastestPlan->plan->price : 'N/A'}}</div>
+                                                <div class="text">{{$lastestPlan != null ? '₹ '.number_format($lastestPlan->plan->price) : 'N/A'}}</div>
                                             </li>
                                             <li>
                                                 <div class="title">Duration (in days):</div>
