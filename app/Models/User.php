@@ -68,4 +68,10 @@ class User extends Authenticatable implements HasMedia
             get: fn ($value) => ucfirst($value),
         );
     }
+    
+    // Relations
+
+    public function assignPlan(){
+        return $this->hasMany(AssignPlan::class, 'user_id', 'id');
+    }
 }
