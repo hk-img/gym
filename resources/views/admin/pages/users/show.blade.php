@@ -51,7 +51,7 @@
                                             <h6 class="text-muted">+91 {{$user->phone }}</h6>
                                             {{-- <small class="text-muted">Web Designer</small>
                                             <div class="staff-id">Employee ID : FT-0001</div> --}}
-                                            <div class="small doj text-muted">Member Since : {{ Carbon\Carbon::parse($user->created_at)->format('M Y') }}</div>
+                                            <div class="small doj text-muted">Member Since : {{ Carbon\Carbon::parse($user->created_at)->format('d M Y') }}</div>
 
                                             {{-- <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send
                                                     Message</a></div> --}}
