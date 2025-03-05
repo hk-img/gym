@@ -339,7 +339,7 @@ class UserController extends Controller implements HasMiddleware
                         return $row->plan->name;
                     })
                     ->addColumn('price', function ($row) {
-                        return '₹ '.$row->plan->price;
+                        return '₹ '.number_format($row->plan->price);;
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
