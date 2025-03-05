@@ -46,7 +46,7 @@ class ReportController extends Controller
                         return $row->plan->name.' ('.$row->plan->duration.' Days'.')' ?? 'N/A';
                     })
                     ->addColumn('price', function($row) { 
-                        return '₹ '.$row->plan->price ?? 'N/A';
+                        return '₹ '.number_format($row->plan->price) ?? 'N/A';
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
