@@ -188,7 +188,8 @@ class UserController extends Controller implements HasMiddleware
         try {
             $id = base64_decode($id);
             $user = User::findOrFail($id);
-            return view('admin.pages.users.show',compact('user'));
+            $lastestPlan = $user->assignPlan()->latest()->first();
+            return view('admin.pages.users.show',compact('user', 'lastestPlan'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')

@@ -46,7 +46,9 @@ class PlanController extends Controller implements HasMiddleware
                     ->addColumn('created_at_formatted', function ($row) {
                         return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
                     })
-            
+                    ->addColumn('price', function($row) { 
+                        return '₹ '.$row->price;
+                    })
                     ->addColumn('status', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $status = $row->status == 1 ? 'success' : 'danger';
