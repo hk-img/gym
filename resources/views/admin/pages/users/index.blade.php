@@ -105,3 +105,10 @@
         });
     </script>
 @endpush
+
+<script>
+    $(document).ready(function(){
+
+        
+    });
+</script>

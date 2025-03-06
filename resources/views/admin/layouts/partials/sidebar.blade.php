@@ -31,6 +31,19 @@
                     </a>
                 </li>
 
+                <!-- Gym Manager -->
+                <li class="submenu">
+                    <a href="#"><i class="la la-user"></i> <span>Gym Manager</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.users.create') ? 'active' : ''}}" href="{{route('admin.users.create')}}">Add</a>
+                        </li>
+                        <li class="px-3"><a class="{{Route::is('admin.users.index') ? 'active' : ''}}" href="{{route('admin.users.index')}}">List</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- User -->
                 <li class="submenu">
                     <a href="#"><i class="la la-user"></i> <span>User</span>

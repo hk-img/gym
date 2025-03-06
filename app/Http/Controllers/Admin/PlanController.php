@@ -69,15 +69,15 @@ class PlanController extends Controller implements HasMiddleware
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.plan.edit', $encodedId);
-                        $deleteRoute = route('admin.plan.destroy', $encodedId); 
+                        // $deleteRoute = route('admin.plan.destroy', $encodedId); 
                       
                         // Edit button
                         $editButton = auth()->user()->can('brand-edit') ? 
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
-                        // Delete button
-                        $deleteButton = auth()->user()->can('brand-delete') ? 
-                            "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-brand-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
+                        // // Delete button
+                        // $deleteButton = auth()->user()->can('brand-delete') ? 
+                        //     "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-brand-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
                                         
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -85,13 +85,10 @@ class PlanController extends Controller implements HasMiddleware
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
-                                        ' . $deleteButton . '
+                                        
                                     </div>
                                 </div>
-                                <form action="' . $deleteRoute . '" method="POST" id="delete-brand-' . $row->id . '" style="display: none;">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
-                                </form>';
+                            ';
                     })
                     ->rawColumns(['status', 'action'])
                     ->make(true);

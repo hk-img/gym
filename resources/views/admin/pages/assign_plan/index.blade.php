@@ -106,6 +106,7 @@
                                             <th>End Date</th>
                                             <th>Payment Method</th>
                                             <th>UTR</th>
+                                            <th>Discount</th>
                                             <th>Membership Status</th>
                                             {{-- <th>Status</th> --}}
                                             {{-- <th>Action</th> --}}
@@ -160,6 +161,7 @@
             { data: 'end_date', name: 'end_date' },
             { data: 'payment_method', name: 'payment_method' },
             { data: 'utr', name: 'utr' },
+            { data: 'discount', name: 'discount'},
             { data: 'membership_status', name: 'membership_status' },
             {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             {{-- { data: 'action', name: 'action', orderable: false, searchable: false }, --}}

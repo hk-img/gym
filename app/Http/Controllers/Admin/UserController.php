@@ -108,6 +108,7 @@ class UserController extends Controller implements HasMiddleware
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.users.edit', $encodedId);
                         $viewRoute = route('admin.users.show', $encodedId);
+                        $planRoute = route('admin.assign-plan.create' , $encodedId);
                     
                         // Edit button
                         $editButton = auth()->user()->can('user-edit') ? 
@@ -116,7 +117,11 @@ class UserController extends Controller implements HasMiddleware
                         // View button
                         $viewButton = auth()->user()->can('user-view') ? 
                             '<a href="' . $viewRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
-;
+                        
+
+                        //plan
+                        $planButton = auth()->user()->can('user-view') ? 
+                            '<a href="' . $planRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
                     
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -125,6 +130,7 @@ class UserController extends Controller implements HasMiddleware
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
                                         ' . $viewButton . '
+                                        ' . $planButton . '
                                     </div>
                                 </div>';
                     })

@@ -43,7 +43,7 @@ class OptionController extends Controller
 					->map(function ($plan) {
 						return [
 							'id' => $plan->id,
-							'name' => $plan->name. ' ('.$plan->duration.' Days'.')'
+							'name' => $plan->name. ' ('.$plan->duration.' Days'.')' ." ". '(&#8377;'.''.$plan->price.')'
 						];
 					});
 
