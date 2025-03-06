@@ -25,11 +25,19 @@
                 @endif
             </ul> --}}
             <ul class="sidebar-vertical">
+
+                @php
+                    $user = auth()->user();
+                    $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
+                @endphp
+
                 <!-- Dashboard -->
+            @if(!$isSuperAdmin)
                 <li class="">
                     <a href="{{route('admin.dashboard') }}"><i class="la la-cube"></i> <span>Dashboard</span>
                     </a>
                 </li>
+            @endif
 
                 <!-- Gym Manager -->
                 <li class="submenu">
@@ -37,13 +45,14 @@
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li class="px-3"><a class="{{Route::is('admin.users.create') ? 'active' : ''}}" href="{{route('admin.users.create')}}">Add</a>
+                        <li class="px-3"><a class="{{Route::is('admin.gym.create') ? 'active' : ''}}" href="{{route('admin.gym.create')}}">Add</a>
                         </li>
-                        <li class="px-3"><a class="{{Route::is('admin.users.index') ? 'active' : ''}}" href="{{route('admin.users.index')}}">List</a>
+                        <li class="px-3"><a class="{{Route::is('admin.gym.index') ? 'active' : ''}}" href="{{route('admin.gym.index')}}">List</a>
                         </li>
                     </ul>
                 </li>
-
+            
+            @if(!$isSuperAdmin)
                 <!-- User -->
                 <li class="submenu">
                     <a href="#"><i class="la la-user"></i> <span>User</span>
@@ -92,6 +101,7 @@
                         </li>
                     </ul>
                 </li>
+            @endif
             </ul>
         </div>
     </div>

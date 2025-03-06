@@ -159,7 +159,7 @@ class AssignPlanController extends Controller
                 Rule::unique('assign_plans', 'utr')->ignore(null),
             ],
 
-            'discount' => 'required|numeric',
+            'discount' => 'nullable|numeric',
 
         ]);
 

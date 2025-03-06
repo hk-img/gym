@@ -54,7 +54,7 @@
                             
                             <div class="row g-3 mt-2">
                                 <!-- Address -->
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="form-label">Address <span class="text-danger">*</span></label>
                                     <textarea rows="3" class="form-control" name="address" placeholder="Enter Full Address">{{ old('address', $data->address) }}</textarea>
                                     @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror

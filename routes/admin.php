@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\GymController;
+use App\Http\Controllers\Admin\GymController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 

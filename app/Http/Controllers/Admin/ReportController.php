@@ -48,6 +48,14 @@ class ReportController extends Controller
                     ->addColumn('price', function($row) { 
                         return '₹ '.number_format($row->plan->price) ?? 'N/A';
                     })
+
+                    ->addColumn('netamount', function($row) { 
+                        $price = $row->plan->price ?? 0;
+                        $discount = $row->discount ?? 0;
+                        $netAmount = max(0, $price - $discount);
+                        return '₹ '.number_format($netAmount);
+                    })
+
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
                     })
@@ -82,20 +90,38 @@ class ReportController extends Controller
         }
     }
 
+    // public function getMonthlyRevenue(Request $request)
+    // {
+    //     $month = $request->input('month', now()->format('Y-m'));
+
+    //     $revenue = AssignPlan::with('plan') // Load related plan
+    //         ->whereYear('created_at', substr($month, 0, 4)) // Filter by year
+    //         ->whereMonth('created_at', substr($month, 5, 2)) // Filter by month
+    //         ->get()
+    //         ->sum(function ($assignPlan) {
+    //             return $assignPlan->plan ? (float) $assignPlan->plan->price : 0; // Cast to float
+    //         });
+
+    //     return response()->json(['revenue' => $revenue]);
+    // }
+
     public function getMonthlyRevenue(Request $request)
     {
         $month = $request->input('month', now()->format('Y-m'));
 
-        $revenue = AssignPlan::with('plan') // Load related plan
-            ->whereYear('created_at', substr($month, 0, 4)) // Filter by year
-            ->whereMonth('created_at', substr($month, 5, 2)) // Filter by month
+        $revenue = AssignPlan::with('plan')
+            ->whereYear('created_at', substr($month, 0, 4))
+            ->whereMonth('created_at', substr($month, 5, 2))
             ->get()
             ->sum(function ($assignPlan) {
-                return $assignPlan->plan ? (float) $assignPlan->plan->price : 0; // Cast to float
+                $price = $assignPlan->plan ? (float) $assignPlan->plan->price : 0;
+                $discount = (float) $assignPlan->discount ?? 0;
+                return max(0, $price - $discount);
             });
 
         return response()->json(['revenue' => $revenue]);
     }
+
 
 
 

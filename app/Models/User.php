@@ -74,4 +74,6 @@ class User extends Authenticatable implements HasMedia
     public function assignPlan(){
         return $this->hasMany(AssignPlan::class, 'user_id', 'id');
     }
+
+    
 }

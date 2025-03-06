@@ -18,7 +18,7 @@ use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
 
-class UserController extends Controller implements HasMiddleware
+class GymController extends Controller implements HasMiddleware
 {
     use Traits;
 
@@ -39,15 +39,11 @@ class UserController extends Controller implements HasMiddleware
             if ($request->ajax()) {
 
                 $query = User::query();
+
                 $query->whereHas('roles' , function($q){
-                    $q->where('name','Member');
+                    $q->where('name','Gym');
                 });
                 
-                // Filter by membership status
-                if ($request->membership_status) {
-                    $query->where('membership_status', $request->membership_status);    
-                }
-
                 $data = $query->with('media')->latest()->excludeSuperAdmin()->get();
         
                 return DataTables::of($data)
@@ -57,9 +53,6 @@ class UserController extends Controller implements HasMiddleware
                     })
                     ->editColumn('name', function ($row) {
                         $name = '<h2 class="table-avatar">
-                            <a href="#" class="avatar">
-                                <img src="' . ($row->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg')) . '" alt="User Image">
-                            </a>
                             <a>
                                 <span>' . htmlspecialchars($row->name, ENT_QUOTES, 'UTF-8') . '</span>
                             </a>
@@ -73,20 +66,13 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('phone', function ($row) {
                         return $row->country_code ?? '+91'.' '.$row->phone;
                     })
+
+                    ->addColumn('email', function ($row) {
+                        return $row->email ?? 'N/A';
+                    })
+
                     ->addColumn('end_date', function ($row) {
                         return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
-                    })
-                    ->addColumn('membership_status', function ($row) {
-                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
-                            $status = $row->membership_status;
-                            $returnData = '<div class="action-label">
-                                            <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
-                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
-                                            </a>
-                                        </div>';
-                        
-            
-                        return $returnData;
                     })
                     // ->addColumn('status', function ($row) {
                     //     $encodedId = base64_encode($row->id);
@@ -109,9 +95,8 @@ class UserController extends Controller implements HasMiddleware
                     // })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
-                        $editRoute = route('admin.users.edit', $encodedId);
-                        $viewRoute = route('admin.users.show', $encodedId);
-                        $planRoute = route('admin.assign-plan.create' , $encodedId);
+                        $editRoute = route('admin.gym.edit', $encodedId);
+                        $viewRoute = route('admin.gym.show', $encodedId);
                     
                         // Edit button
                         $editButton = auth()->user()->can('user-edit') ? 
@@ -121,10 +106,6 @@ class UserController extends Controller implements HasMiddleware
                         $viewButton = auth()->user()->can('user-view') ? 
                             '<a href="' . $viewRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
                         
-
-                        //plan
-                        $planButton = auth()->user()->can('user-view') ? 
-                            '<a href="' . $planRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
                     
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -133,14 +114,14 @@ class UserController extends Controller implements HasMiddleware
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
                                         ' . $viewButton . '
-                                        ' . $planButton . '
+                                        
                                     </div>
                                 </div>';
                     })
                     ->rawColumns(['name','start_date','end_date','membership_status','status', 'action'])
                     ->make(true);
             }
-            return view('admin.pages.users.index');
+            return view('admin.pages.gym.index');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.dashboard')
@@ -152,7 +133,7 @@ class UserController extends Controller implements HasMiddleware
     {
         try {
             $roles = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name')->all();
-            return view('admin.pages.users.create',compact('roles'));
+            return view('admin.pages.gym.create',compact('roles'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
@@ -162,12 +143,12 @@ class UserController extends Controller implements HasMiddleware
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'name' => 'required|max:250',
-            // 'email' => 'required|email|max:250|unique:users,email',
+            'email' => 'required|email|max:250|unique:users,email',
             'phone' => 'required|digits:10|unique:users,phone',
-            'address' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:1048',
+            'password' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -176,18 +157,20 @@ class UserController extends Controller implements HasMiddleware
             $input = $request->all();
         
             $user = User::create($input);
-            $user->assignRole('Member');
+            $user->gym_id = 'GYM' . str_pad($user->id, 6, '0', STR_PAD_LEFT);
+            $user->save();
+            $user->assignRole('Gym');
 
-            if($user){
-                $this->uploadMedia($request->file('image'), $user, 'images');
-            }
+            // if($user){
+            //     $this->uploadMedia($request->file('image'), $user, 'images');
+            // }
             DB::commit();
         
-            return redirect()->route('admin.users.index')->with('success', 'Member added successfully.');;
+            return redirect()->route('admin.gym.index')->with('success', 'Member added successfully.');;
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
             ->with('error', $e->getMessage());
         }
     }
@@ -198,10 +181,10 @@ class UserController extends Controller implements HasMiddleware
             $id = base64_decode($id);
             $user = User::findOrFail($id);
             $lastestPlan = $user->assignPlan()->latest()->first();
-            return view('admin.pages.users.show',compact('user', 'lastestPlan'));
+            return view('admin.pages.gym.show',compact('user', 'lastestPlan'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
             ->with('error', 'Something went wrong');
         }
     }
@@ -212,10 +195,10 @@ class UserController extends Controller implements HasMiddleware
             $id = base64_decode($id);
             $data = User::excludeSuperAdmin()->findOrFail($id);
         
-            return view('admin.pages.users.edit',compact('data'));
+            return view('admin.pages.gym.edit',compact('data'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
             ->with('error', 'Something went wrong');
         }
     }
@@ -224,10 +207,8 @@ class UserController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|max:250',
-            // 'email' => 'required|email|max:250|unique:users,email',
+            'email' => 'required|email|max:250|unique:users,email,'.$id,
             'phone' => 'required|digits:10|unique:users,phone,'.$id,
-            'address' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
         DB::beginTransaction();
         try {        
@@ -236,25 +217,25 @@ class UserController extends Controller implements HasMiddleware
             $user = User::find($id);
             $user->update($input);
 
-            if($user){
-                if($request->hasFile('image')){
+            // if($user){
+            //     if($request->hasFile('image')){
 
-                    if ($user->hasMedia('images')) {
-                        $user->clearMediaCollection('images'); // Deletes all media in the 'images' collection
-                    }
+            //         if ($user->hasMedia('images')) {
+            //             $user->clearMediaCollection('images'); // Deletes all media in the 'images' collection
+            //         }
 
-                    $this->uploadMedia($request->file('image'), $user, 'images');
-                }
-            }
+            //         $this->uploadMedia($request->file('image'), $user, 'images');
+            //     }
+            // }
 
             DB::commit();
         
-            return redirect()->route('admin.users.index')
-                            ->with('success','Member info updated successfully');
+            return redirect()->route('admin.gym.index')
+                            ->with('success','Gym info updated successfully');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
             ->with('error', 'Something went wrong');
         }
     }
@@ -265,10 +246,10 @@ class UserController extends Controller implements HasMiddleware
             $id = base64_decode($id);
             User::excludeSuperAdmin()->findOrFail($id)->delete();
             
-            return redirect()->route('admin.users.index')->with('success', 'Member deleted successfully.');
+            return redirect()->route('admin.gym.index')->with('success', 'Gym deleted successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
                 ->with('error', 'Something went wrong');
         }
     }
@@ -278,7 +259,7 @@ class UserController extends Controller implements HasMiddleware
         try {
             // Validate the status to ensure it's either 1 or 2
             if (!in_array($status, [1, 2])) {
-                return redirect()->route('admin.users.index')
+                return redirect()->route('admin.gym.index')
                     ->with('error', 'Invalid status value. Status must be 1 or 2.');
             }
 
@@ -288,10 +269,10 @@ class UserController extends Controller implements HasMiddleware
             $user->status = $status;
             $user->save();
             
-            return redirect()->route('admin.users.index')->with('success', 'Status changed successfully.');
+            return redirect()->route('admin.gym.index')->with('success', 'Status changed successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.users.index')
+            return redirect()->route('admin.gym.index')
                 ->with('error', 'Something went wrong');
         }
     }
