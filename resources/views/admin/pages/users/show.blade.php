@@ -51,52 +51,41 @@
                                             <h6 class="text-muted">+91 {{$user->phone }}</h6>
                                             {{-- <small class="text-muted">Web Designer</small>
                                             <div class="staff-id">Employee ID : FT-0001</div> --}}
-                                            <div class="small doj text-muted">Member Since : {{ Carbon\Carbon::parse($user->created_at)->format('M Y') }}</div>
+                                            <div class="small doj text-muted">Member Since : {{ Carbon\Carbon::parse($user->created_at)->format('d M Y') }}</div>
 
                                             {{-- <div class="staff-msg"><a class="btn btn-custom" href="chat.html">Send
                                                     Message</a></div> --}}
                                         </div>
                                     </div>
-                                    {{-- <div class="col-md-7">
+                                    <div class="col-md-7">
                                         <ul class="personal-info">
                                             <li>
-                                                <div class="title">Phone:</div>
-                                                <div class="text"><a href="#">9876543210</a></div>
+                                                <div class="title">Plan:</div>
+                                                <div class="text">{{$lastestPlan->plan->name ?? 'N/A'}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Email:</div>
-                                                <div class="text"><a href="#"><span class="__cf_email__"
-                                                            data-cfemail="bcd6d3d4d2d8d3d9fcd9c4ddd1ccd0d992dfd3d1">[email&#160;protected]</span></a>
-                                                </div>
+                                                <div class="title">Price:</div>
+                                                <div class="text">{{$lastestPlan != null ? '₹ '.number_format($lastestPlan->plan->price) : 'N/A'}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Birthday:</div>
-                                                <div class="text">24th July</div>
+                                                <div class="title">Duration (in days):</div>
+                                                <div class="text">{{$lastestPlan != null ? $lastestPlan->days.' Days' : 'N/A'}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Address:</div>
-                                                <div class="text">1861 Bayonne Ave, Manchester Township, NJ,
-                                                    08759</div>
+                                                <div class="title">Started on:</div>
+                                                <div class="text">{{$lastestPlan != null ? Carbon\Carbon::parse($lastestPlan->start_date)->format('d M Y') : 'N/A'}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Gender:</div>
-                                                <div class="text">Male</div>
+                                                <div class="title">Expiry Date:</div>
+                                                <div class="text">{{$lastestPlan != null ? Carbon\Carbon::parse($lastestPlan->end_date)->format('d M Y') : 'N/A'}}</div>
                                             </li>
                                             <li>
-                                                <div class="title">Reports to:</div>
-                                                <div class="text">
-                                                    <div class="avatar-box">
-                                                        <div class="avatar avatar-xs">
-                                                            <img src="assets/img/profiles/avatar-16.jpg" alt="">
-                                                        </div>
-                                                    </div>
-                                                    <a href="profile.html">
-                                                        Jeffery Lalor
-                                                    </a>
-                                                </div>
+                                                <div class="title">Plan Status</div>
+                                                <div class="text">{{$lastestPlan->membership_status ?? 'N/A'}}</div>
                                             </li>
+                                            
                                         </ul>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                             {{-- <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal"

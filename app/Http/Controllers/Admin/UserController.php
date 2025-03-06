@@ -194,7 +194,8 @@ class UserController extends Controller implements HasMiddleware
         try {
             $id = base64_decode($id);
             $user = User::findOrFail($id);
-            return view('admin.pages.users.show',compact('user'));
+            $lastestPlan = $user->assignPlan()->latest()->first();
+            return view('admin.pages.users.show',compact('user', 'lastestPlan'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
@@ -344,7 +345,7 @@ class UserController extends Controller implements HasMiddleware
                         return $row->plan->name;
                     })
                     ->addColumn('price', function ($row) {
-                        return '₹ '.$row->plan->price;
+                        return '₹ '.number_format($row->plan->price);;
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025

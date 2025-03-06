@@ -63,7 +63,7 @@
                                             <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>End Date</th>
+                                            <th>Expiry Date</th>
                                             <th>Membership Status</th>
                                             {{-- <th>Status</th> --}}
                                             <th>Action</th>

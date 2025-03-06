@@ -181,7 +181,7 @@ class AssignPlanController extends Controller
             $input['end_date'] = $endDate;
             
             $assignPlan = AssignPlan::create($input);
-            $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate]);
+            $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);
 
             DB::commit();
         
