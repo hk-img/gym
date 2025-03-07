@@ -35,14 +35,27 @@
                             <form action="{{ route('admin.assign-plan.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
-                                <div class="input-block mb-3 row">
+                                {{-- <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
                                         <select class="userList form-control" name="user_id" id="userSelect">
                                         </select>
                                         @error('user_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
+                                </div> --}}
+                                {{-- @dd($user->id); --}}
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <select class="userList form-control" name="user_id" id="userSelect">
+                                            <option value="{{ $user->id ?? '' }}" selected>{{ $user->name ?? 'Select a User' }}</option>
+                                        </select>
+                                        @error('user_id') 
+                                            <p class="text-danger text-xs pt-1"> {{$message}} </p>
+                                        @enderror
+                                    </div>
                                 </div>
+                                
 
                                 <!-- User Info -->
                                 <div id="userInfo" class="mb-3 row" style="display: none;">
@@ -87,7 +100,7 @@
                                 </div> --}}
 
                                 <!-- User Type -->
-                                <div class="input-block mb-3 row">
+                                {{-- <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">User Type<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
                                         <select class="form-control" name="user_type">
@@ -97,7 +110,7 @@
                                         </select>
                                         @error('plan_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- Payment Method -->
                                 <div class="input-block mb-3 row">

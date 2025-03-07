@@ -29,6 +29,7 @@
                 @php
                     $user = auth()->user();
                     $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
+                    $isGymManager = $user->roles()->where('name', 'Gym')->exists();
                 @endphp
 
                 <!-- Dashboard -->
@@ -39,6 +40,7 @@
                 </li>
             @endif
 
+                @if(!$isGymManager)
                 <!-- Gym Manager -->
                 <li class="submenu">
                     <a href="#"><i class="la la-user"></i> <span>Gym Manager</span>
@@ -51,6 +53,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
             
             @if(!$isSuperAdmin)
                 <!-- User -->

@@ -135,23 +135,37 @@ class AssignPlanController extends Controller
         }
     }
 
-    public function create()
+    // public function create()
+    // {
+    //     try {
+    //         return view('admin.pages.assign_plan.create');
+    //     } catch (\Throwable $e) {
+    //         Log::error($e->getMessage());
+    //         return redirect()->route('admin.assign-plan.index')
+    //         ->with('error', 'Something went wrong');
+    //     }
+    // }
+
+    public function create(Request $request)
     {
         try {
-            return view('admin.pages.assign_plan.create');
+            $user = User::find($request->user);
+            // dd($user);
+            return view('admin.pages.assign_plan.create', compact('user')); // Pass user data to the view
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.assign-plan.index')
-            ->with('error', 'Something went wrong');
+            return redirect()->route('admin.assign-plan.index')->with('error', 'Something went wrong');
         }
     }
+    
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'plan_id' => 'required|exists:plans,id',
-            'user_type' => 'required|in:new,old',
+            // 'user_type' => 'required|in:new,old',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
@@ -165,9 +179,17 @@ class AssignPlanController extends Controller
 
         DB::beginTransaction();
         try {
-        
+            
             $input = $request->all();
+            $check = AssignPlan::where('user_id',$request->user_id)->first();
 
+            if($check){
+                $user_type = 'old';
+            }
+            else{
+                $user_type = 'new';
+            }
+            
            // Get the selected plan
             $plan = Plan::findOrFail($validated['plan_id']);
             $days = intval($plan->duration);
@@ -179,6 +201,7 @@ class AssignPlanController extends Controller
             $input['days'] = $days;
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
+            $input['user_type'] = $user_type;
             
             $assignPlan = AssignPlan::create($input);
             $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);

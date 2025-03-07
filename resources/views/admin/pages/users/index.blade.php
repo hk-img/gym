@@ -106,9 +106,38 @@
     </script>
 @endpush
 
-<script>
-    $(document).ready(function(){
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script>
+    $(document).ready(function () {
+    $(document).on('click', '.assign-plan-btn', function () {
+        let userId = $(this).data('user-id'); // Get user ID
 
-        
+        $.ajax({
+            url: "{{ route('admin.assign-plan.create') }}", 
+            type: "GET",
+            data: { user: userId }, 
+            success: function (response) {
+                if (response.success) {
+                    $('#userSelect').html('<option value="' + response.user.id + '">' + response.user.name + '</option>');
+                } else {
+                    alert('User not found');
+                }
+            },
+            error: function () {
+                alert('Something went wrong');
+            }
+        });
     });
+});
+
+</script> --}}
+
+
+<script>
+    $(document).ready(function () {
+    $(document).on('click', '.assign-plan-btn', function () {
+        let userId = $(this).data('user-id'); 
+        window.location.href = "{{ route('admin.assign-plan.create') }}?user=" + userId;
+    });
+});
 </script>
