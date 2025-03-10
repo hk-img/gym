@@ -38,7 +38,7 @@
                                     <!-- Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Gym Name" onkeypress="return onlyLetters(event)">
+                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Name" onkeypress="return onlyLetters(event)">
                                         @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
 

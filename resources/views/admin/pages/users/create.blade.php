@@ -61,6 +61,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Upload Image <span class="text-danger">*</span></label>
                                         <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
+                                        <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
                                         @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         
                                         <!-- Image Preview -->

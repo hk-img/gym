@@ -64,6 +64,12 @@ class User extends Authenticatable implements HasMedia
     }
 
     // Accessors
+    public function name(): Attribute{
+        return Attribute::make(
+            get: fn ($value) => ucwords($value),
+        );
+    }
+
     public function MembershipStatus(): Attribute{
         return Attribute::make(
             get: fn ($value) => ucfirst($value),

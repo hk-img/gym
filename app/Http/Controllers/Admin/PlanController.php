@@ -25,10 +25,10 @@ class PlanController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware(['permission:brand-list|brand-create|brand-edit|brand-delete'], only: ['index']),
-            new Middleware(['permission:brand-create'], only: ['create', 'store']),
-            new Middleware(['permission:brand-edit'], only: ['edit', 'update']),
-            new Middleware(['permission:brand-delete'], only: ['destroy']),
+            new Middleware(['permission:plan-list|plan-create|plan-edit|plan-delete'], only: ['index']),
+            new Middleware(['permission:plan-create'], only: ['create', 'store']),
+            new Middleware(['permission:plan-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:plan-delete'], only: ['destroy']),
         ];
     }
    
@@ -74,7 +74,7 @@ class PlanController extends Controller implements HasMiddleware
                         // $deleteRoute = route('admin.plan.destroy', $encodedId); 
                       
                         // Edit button
-                        $editButton = auth()->user()->can('brand-edit') ? 
+                        $editButton = auth()->user()->can('plan-edit') ? 
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
                         // // Delete button

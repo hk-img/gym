@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | Edit')
+@section('page_title', 'Gym Manager | Edit')
 @section('content')
 <div class="page-wrapper">
 
@@ -9,7 +9,7 @@
         <div class="page-header">
             <div class="row">
                 <div class="col">
-                    <h3 class="page-title">Member Manager</h3>
+                    <h3 class="page-title">Gym Manager</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('admin.gym.index') }}">List</a></li>
@@ -29,7 +29,7 @@
             <div class="col-lg-12">
                 <div class="card shadow-lg border-0 rounded-lg">
                     <div class="card-header">
-                        <h4 class="card-title mb-0">Edit Member</h4>
+                        <h4 class="card-title mb-0">Edit Gym Info</h4>
                     </div>
                     <div class="card-body p-4">
                         <form method="POST" action="{{ route('admin.gym.update', $data->id) }}" enctype="multipart/form-data" id="myForm">
@@ -40,7 +40,7 @@
                                 <!-- Name -->
                                 <div class="col-md-6">
                                     <label class="form-label">Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name" value="{{ old('name', $data->name) }}" placeholder="Enter Member Name" onkeypress="return onlyLetters(event)">
+                                    <input type="text" class="form-control" name="name" value="{{ old('name', $data->name) }}" placeholder="Enter Name" onkeypress="return onlyLetters(event)">
                                     @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                 </div>
 

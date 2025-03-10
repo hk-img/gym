@@ -134,7 +134,7 @@ class UserController extends Controller implements HasMiddleware
 
                         $planButton = ($row->membership_status == 'Pending' || $row->membership_status == 'Expired') ?
                             '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . $row->id . '">
-                                            <i class="fa-solid fa-eye m-r-5"></i> Assign Plan
+                                            <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
                                         </a>'
                             : '';
 
@@ -183,19 +183,19 @@ class UserController extends Controller implements HasMiddleware
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
 
-        DB::beginTransaction();
         try {
-
+            
             $input = $request->all();
             $input['added_by'] = auth()->user()->id;
-
+            
             $check = User::where('phone', $request->phone)->where('added_by', auth()->user()->id)->first();
-
+            
             if ($check) {
                 return redirect()->route('admin.users.index')
-                    ->with('error', 'User already exist');
+                ->with('error', 'User already exist');
             }
-
+            
+            DB::beginTransaction();
 
             $user = User::create($input);
             $user->assignRole('Member');
@@ -246,16 +246,23 @@ class UserController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|max:250',
-            'email' => 'required|email|max:250',
-            'phone' => 'required|digits:10|unique:users,phone,' . $id,
+            'phone' => 'required|digits:10',
+            // 'phone' => 'required|digits:10|unique:users,phone,' . $id,
             'address' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1048',
-            'added_by' => 'nullable',
         ]);
-        DB::beginTransaction();
         try {
             $input = $request->all();
-
+            
+            $check = User::where('phone', $request->phone)->where('id', '!=', $id)->where('added_by', auth()->user()->id)->first();
+            
+            if ($check) {
+                return redirect()->route('admin.users.index')
+                ->with('error', 'User already exist');
+            }
+            
+            DB::beginTransaction();
+            
             $user = User::find($id);
             $user->update($input);
 

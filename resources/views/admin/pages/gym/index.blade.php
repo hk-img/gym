@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | List')
+@section('page_title', 'Gym Manager | List')
 @section('content')
     <div class="page-wrapper">
 
@@ -20,7 +20,7 @@
             <!-- /Page Header -->
 
             <!-- Filter Row -->
-            <div class="row filter-row">
+            {{-- <div class="row filter-row">
                 <div class="col-sm-6 col-md-3">
                     <div class="input-block mb-3 form-focus select-focus">
                         <select class="form-control membershipStatus">
@@ -40,7 +40,7 @@
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- /Filter Row -->
             
             <!-- Table -->
@@ -95,7 +95,7 @@
         ];
 
         const filterSelectors = [
-            { name: 'membership_status', selector: '.membershipStatus'},
+            // { name: 'membership_status', selector: '.membershipStatus'},
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
