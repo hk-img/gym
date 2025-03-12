@@ -60,8 +60,12 @@
                                     <!-- Password -->
                                     <div class="col-md-6">
                                         <label class="form-label">Password <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="password"  id="password" value="{{ old('password')}}">
-                                        @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        <div class="position-relative">
+                                            <input type="password" class="form-control" name="password"  id="password" value="{{ old('password')}}">
+                                            <span class="fa-solid fa-eye-slash password-icon" id="toggle-password"></span>
+                                            @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+
+                                        </div>
                                         
                                     </div>
 

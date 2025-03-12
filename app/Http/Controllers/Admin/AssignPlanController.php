@@ -43,7 +43,10 @@ class AssignPlanController extends Controller
             if ($request->ajax()) {
 
                 $query = AssignPlan::query();
-
+                $query->whereHas('user', function ($q) {
+                    $q->where('added_by', auth()->user()->id);
+                });
+                // dd($query);
                 // Apply date range filter if provided
                 if ($request->date_range) {
                     $dates = explode(' - ', $request->date_range);
@@ -221,6 +224,9 @@ class AssignPlanController extends Controller
     {
         try {
             $user = User::find($id);
+            // $user->whereHas('user', function ($q) {
+            //     $q->where('added_by', auth()->user()->id);
+            // });
             return view('admin.pages.users.show',compact('user'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());

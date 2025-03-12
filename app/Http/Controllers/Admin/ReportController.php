@@ -34,6 +34,9 @@ class ReportController extends Controller
                     ->whereMonth('created_at', substr($month, 5, 2));
                 }
                 
+                $query->whereHas('user', function($q){
+                    $q->where('added_by', auth()->user()->id);
+                });
 
                 $data = $query->latest()->get();
 

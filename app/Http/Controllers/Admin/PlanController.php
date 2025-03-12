@@ -37,7 +37,7 @@ class PlanController extends Controller implements HasMiddleware
         try {
             if ($request->ajax()) {
 
-                $query = Plan::query();
+                $query = Plan::query()->where('created_by', auth()->user()->id);
 
                 $data = $query->latest()->get();
         
@@ -118,15 +118,26 @@ class PlanController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250|unique:plans,name,',
+            'name' => 'required|max:250',
+            // 'name' => 'required|max:250|unique:plans,name,',
             'duration' => 'required',
             // 'status' => 'required',
             'price' => 'required',
         ]);
 
-        DB::beginTransaction();
+        
         try {
             $input = $request->all();
+            $input['created_by'] = auth()->user()->id;
+
+            $check = Plan::where('name', $request->name)->where('created_by', auth()->user()->id)->first();
+
+            if($check){
+                return redirect()->route('admin.plan.index')
+                ->with('error', 'Plan already exist');
+            }
+
+            DB::beginTransaction();
             $brand = Plan::create($input);
 
 
@@ -170,15 +181,26 @@ class PlanController extends Controller implements HasMiddleware
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250|unique:plans,name,' . $id ,
+            'name' => 'required|max:250',
+            // 'name' => 'required|max:250|unique:plans,name,' . $id ,
             'duration' => 'required',
             // 'status' => 'required',
             'price' => 'required',
         ]);
-        DB::beginTransaction();
+        
         try {        
             $input = $request->all();
             $input = Arr::except($input,[ '_token','_method']);
+
+            $check = Plan::where('name', $request->name)->where('id', '!=', $id)->where('created_by', auth()->user()->id)->first();
+
+            if ($check){
+                return redirect()->route('admin.plan.index')
+                ->with('error', 'Plan already exist');
+            }
+
+            DB::beginTransaction();
+
             $brand = Plan::where('id', $id)->update($input);
 
             DB::commit();
