@@ -20161,8 +20161,8 @@ th.width-64 {
   position: relative;
 }
 .profile-view .profile-img-wrap {
-  height: 120px;
-  width: 120px;
+  height: 80px;
+  width: 80px;
   position: absolute;
 }
 @media (max-width: 575px) {
@@ -20173,8 +20173,8 @@ th.width-64 {
 }
 .profile-view .profile-img-wrap img {
   border-radius: 50%;
-  height: 120px;
-  width: 120px;
+  height: 80px;
+  width: 80px;
 }
 .profile-view .profile-img {
   width: 120px;
@@ -20364,9 +20364,9 @@ th.width-64 {
 }
 
 .profile-img-wrap {
-  height: 120px;
+  height: 80px;
   position: absolute;
-  width: 120px;
+  width: 80px;
   background: #FFF;
   overflow: hidden;
 }
@@ -20383,8 +20383,8 @@ th.width-64 {
 }
 .profile-img-wrap img {
   border-radius: 50%;
-  height: 120px;
-  width: 120px;
+  height: 80px;
+  width: 80px;
 }
 .profile-img-wrap .fileupload {
   background: rgba(33, 33, 33, 0.5);
@@ -22024,4 +22024,17 @@ textarea.form-control {
 }
 .img-thumbnail {
   border-radius: 8px;
+}
+
+.password-icon{
+  position : absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.gymlogo{
+  width:60px;
+  height:auto;
 }

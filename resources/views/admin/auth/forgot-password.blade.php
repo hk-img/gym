@@ -67,7 +67,7 @@
 
                 <!-- Account Logo -->
                 <div class="account-logo">
-                    <a href="admin-dashboard.html"><img src="{{asset('assets/img/logo2.png')}}" alt="Dreamguy's Technologies"></a>
+                    <a href="admin-dashboard.html"><img src="{{asset('assets/img/gym_logo.png')}}" alt="Dreamguy's Technologies"></a>
                 </div>
                 <!-- /Account Logo -->
 
@@ -102,3 +102,5 @@
             </div>
         </div>
 @endsection
+
+

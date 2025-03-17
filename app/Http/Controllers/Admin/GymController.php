@@ -132,7 +132,7 @@ class GymController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250',
+            'name' => 'required|max:250|unique:users,name',
             'email' => 'required|email|max:250|unique:users,email',
             'phone' => 'required|digits:10|unique:users,phone',
             'password' => 'required',
@@ -193,7 +193,7 @@ class GymController extends Controller implements HasMiddleware
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250',
+            'name' => 'required|max:250|unique:users,name',
             'email' => 'required|email|max:250|unique:users,email,'.$id,
             'phone' => 'required|digits:10|unique:users,phone,'.$id,
         ]);

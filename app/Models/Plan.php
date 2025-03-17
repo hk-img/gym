@@ -11,6 +11,7 @@ class Plan extends Model
         'name',
         'duration',
         'price',
+        'created_by',
         'status'
     ];
 
