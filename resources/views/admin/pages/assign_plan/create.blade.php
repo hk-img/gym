@@ -35,14 +35,27 @@
                             <form action="{{ route('admin.assign-plan.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
-                                <div class="input-block mb-3 row">
+                                {{-- <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
                                         <select class="userList form-control" name="user_id" id="userSelect">
                                         </select>
                                         @error('user_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
+                                </div> --}}
+                                {{-- @dd($user->id); --}}
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <select class="userList form-control" name="user_id" id="userSelect">
+                                            <option value="{{ $user->id ?? '' }}" selected>{{ $user->name ?? 'Select a User' }}</option>
+                                        </select>
+                                        @error('user_id') 
+                                            <p class="text-danger text-xs pt-1"> {{$message}} </p>
+                                        @enderror
+                                    </div>
                                 </div>
+                                
 
                                 <!-- User Info -->
                                 <div id="userInfo" class="mb-3 row" style="display: none;">
@@ -66,8 +79,16 @@
                                     </div>
                                 </div>
 
+                                <div class="input-block mb-3 row" >
+                                    <label class="col-form-label col-md-2">Discount<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" id="discount" class="form-control" placeholder="Enter the discount" name="discount" onkeypress="return onlyNumbers(event)" value="{{old('discount')}}">
+
+                                    </div>
+                                </div>
+
                                 <!-- Plan Info -->
-                                <div id="planInfo" class="mb-3 row" style="display: none;">
+                                {{-- <div id="planInfo" class="mb-3 row" style="display: none;">
                                     <label class="col-form-label col-md-2"></label>
                                     <div class="col-md-10">
                                         <div class="d-flex gap-4">
@@ -76,10 +97,10 @@
                                             <p><strong>Price:</strong> <span id="planPrice"></span></p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- User Type -->
-                                <div class="input-block mb-3 row">
+                                {{-- <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">User Type<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
                                         <select class="form-control" name="user_type">
@@ -89,7 +110,7 @@
                                         </select>
                                         @error('plan_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- Payment Method -->
                                 <div class="input-block mb-3 row">
@@ -113,6 +134,8 @@
                                         @error('utr') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
+
+                                
 
                                 
                                 <!-- Submit Button -->

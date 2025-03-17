@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | Add')
+@section('page_title', 'Gym Manager | Add')
 @section('content')
     <div class="page-wrapper">
 
@@ -9,15 +9,15 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Member Manager</h3>
+                        <h3 class="page-title">Gym Manager</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">List</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.gym.index') }}">List</a></li>
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
                     <div class="col d-flex justify-content-end align-items-center">
-                        <a href="{{ route('admin.users.index') }}"><button type="button"
+                        <a href="{{ route('admin.gym.index') }}"><button type="button"
                                 class="btn btn-primary me-2">Back</button></a>
                     </div>
                 </div>
@@ -28,17 +28,17 @@
                 <div class="col-lg-12">
                     <div class="card shadow-lg border-0 rounded-lg">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Member Registration</h4>
+                            <h4 class="card-title mb-0">Gym Registration</h4>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.users.store') }}" method="post" id="myForm" enctype="multipart/form-data">
+                            <form action="{{ route('admin.gym.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 
                                 <div class="row g-3">
                                     <!-- Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Member Name" onkeypress="return onlyLetters(event)">
+                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Name" onkeypress="return onlyLetters(event)">
                                         @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
 
@@ -50,25 +50,25 @@
                                     </div>
                                 </div>
                                 <div class="row g-3 mt-2">
-                                    <!-- Address -->
-                                    <div class="col-md-12">
-                                        <label class="form-label">Address <span class="text-danger">*</span></label>
-                                        <textarea rows="3" class="form-control" name="address" placeholder="Enter Full Address">{{ old('address') }}</textarea>
-                                        @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="email" placeholder="Enter Email" value="{{ old('email')}}"/>
+                                        @error('email') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                     
-                                    <!-- Image Upload -->
+                                    <!-- Password -->
                                     <div class="col-md-6">
-                                        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
-                                        <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
-                                        <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
-                                        @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                        
-                                        <!-- Image Preview -->
-                                        <div class="mt-2">
-                                            <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail" style="max-width: 150px; display: none;">
+                                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                                        <div class="position-relative">
+                                            <input type="password" class="form-control" name="password"  id="password" value="{{ old('password')}}">
+                                            <span class="fa-solid fa-eye-slash password-icon" id="toggle-password"></span>
+                                            @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+
                                         </div>
+                                        
                                     </div>
+
                                 </div>
                                 
                                 <div class="mt-4">

@@ -2,10 +2,11 @@
             <!-- Logo -->
             <div class="header-left">
                 <a href="{{route('admin.dashboard')}}" class="logo">
-                    <img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
+                    {{-- <img src="{{asset('assets/img/logo.svg')}}" alt="Logo"> --}}
+                    <img src="{{asset('assets/img/gym_logo_white.png')}}" alt="Logo" class="gymlogo">
                 </a>
                 <a href="{{route('admin.dashboard')}}" class="logo collapse-logo">
-                    <img src="{{asset('assets/img/collapse-logo.svg')}}" alt="Logo">
+                    <img src="{{asset('assets/img/collapase_img.png')}}" alt="Logo">
                 </a>
                 <a href="{{route('admin.dashboard')}}" class="logo2">
                     <img src="{{asset('assets/img/logo2.png')}}" width="40" height="40" alt="Logo">

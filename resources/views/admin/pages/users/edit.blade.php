@@ -54,7 +54,7 @@
                             
                             <div class="row g-3 mt-2">
                                 <!-- Address -->
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="form-label">Address <span class="text-danger">*</span></label>
                                     <textarea rows="3" class="form-control" name="address" placeholder="Enter Full Address">{{ old('address', $data->address) }}</textarea>
                                     @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
@@ -63,18 +63,17 @@
                                 <!-- Image Upload -->
                                 <div class="col-md-6">
                                     <label class="form-label">Upload Image</label>
-                                    <input type="file" class="form-control" name="image" accept="image/*">
+                                    <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
+                                    <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
                                     @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     <div class="mt-3">
                                         {{-- <label class="form-label">Current Image</label> --}}
                                         <div class="image-container d-inline-block">
-                                            <img src="{{ $data->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/placeholder.jpg') }}" width="150" height="150" class="img-thumbnail">
+                                            <img id="imagePreview" src="{{ $data->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/placeholder.jpg') }}" width="150" height="150" class="img-thumbnail">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Image Preview -->
                             
                             
                             <div class="mt-4">
@@ -91,3 +90,17 @@
 </div>
 
 @endsection
+@push('custom-script')
+    <script> 
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
+@endpush
+

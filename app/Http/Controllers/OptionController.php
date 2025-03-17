@@ -27,7 +27,10 @@ class OptionController extends Controller
 					->orWhere('phone', 'LIKE', '%'.$term.'%');
 				})->whereHas('roles', function($q){
 					$q->where('name', '=', 'Member');
-				})->where('status', 1)->limit($this->limit)->get();
+				})
+				->where('status', 1)
+				->where('added_by', auth()->user()->id)
+				->limit($this->limit)->get();
 
 		return response()->json($users);
 	}
@@ -38,12 +41,13 @@ class OptionController extends Controller
 		
 		$plans = Plan::where('name', 'LIKE', '%' . $term . '%')
 					->where('status', 1)
+					->where('created_by', auth()->user()->id)
 					->limit($this->limit)
 					->get()
 					->map(function ($plan) {
 						return [
 							'id' => $plan->id,
-							'name' => $plan->name. ' ('.$plan->duration.' Days'.')'
+							'name' => $plan->name. ' ('.$plan->duration.' Days'.')' ." ". '(&#8377;'.''.$plan->price.')'
 						];
 					});
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\GymController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,9 @@ Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
     Route::get('users/change-status/{id}/{status}', [UserController::class,'changeStatus'])->name('users.changeStatus');
     Route::get('users/info/{id}', [UserController::class,'userInfo'])->name('users.info');
     Route::get('users/user-renewal-history/{id}', [UserController::class,'userRenewalHistory'])->name('users.userRenewalHistory');
+
+    /**Gym Manager */
+    Route::resource('gym', GymController::class);
     
     /** Plan */
     Route::resource('plan', PlanController::class);

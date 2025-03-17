@@ -22,20 +22,20 @@ use Yajra\DataTables\Facades\DataTables;
 
 
 // class AssignPlanController extends Controller implements HasMiddleware
-class AssignPlanController extends Controller
+class AssignPlanController extends Controller implements HasMiddleware
 {
     use Traits;
 
-    // public static function middleware(): array
-    // {
-    //     return [
-    //         'auth',
-    //         new Middleware(['permission:user-list|user-create|user-edit|user-delete'], only: ['index']),
-    //         new Middleware(['permission:user-create'], only: ['create', 'store']),
-    //         new Middleware(['permission:user-edit'], only: ['edit', 'update']),
-    //         new Middleware(['permission:user-delete'], only: ['destroy']),
-    //     ];
-    // }
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware(['permission:assign-plan-list|assign-plan-create|assign-plan-edit|assign-plan-delete'], only: ['index']),
+            new Middleware(['permission:assign-plan-create'], only: ['create', 'store']),
+            new Middleware(['permission:assign-plan-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:assign-plan-delete'], only: ['destroy']),
+        ];
+    }
    
     public function index(Request $request)
     {
@@ -43,7 +43,10 @@ class AssignPlanController extends Controller
             if ($request->ajax()) {
 
                 $query = AssignPlan::query();
-
+                $query->whereHas('user', function ($q) {
+                    $q->where('added_by', auth()->user()->id);
+                });
+                // dd($query);
                 // Apply date range filter if provided
                 if ($request->date_range) {
                     $dates = explode(' - ', $request->date_range);
@@ -135,23 +138,37 @@ class AssignPlanController extends Controller
         }
     }
 
-    public function create()
+    // public function create()
+    // {
+    //     try {
+    //         return view('admin.pages.assign_plan.create');
+    //     } catch (\Throwable $e) {
+    //         Log::error($e->getMessage());
+    //         return redirect()->route('admin.assign-plan.index')
+    //         ->with('error', 'Something went wrong');
+    //     }
+    // }
+
+    public function create(Request $request)
     {
         try {
-            return view('admin.pages.assign_plan.create');
+            $user = User::find($request->user);
+            // dd($user);
+            return view('admin.pages.assign_plan.create', compact('user')); // Pass user data to the view
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.assign-plan.index')
-            ->with('error', 'Something went wrong');
+            return redirect()->route('admin.assign-plan.index')->with('error', 'Something went wrong');
         }
     }
+    
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'plan_id' => 'required|exists:plans,id',
-            'user_type' => 'required|in:new,old',
+            // 'user_type' => 'required|in:new,old',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
@@ -159,13 +176,23 @@ class AssignPlanController extends Controller
                 Rule::unique('assign_plans', 'utr')->ignore(null),
             ],
 
+            'discount' => 'nullable|numeric',
+
         ]);
 
         DB::beginTransaction();
         try {
-        
+            
             $input = $request->all();
+            $check = AssignPlan::where('user_id',$request->user_id)->first();
 
+            if($check){
+                $user_type = 'old';
+            }
+            else{
+                $user_type = 'new';
+            }
+            
            // Get the selected plan
             $plan = Plan::findOrFail($validated['plan_id']);
             $days = intval($plan->duration);
@@ -177,6 +204,7 @@ class AssignPlanController extends Controller
             $input['days'] = $days;
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
+            $input['user_type'] = $user_type;
             
             $assignPlan = AssignPlan::create($input);
             $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);
@@ -196,6 +224,9 @@ class AssignPlanController extends Controller
     {
         try {
             $user = User::find($id);
+            // $user->whereHas('user', function ($q) {
+            //     $q->where('added_by', auth()->user()->id);
+            // });
             return view('admin.pages.users.show',compact('user'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
