@@ -48,6 +48,8 @@ class UserSeeder extends Seeder
         'plan-delete',
         'plan-view',
         'plan-status',
+
+        'membership-list'
     ];
 
 
@@ -94,6 +96,7 @@ class UserSeeder extends Seeder
             'user-list', 'user-create', 'user-edit', 'user-delete', 'user-view', 'user-status',
             'assign-plan-list', 'assign-plan-create', 'assign-plan-edit', 'assign-plan-delete', 'assign-plan-view', 'assign-plan-status',
             'plan-list', 'plan-create', 'plan-edit', 'plan-delete', 'plan-view', 'plan-status',
+            'membership-list'
         ])->pluck('id')->all();
 
         // Assign permissions

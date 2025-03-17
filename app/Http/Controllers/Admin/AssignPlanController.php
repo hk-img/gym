@@ -22,20 +22,20 @@ use Yajra\DataTables\Facades\DataTables;
 
 
 // class AssignPlanController extends Controller implements HasMiddleware
-class AssignPlanController extends Controller
+class AssignPlanController extends Controller implements HasMiddleware
 {
     use Traits;
 
-    // public static function middleware(): array
-    // {
-    //     return [
-    //         'auth',
-    //         new Middleware(['permission:user-list|user-create|user-edit|user-delete'], only: ['index']),
-    //         new Middleware(['permission:user-create'], only: ['create', 'store']),
-    //         new Middleware(['permission:user-edit'], only: ['edit', 'update']),
-    //         new Middleware(['permission:user-delete'], only: ['destroy']),
-    //     ];
-    // }
+    public static function middleware(): array
+    {
+        return [
+            'auth',
+            new Middleware(['permission:assign-plan-list|assign-plan-create|assign-plan-edit|assign-plan-delete'], only: ['index']),
+            new Middleware(['permission:assign-plan-create'], only: ['create', 'store']),
+            new Middleware(['permission:assign-plan-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:assign-plan-delete'], only: ['destroy']),
+        ];
+    }
    
     public function index(Request $request)
     {
