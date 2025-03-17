@@ -57,8 +57,8 @@
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <div class="title">Birthday:</div>
-                                                    <div class="text">24th July</div>
+                                                    {{-- <div class="title">Birthday:</div>
+                                                    <div class="text">24th July</div> --}}
                                                 {{-- </li>
                                                 <li>
                                                     <div class="title">Address:</div>

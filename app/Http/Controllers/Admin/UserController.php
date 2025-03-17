@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-    
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AssignPlan;
@@ -26,27 +26,32 @@ class UserController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware(['permission:user-list|user-create|user-edit|user-delete'], only: ['index']),
+            new Middleware(['permission:user-list|user-create|user-edit|user-delete|user-view'], only: ['index']),
             new Middleware(['permission:user-create'], only: ['create', 'store']),
             new Middleware(['permission:user-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:user-view'], only: ['show']),
             new Middleware(['permission:user-delete'], only: ['destroy']),
         ];
     }
-   
+
     public function index(Request $request)
     {
         try {
             if ($request->ajax()) {
 
-                $query = User::query();
+                $query = User::query()->where('added_by',auth()->user()->id);
                 
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'Member');
+                });
+
                 // Filter by membership status
                 if ($request->membership_status) {
-                    $query->where('membership_status', $request->membership_status);    
+                    $query->where('membership_status', $request->membership_status);
                 }
 
                 $data = $query->with('media')->latest()->excludeSuperAdmin()->get();
-        
+
                 return DataTables::of($data)
                     ->addIndexColumn() // Adds the iteration column
                     ->addColumn('created_at_formatted', function ($row) {
@@ -68,21 +73,25 @@ class UserController extends Controller implements HasMiddleware
                         return $row->start_date != null ? Carbon::parse($row->start_date)->format('d M Y') : 'N/A';
                     })
                     ->addColumn('phone', function ($row) {
-                        return $row->country_code ?? '+91'.' '.$row->phone;
+                        return $row->country_code ?? '+91' . ' ' . $row->phone;
                     })
                     ->addColumn('end_date', function ($row) {
                         return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
                     })
+
+                    ->addColumn('added_by', function ($row) {
+                        return $row->gym_id;
+                    })
                     ->addColumn('membership_status', function ($row) {
-                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
-                            $status = $row->membership_status;
-                            $returnData = '<div class="action-label">
+                        $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' : ($row->membership_status == 'Expired' ? 'danger' : ''));
+                        $status = $row->membership_status;
+                        $returnData = '<div class="action-label">
                                             <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
-                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                                <i class="fa-regular fa-circle-dot text-' . $statusClass . '"></i> ' . $status . '
                                             </a>
                                         </div>';
-                        
-            
+
+
                         return $returnData;
                     })
                     // ->addColumn('status', function ($row) {
@@ -108,16 +117,28 @@ class UserController extends Controller implements HasMiddleware
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.users.edit', $encodedId);
                         $viewRoute = route('admin.users.show', $encodedId);
-                    
+                        $planRoute = route('admin.assign-plan.create', $encodedId);
+
                         // Edit button
-                        $editButton = auth()->user()->can('user-edit') ? 
+                        $editButton = auth()->user()->can('user-edit') ?
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
                         // View button
-                        $viewButton = auth()->user()->can('user-view') ? 
+                        $viewButton = auth()->user()->can('user-view') ?
                             '<a href="' . $viewRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
-;
-                    
+
+
+                        // $planButton = auth()->user()->can('user-view') ? 
+                        // '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . $row->id . '">
+                        //     <i class="fa-solid fa-eye m-r-5"></i> Assign Plan
+                        // </a>' : '';
+
+                        $planButton = ($row->membership_status == 'Pending' || $row->membership_status == 'Expired') ?
+                            '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . $row->id . '">
+                                            <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
+                                        </a>'
+                            : '';
+
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
                                     <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
@@ -125,17 +146,18 @@ class UserController extends Controller implements HasMiddleware
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
                                         ' . $viewButton . '
+                                        ' . $planButton . '
                                     </div>
                                 </div>';
                     })
-                    ->rawColumns(['name','start_date','end_date','membership_status','status', 'action'])
+                    ->rawColumns(['name', 'start_date', 'end_date', 'membership_status', 'status', 'action'])
                     ->make(true);
             }
             return view('admin.pages.users.index');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.dashboard')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -143,11 +165,11 @@ class UserController extends Controller implements HasMiddleware
     {
         try {
             $roles = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name')->all();
-            return view('admin.pages.users.create',compact('roles'));
+            return view('admin.pages.users.create', compact('roles'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -155,59 +177,69 @@ class UserController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|max:250',
-            // 'email' => 'required|email|max:250|unique:users,email',
-            'phone' => 'required|digits:10|unique:users,phone',
+            'email' => 'nullable|email|max:250',
+            'phone' => 'required',
+            // 'phone' => 'unique:users,phone_number,NULL,id,added_by,' . $request->added_by,
             'address' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
 
-        DB::beginTransaction();
         try {
-        
+            
             $input = $request->all();
-        
+            $input['added_by'] = auth()->user()->id;
+            
+            $check = User::where('phone', $request->phone)->where('added_by', auth()->user()->id)->first();
+            
+            if ($check) {
+                return redirect()->route('admin.users.index')
+                ->with('error', 'User already exist');
+            }
+            
+            DB::beginTransaction();
+
             $user = User::create($input);
             $user->assignRole('Member');
 
-            if($user){
+            if ($user) {
                 $this->uploadMedia($request->file('image'), $user, 'images');
             }
             DB::commit();
-        
-            return redirect()->route('admin.users.index')->with('success', 'Member added successfully.');;
+
+            return redirect()->route('admin.users.index')->with('success', 'Member added successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
-            ->with('error', $e->getMessage());
+                ->with('error', $e->getMessage());
         }
     }
-    
+
     public function show($id)
     {
         try {
             $id = base64_decode($id);
             $user = User::findOrFail($id);
             $lastestPlan = $user->assignPlan()->latest()->first();
-            return view('admin.pages.users.show',compact('user', 'lastestPlan'));
+            return view('admin.pages.users.show', compact('user', 'lastestPlan'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
-    
+
     public function edit($id)
     {
         try {
             $id = base64_decode($id);
             $data = User::excludeSuperAdmin()->findOrFail($id);
-        
-            return view('admin.pages.users.edit',compact('data'));
+
+            return view('admin.pages.users.edit', compact('data'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -215,20 +247,28 @@ class UserController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|max:250',
-            // 'email' => 'required|email|max:250|unique:users,email',
-            'phone' => 'required|digits:10|unique:users,phone,'.$id,
+            'phone' => 'required|digits:10',
+            // 'phone' => 'required|digits:10|unique:users,phone,' . $id,
             'address' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
-        DB::beginTransaction();
-        try {        
+        try {
             $input = $request->all();
-        
+            
+            $check = User::where('phone', $request->phone)->where('id', '!=', $id)->where('added_by', auth()->user()->id)->first();
+            
+            if ($check) {
+                return redirect()->route('admin.users.index')
+                ->with('error', 'User already exist');
+            }
+            
+            DB::beginTransaction();
+            
             $user = User::find($id);
             $user->update($input);
 
-            if($user){
-                if($request->hasFile('image')){
+            if ($user) {
+                if ($request->hasFile('image')) {
 
                     if ($user->hasMedia('images')) {
                         $user->clearMediaCollection('images'); // Deletes all media in the 'images' collection
@@ -239,23 +279,23 @@ class UserController extends Controller implements HasMiddleware
             }
 
             DB::commit();
-        
+
             return redirect()->route('admin.users.index')
-                            ->with('success','Member info updated successfully');
+                ->with('success', 'Member info updated successfully');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->route('admin.users.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
-    
+
     public function destroy($id)
     {
         try {
             $id = base64_decode($id);
             User::excludeSuperAdmin()->findOrFail($id)->delete();
-            
+
             return redirect()->route('admin.users.index')->with('success', 'Member deleted successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -263,8 +303,8 @@ class UserController extends Controller implements HasMiddleware
                 ->with('error', 'Something went wrong');
         }
     }
-    
-    public function changeStatus($id,$status)
+
+    public function changeStatus($id, $status)
     {
         try {
             // Validate the status to ensure it's either 1 or 2
@@ -278,7 +318,7 @@ class UserController extends Controller implements HasMiddleware
             $user = User::excludeSuperAdmin()->findOrFail($id);
             $user->status = $status;
             $user->save();
-            
+
             return redirect()->route('admin.users.index')->with('success', 'Status changed successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -293,10 +333,9 @@ class UserController extends Controller implements HasMiddleware
             $user = User::find($id);
             return response()->json([
                 'email' => $user->email,
-                'phone' => $user->country_code ?? '+91'.' '.$user->phone,
+                'phone' => $user->country_code ?? '+91' . ' ' . $user->phone,
                 'status' => ucfirst($user->membership_status)
             ]);
-
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => 'Something went wrong!']);
@@ -312,11 +351,11 @@ class UserController extends Controller implements HasMiddleware
 
                 // Filter by user ID
                 if ($id) {
-                    $query->where('user_id', $id);    
+                    $query->where('user_id', $id);
                 }
 
                 $data = $query->latest()->get();
-        
+
                 return DataTables::of($data)
                     ->addIndexColumn() // Adds the iteration column
                     ->addColumn('created_at_formatted', function ($row) {
@@ -325,21 +364,21 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('user_type', function ($row) {
                         $status = $row->user_type == 'new' ? 'success' : 'danger';
                         $text = $row->user_type;
-            
+
                         return '<div class="action-label">
                                     <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
-                                        <i class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.'
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
                                     </a>
                                 </div>';
                     })
                     ->addColumn('member_name', function ($row) {
-                        return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
+                        return $row->user->name . ' ' . '(' . ($row->user->country_code ?? '+91') . ' ' . $row->user->phone . ')' ?? 'N/A';
                     })
                     ->addColumn('plan', function ($row) {
                         return $row->plan->name;
                     })
                     ->addColumn('price', function ($row) {
-                        return '₹ '.number_format($row->plan->price);;
+                        return '₹ ' . number_format($row->plan->price);;
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
@@ -350,36 +389,36 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('payment_method', function ($row) {
                         $status = $row->payment_method == 'online' ? 'success' : 'danger';
                         $text = $row->payment_method;
-            
+
                         return '<div class="action-label">
                                     <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
-                                        <i class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.'
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
                                     </a>
                                 </div>';
                     })
-                    ->addColumn('utr', function ($row) {            
+                    ->addColumn('utr', function ($row) {
                         return $row->utr ?? 'N/A';
                     })
                     ->addColumn('membership_status', function ($row) {
-                            $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' :($row->membership_status == 'Expired' ? 'danger' :''));
-                            $status = $row->membership_status;
-                            $returnData = '<div class="action-label">
+                        $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' : ($row->membership_status == 'Expired' ? 'danger' : ''));
+                        $status = $row->membership_status;
+                        $returnData = '<div class="action-label">
                                             <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
-                                                <i class="fa-regular fa-circle-dot text-'.$statusClass.'"></i> '.$status.'
+                                                <i class="fa-regular fa-circle-dot text-' . $statusClass . '"></i> ' . $status . '
                                             </a>
                                         </div>';
-                        
-            
+
+
                         return $returnData;
                     })
-                    ->rawColumns(['user_type','member_name', 'plan','status','payment_method','membership_status'])
+                    ->rawColumns(['user_type', 'member_name', 'plan', 'status', 'payment_method', 'membership_status'])
                     ->make(true);
             }
             return view('admin.pages.assign_plan.index');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.dashboard')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 }

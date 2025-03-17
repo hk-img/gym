@@ -60,7 +60,9 @@
                                             <th>Date & Time</th>
                                             <th>Member Name</th>
                                             <th>Plan</th>
-                                            <th>Price</th>
+                                            <th>SubTotal</th>
+                                            <th>Discount</th>
+                                            <th>Net Amount</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Days Remaining</th>
@@ -147,6 +149,8 @@
                     { data: 'member_name', name: 'member_name' },
                     { data: 'plan', name: 'plan' },
                     { data: 'price', name: 'price' },
+                    {data: 'discount', name: 'discount'},
+                    {data: 'netamount', name: 'netamount'},
                     { data: 'start_date', name: 'start_date' },
                     { data: 'end_date_formatted', name: 'end_date' },
                     { data: 'days_remaining', name: 'days_remaining' },

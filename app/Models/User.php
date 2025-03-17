@@ -26,6 +26,7 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'phone',
+        'added_by',
         'address',
         'status',
         'otp',
@@ -63,6 +64,12 @@ class User extends Authenticatable implements HasMedia
     }
 
     // Accessors
+    public function name(): Attribute{
+        return Attribute::make(
+            get: fn ($value) => ucwords($value),
+        );
+    }
+
     public function MembershipStatus(): Attribute{
         return Attribute::make(
             get: fn ($value) => ucfirst($value),
@@ -74,4 +81,6 @@ class User extends Authenticatable implements HasMedia
     public function assignPlan(){
         return $this->hasMany(AssignPlan::class, 'user_id', 'id');
     }
+
+    
 }

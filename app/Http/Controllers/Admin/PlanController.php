@@ -25,10 +25,10 @@ class PlanController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware(['permission:brand-list|brand-create|brand-edit|brand-delete'], only: ['index']),
-            new Middleware(['permission:brand-create'], only: ['create', 'store']),
-            new Middleware(['permission:brand-edit'], only: ['edit', 'update']),
-            new Middleware(['permission:brand-delete'], only: ['destroy']),
+            new Middleware(['permission:plan-list|plan-create|plan-edit|plan-delete'], only: ['index']),
+            new Middleware(['permission:plan-create'], only: ['create', 'store']),
+            new Middleware(['permission:plan-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:plan-delete'], only: ['destroy']),
         ];
     }
    
@@ -37,7 +37,7 @@ class PlanController extends Controller implements HasMiddleware
         try {
             if ($request->ajax()) {
 
-                $query = Plan::query();
+                $query = Plan::query()->where('created_by', auth()->user()->id);
 
                 $data = $query->latest()->get();
         
@@ -71,15 +71,15 @@ class PlanController extends Controller implements HasMiddleware
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.plan.edit', $encodedId);
-                        $deleteRoute = route('admin.plan.destroy', $encodedId); 
+                        // $deleteRoute = route('admin.plan.destroy', $encodedId); 
                       
                         // Edit button
-                        $editButton = auth()->user()->can('brand-edit') ? 
+                        $editButton = auth()->user()->can('plan-edit') ? 
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
-                        // Delete button
-                        $deleteButton = auth()->user()->can('brand-delete') ? 
-                            "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-brand-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
+                        // // Delete button
+                        // $deleteButton = auth()->user()->can('brand-delete') ? 
+                        //     "<a href='#' class='dropdown-item' onclick='confirmDelete(\"delete-brand-{$row->id}\")'><i class='fa-regular fa-trash-can m-r-5'></i> Delete</a>" : '';
                                         
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -87,13 +87,10 @@ class PlanController extends Controller implements HasMiddleware
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
-                                        ' . $deleteButton . '
+                                        
                                     </div>
                                 </div>
-                                <form action="' . $deleteRoute . '" method="POST" id="delete-brand-' . $row->id . '" style="display: none;">
-                                    ' . csrf_field() . '
-                                    ' . method_field('DELETE') . '
-                                </form>';
+                            ';
                     })
                     ->rawColumns(['status', 'action'])
                     ->make(true);
@@ -121,15 +118,26 @@ class PlanController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250|unique:plans,name,',
+            'name' => 'required|max:250',
+            // 'name' => 'required|max:250|unique:plans,name,',
             'duration' => 'required',
             // 'status' => 'required',
             'price' => 'required',
         ]);
 
-        DB::beginTransaction();
+        
         try {
             $input = $request->all();
+            $input['created_by'] = auth()->user()->id;
+
+            $check = Plan::where('name', $request->name)->where('created_by', auth()->user()->id)->first();
+
+            if($check){
+                return redirect()->route('admin.plan.index')
+                ->with('error', 'Plan already exist');
+            }
+
+            DB::beginTransaction();
             $brand = Plan::create($input);
 
 
@@ -173,15 +181,26 @@ class PlanController extends Controller implements HasMiddleware
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|max:250|unique:plans,name,' . $id ,
+            'name' => 'required|max:250',
+            // 'name' => 'required|max:250|unique:plans,name,' . $id ,
             'duration' => 'required',
             // 'status' => 'required',
             'price' => 'required',
         ]);
-        DB::beginTransaction();
+        
         try {        
             $input = $request->all();
             $input = Arr::except($input,[ '_token','_method']);
+
+            $check = Plan::where('name', $request->name)->where('id', '!=', $id)->where('created_by', auth()->user()->id)->first();
+
+            if ($check){
+                return redirect()->route('admin.plan.index')
+                ->with('error', 'Plan already exist');
+            }
+
+            DB::beginTransaction();
+
             $brand = Plan::where('id', $id)->update($input);
 
             DB::commit();
