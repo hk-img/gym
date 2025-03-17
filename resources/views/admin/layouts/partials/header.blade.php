@@ -2,7 +2,8 @@
             <!-- Logo -->
             <div class="header-left">
                 <a href="{{route('admin.dashboard')}}" class="logo">
-                    <img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
+                    {{-- <img src="{{asset('assets/img/logo.svg')}}" alt="Logo"> --}}
+                    <img src="{{asset('assets/img/gym_logo.png')}}" alt="Logo" class="gymlogo">
                 </a>
                 <a href="{{route('admin.dashboard')}}" class="logo collapse-logo">
                     <img src="{{asset('assets/img/collapse-logo.svg')}}" alt="Logo">

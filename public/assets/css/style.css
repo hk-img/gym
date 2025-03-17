@@ -22033,3 +22033,8 @@ textarea.form-control {
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+.gymlogo{
+  width:60px;
+  height:auto;
+}
