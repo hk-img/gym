@@ -2,12 +2,11 @@
 
 @section('content')
     <div class="account-content">
-        {{-- <a href="job-list.html" class="btn btn-primary apply-btn">Apply Job</a> --}}
         <div class="container">
 
             <!-- Account Logo -->
             <div class="account-logo">
-                <a href="admin-dashboard.html"><img src="{{asset('assets/img/gym_logo.png')}}" alt="Dreamguy's Technologies"></a>
+                <a href="javascript:void(0);"><img src="{{asset('assets/img/gym_logo.png')}}" alt="Dreamguy's Technologies"></a>
             </div>
             <!-- /Account Logo -->
 
@@ -62,12 +61,8 @@
                         <div class="input-block mb-4 text-center">
                             <button class="btn btn-primary account-btn" type="submit">Login</button>
                         </div>
-                        {{-- <div class="account-footer">
-                            <p>Don't have an account yet? <a href="register.html">Register</a></p>
-                        </div> --}}
                     </form>
                     <!-- /Account Form -->
-
                 </div>
             </div>
         </div>
