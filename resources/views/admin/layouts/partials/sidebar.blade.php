@@ -92,6 +92,18 @@
                     </ul>
                 </li>
 
+                <!-- Workout -->
+                <li class="submenu">
+                    <a href="#"><i class="la la-user-check"></i> <span>Workout</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.workout.create') ? 'active' : ''}}" href="{{route('admin.workout.create')}}">Add</a>
+                        </li>
+                        <li class="px-3"><a class="{{Route::is('admin.workout.index') ? 'active' : ''}}" href="{{route('admin.workout.index')}}">List</a>
+                    </ul>
+                </li>
+
                 <!-- Reports -->
                 <li class="submenu">
                     <a href="#"><i class="la la-clipboard-list"></i> <span>Reports</span>

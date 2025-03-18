@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GymController;
+use App\Http\Controllers\Admin\WorkoutController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,12 +51,16 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('/admin/reports/revenue', [ReportController::class, 'getMonthlyRevenue'])->name('reports.revenue');
     Route::get('reports/membership-expired', [ReportController::class,'membershipExpired'])->name('reports.expired');
 
+    /** Workout */
+    Route::resource('workout', WorkoutController::class);
+
     Route::delete('admin/images/remove/{id}', [ImageController::class, 'destroy'])->name('images.destroy');    
+
+    /** Option */
+    Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
+    Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
+    Route::get('brand-listt', [OptionController::class,'brandList'])->name('option.brandlist');
 });
 
-/** Option */
-Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
-Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
-Route::get('brand-listt', [OptionController::class,'brandList'])->name('option.brandlist');
 
 require __DIR__.'/auth.php';

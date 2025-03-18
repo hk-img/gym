@@ -161,8 +161,6 @@ class AssignPlanController extends Controller implements HasMiddleware
         }
     }
     
-
-
     public function store(Request $request)
     {
         $validated = $request->validate([
