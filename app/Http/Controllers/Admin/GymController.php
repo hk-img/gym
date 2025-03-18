@@ -68,25 +68,25 @@ class GymController extends Controller implements HasMiddleware
                         return $row->email ?? 'N/A';
                     })
 
-                    // ->addColumn('status', function ($row) {
-                    //     $encodedId = base64_encode($row->id);
-                    //     $status = $row->status == 1 ? 'success' : 'danger';
-                    //     $text = $row->status == 1 ? 'Active' : 'Inactive';
-                    //     $changeStatusActiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '1']);
-                    //     $changeStatusInactiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '2']);
+                    ->addColumn('status', function ($row) {
+                        $encodedId = base64_encode($row->id);
+                        $status = $row->status == 1 ? 'success' : 'danger';
+                        $text = $row->status == 1 ? 'Active' : 'Inactive';
+                        $changeStatusActiveRoute = route('admin.gym.changeStatus', ['id' => $encodedId, 'status' => '1']);
+                        $changeStatusInactiveRoute = route('admin.gym.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
-                    //     return '<div class="dropdown action-label">
-                    //                 <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                    //                     data-bs-toggle="dropdown" aria-expanded="false"><i
-                    //                         class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
-                    //                 <div class="dropdown-menu">
-                    //                     <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
-                    //                             class="fa-regular fa-circle-dot text-success"></i> Active</a>
-                    //                     <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
-                    //                             class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
-                    //                 </div>
-                    //             </div>';
-                    // })
+                        return '<div class="dropdown action-label">
+                                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                                            class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
+                                                class="fa-regular fa-circle-dot text-success"></i> Active</a>
+                                        <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
+                                                class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
+                                    </div>
+                                </div>';
+                    })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.gym.edit', $encodedId);

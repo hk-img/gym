@@ -63,8 +63,8 @@
                                             <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Expiry Date</th>
                                             <th>Membership Status</th>
+                                            <th>Expiry Date</th>
                                             {{-- <th>Status</th> --}}
                                             <th>Action</th>
                                         </tr>
@@ -90,8 +90,8 @@
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
-            { data: 'end_date', name: 'end_date' },
             { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
+            { data: 'end_date', name: 'end_date' },
             {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];

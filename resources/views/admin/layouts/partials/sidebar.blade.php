@@ -33,12 +33,10 @@
                 @endphp
 
                 <!-- Dashboard -->
-            @if(!$isSuperAdmin)
                 <li class="">
                     <a href="{{route('admin.dashboard') }}"><i class="la la-cube"></i> <span>Dashboard</span>
                     </a>
                 </li>
-            @endif
 
                 @if(!$isGymManager)
                 <!-- Gym Manager -->

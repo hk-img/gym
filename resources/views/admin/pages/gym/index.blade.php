@@ -64,7 +64,7 @@
                                             <th>Name</th>
                                             <th>Phone</th>
                                             <th>Email</th>
-                                            {{-- <th>Status</th> --}}
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -90,7 +90,7 @@
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
             { data: 'email', name: 'email' },
-            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
+            { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];
 

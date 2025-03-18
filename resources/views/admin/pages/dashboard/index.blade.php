@@ -9,7 +9,7 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3 class="page-title">Welcome Admin!</h3>
+                            <h3 class="page-title">Welcome {{auth()->user()->name}}!</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active">Dashboard</li>
                             </ul>
@@ -17,52 +17,44 @@
                     </div>
                 </div>
                 <!-- /Page Header -->
-
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{isset($data) ? $data['customer'] : 0}}</h3>
-                                    <span>Customer</span>
+                    @if(auth()->user()->hasRole('Super Admin'))
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['gym'] : 0}}</h3>
+                                        <span>Gym</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>44</h3>
-                                    <span>Clients</span>
+                    @endif
+                    @if(auth()->user()->hasRole('Gym'))
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['member'] : 0}}</h3>
+                                        <span>Member</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa-regular fa-gem"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>37</h3>
-                                    <span>Tasks</span>
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa-regular fa-gem"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['plan'] : 0}}</h3>
+                                        <span>Plan</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{isset($data) ? $data['vendor'] : 0}}</h3>
-                                    <span>Vendor</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
 
                 {{-- <div class="row">

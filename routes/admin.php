@@ -18,7 +18,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified','verify_admin','revalidate'])->name('dashboard');
 
-Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
+Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -34,6 +34,7 @@ Route::middleware(['auth','verify_admin','revalidate'])->group(function () {
 
     /**Gym Manager */
     Route::resource('gym', GymController::class);
+    Route::get('gym/change-status/{id}/{status}', [GymController::class,'changeStatus'])->name('gym.changeStatus');
     
     /** Plan */
     Route::resource('plan', PlanController::class);
