@@ -126,7 +126,7 @@ class ReportController extends Controller implements HasMiddleware
                 // Fetch full details for the latest record per user, but EXCLUDE active members
                 $data = AssignPlan::whereIn('id', $latestPlanSubquery)
                 ->with(['user', 'plan'])
-                ->where('membership_status', '!=', 'Active') // Exclude users with active membership
+                ->where('membership_status', '!=', 'active') // Exclude users with active membership
                 ->orderBy('end_date', 'DESC')
                 ->get();
 
