@@ -206,7 +206,7 @@ class PlanController extends Controller implements HasMiddleware
             DB::commit();
         
             return redirect()->route('admin.plan.index')
-                            ->with('success','Brand updated successfully');
+                            ->with('success','Plan updated successfully');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());

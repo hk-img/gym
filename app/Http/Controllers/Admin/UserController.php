@@ -134,7 +134,7 @@ class UserController extends Controller implements HasMiddleware
                         // </a>' : '';
 
                         $planButton = ($row->membership_status == 'Pending' || $row->membership_status == 'Expired') ?
-                            '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . $row->id . '">
+                            '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . base64_encode($row->id) . '">
                                             <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
                                         </a>'
                             : '';

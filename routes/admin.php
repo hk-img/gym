@@ -48,6 +48,9 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Reports */
     Route::get('reports/membership-renewals', [ReportController::class,'membershipRenewals'])->name('reports.renewals');
     Route::get('/admin/reports/revenue', [ReportController::class, 'getMonthlyRevenue'])->name('reports.revenue');
+    Route::get('reports/membership-expired', [ReportController::class,'membershipExpired'])->name('reports.expired');
+
+    Route::get('reports/query-run', [ReportController::class,'queryRun']);
 
     Route::delete('admin/images/remove/{id}', [ImageController::class, 'destroy'])->name('images.destroy');    
 });

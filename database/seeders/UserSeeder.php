@@ -49,7 +49,8 @@ class UserSeeder extends Seeder
         'plan-view',
         'plan-status',
 
-        'membership-list'
+        'membership-renewal',
+        'membership-expired'
     ];
 
 

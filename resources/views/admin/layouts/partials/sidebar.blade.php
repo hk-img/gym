@@ -99,6 +99,7 @@
                     </a>
                     <ul>
                         <li class="px-3"><a class="{{Route::is('admin.reports.renewals') ? 'active' : ''}}" href="{{route('admin.reports.renewals')}}">Membership Renewal</a>
+                    <li class="px-3"><a class="{{Route::is('admin.reports.expired') ? 'active' : ''}}" href="{{route('admin.reports.expired')}}">Membership Expired</a>
                         </li>
                     </ul>
                 </li>
