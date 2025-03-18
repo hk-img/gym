@@ -35,7 +35,7 @@
                         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                             <div class="card dash-widget">
                                 <div class="card-body">
-                                    <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
                                     <div class="dash-widget-info">
                                         <h3>{{isset($data) ? $data['member'] : 0}}</h3>
                                         <span>Member</span>
@@ -46,7 +46,7 @@
                         <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
                             <div class="card dash-widget">
                                 <div class="card-body">
-                                    <span class="dash-widget-icon"><i class="fa-regular fa-gem"></i></span>
+                                    <span class="dash-widget-icon"><i class="fa fa-tasks"></i></span>
                                     <div class="dash-widget-info">
                                         <h3>{{isset($data) ? $data['plan'] : 0}}</h3>
                                         <span>Plan</span>
