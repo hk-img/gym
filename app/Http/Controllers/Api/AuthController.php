@@ -20,6 +20,7 @@ class AuthController extends Controller
     {
         // Validate input using Validator
         $validator = Validator::make($request->all(), [
+            'gym_id' => 'required',
             'phone' => 'required|numeric',
         ]);
 
@@ -33,13 +34,11 @@ class AuthController extends Controller
 
             // Generate OTP (use rand(1000, 9999) in production)
             $otp = 1234;
-            $user = User::firstOrCreate(
-                ['phone' => $request->phone],
-                ['otp' => $otp, 'otp_sent_at' => Carbon::now(), 'password' => bcrypt('12345678')]
-            );
-
-            if ($user) {
-                $user->assignRole('Customer');
+            $user = User::where('phone', $request->phone)->whereHas('addedBy', function($q)use($request){
+                $q->where('gym_id', $request->gym_id);
+            })->first();
+            if(!$user){
+                return ApiResponse::response(ApiResponse::HTTP_UNAUTHORIZED, "Invalid credentials.");
             }
 
             $user->update(['otp' => $otp, 'otp_sent_at' => Carbon::now()]);
@@ -61,6 +60,7 @@ class AuthController extends Controller
     {
         // Validate input using Validator
         $validator = Validator::make($request->all(), [
+            'gym_id' => 'required',
             'phone' => 'required|numeric',
             'otp' => 'required|numeric'
         ]);
@@ -73,7 +73,9 @@ class AuthController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', $request->phone)->whereHas('addedBy', function($q)use($request){
+                $q->where('gym_id', $request->gym_id);
+            })->first();
 
             if (!$user || $user->otp !== $request->otp) {
                 return ApiResponse::notFound('Invalid OTP.');
@@ -108,6 +110,7 @@ class AuthController extends Controller
     {
         // Validate input using Validator
         $validator = Validator::make($request->all(), [
+            'gym_id' => 'required',
             'phone' => 'required|numeric'
         ]);
         
@@ -119,7 +122,9 @@ class AuthController extends Controller
             DB::beginTransaction();
             $request->validate(['phone' => 'required|numeric']);
 
-            $user = User::where('phone', $request->phone)->first();
+            $user = User::where('phone', $request->phone)->whereHas('addedBy', function($q)use($request){
+                $q->where('gym_id', $request->gym_id);
+            })->first();
 
             if (!$user) {
                 return ApiResponse::notFound('Phone number not registered.');

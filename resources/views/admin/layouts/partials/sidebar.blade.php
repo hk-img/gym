@@ -105,6 +105,18 @@
                     </ul>
                 </li>
 
+                <!-- Equipment -->
+                <li class="submenu">
+                    <a href="javacript:void(0);"><i class="las la-tools"></i><span>Equipment</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.equipment.create') ? 'active' : ''}}" href="{{route('admin.equipment.create')}}">Add</a>
+                        </li>
+                        <li class="px-3"><a class="{{Route::is('admin.equipment.index') ? 'active' : ''}}" href="{{route('admin.equipment.index')}}">List</a>
+                    </ul>
+                </li>
+
                 <!-- Reports -->
                 <li class="submenu">
                     <a href="javacript:void(0);"><i class="la la-clipboard-list"></i> <span>Reports</span>
