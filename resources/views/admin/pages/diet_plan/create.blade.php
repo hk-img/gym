@@ -90,7 +90,7 @@
                                                 <td><input type="number" step="0.1" name="meals[0][protein]" class="form-control" required></td>
                                                 <td><input type="number" step="0.1" name="meals[0][carbs]" class="form-control" required></td>
                                                 <td><input type="number" step="0.1" name="meals[0][fats]" class="form-control" required></td>
-                                                <td><button type="button" class="btn btn-danger btn-sm removeMeal">X</button></td>
+                                                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -139,7 +139,7 @@
                 <td><input type="number" step="0.1" name="meals[${rowCount}][protein]" class="form-control" required></td>
                 <td><input type="number" step="0.1" name="meals[${rowCount}][carbs]" class="form-control" required></td>
                 <td><input type="number" step="0.1" name="meals[${rowCount}][fats]" class="form-control" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm removeMeal">X</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
             `;
         });
 

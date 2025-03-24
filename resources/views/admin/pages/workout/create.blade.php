@@ -78,7 +78,7 @@
                                                 <td><input type="number" name="exercises[0][sets]" class="form-control" required></td>
                                                 <td><input type="number" name="exercises[0][reps]" class="form-control" required></td>
                                                 <td><input type="number" name="exercises[0][weight]" class="form-control"></td>
-                                                <td><button type="button" class="btn btn-danger btn-sm removeExercise">X</button></td>
+                                                <td><button type="button" class="btn btn-danger btn-sm removeExercise"><i class="fa-solid fa-trash"></i></button></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -117,7 +117,7 @@
                 <td><input type="number" name="exercises[${rowCount}][sets]" class="form-control" required></td>
                 <td><input type="number" name="exercises[${rowCount}][reps]" class="form-control" required></td>
                 <td><input type="number" name="exercises[${rowCount}][weight]" class="form-control"></td>
-                <td><button type="button" class="btn btn-danger btn-sm removeExercise">X</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm removeExercise"><i class="fa-solid fa-trash"></i></button></td>
             `;
         });
 

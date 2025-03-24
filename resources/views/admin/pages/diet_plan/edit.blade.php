@@ -86,7 +86,7 @@
                                                 <td><input type="number" step="0.1" name="meals[{{ $index }}][protein]" class="form-control" value="{{ $meal->protein }}" required></td>
                                                 <td><input type="number" step="0.1" name="meals[{{ $index }}][carbs]" class="form-control" value="{{ $meal->carbs }}" required></td>
                                                 <td><input type="number" step="0.1" name="meals[{{ $index }}][fats]" class="form-control" value="{{ $meal->fats }}" required></td>
-                                                <td><button type="button" class="btn btn-danger btn-sm removeMeal">X</button></td>
+                                                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -140,7 +140,7 @@
                 <td><input type="number" step="0.1" name="meals[${rowCount}][protein]" class="form-control" required></td>
                 <td><input type="number" step="0.1" name="meals[${rowCount}][carbs]" class="form-control" required></td>
                 <td><input type="number" step="0.1" name="meals[${rowCount}][fats]" class="form-control" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm removeMeal">X</button></td>
+                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
             `;
         });
 
