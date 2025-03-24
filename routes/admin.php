@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\GymController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WorkoutController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,10 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
 
     /** Attendance */
     Route::resource('attendance', AttendanceController::class);
+
+    /** Send Notification */
+    Route::get('send-notification', [NotificationController::class,'sendForm'])->name('notifications.form');
+    Route::post('send-notification', [NotificationController::class,'sendNotification'])->name('notifications.send');
 
     Route::delete('admin/images/remove/{id}', [ImageController::class, 'destroy'])->name('images.destroy');    
 

@@ -116,6 +116,16 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- Notification -->
+                <li class="submenu">
+                    <a href="javacript:void(0);"><i class="las la-bell"></i> <span>Notification</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.notifications.form') ? 'active' : ''}}" href="{{route('admin.notifications.form')}}">Send Notification</a>
+                    </ul>
+                </li>
             @endif
             </ul>
         </div>
