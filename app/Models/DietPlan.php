@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
-class Workout extends Model
+class DietPlan extends Model
 {
-    protected $fillable = ['user_id', 'workout_name', 'date','added_by'];
+    protected $guarded = ['id'];
 
-    public function exercises()
+    public function meals()
     {
-        return $this->hasMany(Exercise::class);
+        return $this->hasMany(Meal::class);
     }
 
     public function user()
@@ -20,7 +20,7 @@ class Workout extends Model
     }
 
     // Accessor
-    public function workoutName():Attribute{
+    public function dietPlanName():Attribute{
         return Attribute::make(
             get: fn($value) => ucwords($value)
         );

@@ -4,16 +4,12 @@ namespace App\Http\Controllers\Admin;
     
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Brand;
 use App\Models\Plan;
-use App\Models\Type;
-use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Str;
 use Yajra\DataTables\Facades\DataTables;
 use App\Traits\Traits;
 
@@ -57,7 +53,7 @@ class PlanController extends Controller implements HasMiddleware
                         $changeStatusInactiveRoute = route('admin.plan.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
                         return '<div class="dropdown action-label">
-                                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                                    <a href="javacript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false"><i
                                             class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
                                     <div class="dropdown-menu">
@@ -83,7 +79,7 @@ class PlanController extends Controller implements HasMiddleware
                                         
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '

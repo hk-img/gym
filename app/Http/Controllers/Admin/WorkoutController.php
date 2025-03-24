@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Models\Workout;
 use App\Traits\Traits;
 use Carbon\Carbon;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -27,10 +25,11 @@ class WorkoutController extends Controller implements HasMiddleware
     {
         return [
             'auth',
-            new Middleware(['permission:assign-plan-list|assign-plan-create|assign-plan-edit|assign-plan-delete'], only: ['index']),
-            new Middleware(['permission:assign-plan-create'], only: ['create', 'store']),
-            new Middleware(['permission:assign-plan-edit'], only: ['edit', 'update']),
-            new Middleware(['permission:assign-plan-delete'], only: ['destroy']),
+            new Middleware(['permission:workout-list|workout-create|workout-edit|workout-delete|show'], only: ['index']),
+            new Middleware(['permission:workout-create'], only: ['create', 'store']),
+            new Middleware(['permission:workout-edit'], only: ['edit', 'update']),
+            new Middleware(['permission:workout-view'], only: ['show']),
+            new Middleware(['permission:workout-delete'], only: ['destroy']),
         ];
     }
     
@@ -66,7 +65,7 @@ class WorkoutController extends Controller implements HasMiddleware
                     }) 
 
                     ->addColumn('created_at_formatted', function($row){
-                        return \Carbon\Carbon::parse($row->date)->format('D m, Y');
+                        return \Carbon\Carbon::parse($row->date)->format('d M Y');
                     })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
@@ -74,16 +73,16 @@ class WorkoutController extends Controller implements HasMiddleware
                         $viewRoute = route('admin.workout.show', $encodedId);
 
                         // Edit button
-                        $editButton = auth()->user()->can('user-edit') ?
+                        $editButton = auth()->user()->can('workout-edit') ?
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
                         // View button
-                        $viewButton = auth()->user()->can('user-view') ?
+                        $viewButton = auth()->user()->can('workout-view') ?
                             '<a href="' . $viewRoute . '" class="dropdown-item"><i class="fa-solid fa-eye m-r-5"></i> View</a>' : '';
 
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '

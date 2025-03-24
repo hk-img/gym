@@ -181,7 +181,7 @@ class ReportController extends Controller implements HasMiddleware
                             : '';
 
                         return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $planButton . '
@@ -209,6 +209,9 @@ class ReportController extends Controller implements HasMiddleware
         $revenue = AssignPlan::with('plan')
             ->whereYear('created_at', substr($month, 0, 4))
             ->whereMonth('created_at', substr($month, 5, 2))
+            ->whereHas('user', function($q){
+                $q->where('added_by', auth()->user()->id);
+            })
             ->get()
             ->sum(function ($assignPlan) {
                 $price = $assignPlan->plan ? (float) $assignPlan->plan->price : 0;

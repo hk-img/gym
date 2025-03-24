@@ -34,15 +34,15 @@
                                 @method('PUT')
                                 
                                 <div class="row g-3">
+                                    <!-- Member Selection -->
                                     <div class="col-md-6">
                                         <label class="form-label">Member <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="member_id" required>
-                                            @foreach($members as $member)
-                                                <option value="{{ $member->id }}" {{ $workout->member_id == $member->user_id ? 'selected' : '' }}>{{ $member->name }}</option>
-                                            @endforeach
+                                        <select class="userList form-control" name="member_id" required>
+                                            
                                         </select>
                                         @error('member_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
+
                                     <div class="col-md-6">
                                         <label class="form-label">Workout Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="workout_name" value="{{ $workout->workout_name }}" required>
@@ -100,6 +100,19 @@
 
 @push('custom-script')
     <script>
+        var selectedMemberId = "{{ $dietPlan->user_id ?? '' }}"; 
+        var selectedMemberName = "{{ $dietPlan->user->name ?? '' }}";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
+        });
+
+        // Preselect the item
+        if (selectedMemberId) {
+            var option = new Option(selectedMemberName, selectedMemberId, true, true);
+            $('.userList').append(option).trigger('change');
+        } 
+        
         function resetForm() {
             document.getElementById('workoutForm').reset();
         }

@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AssignPlanController;
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DietPlanController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
@@ -53,6 +55,12 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
 
     /** Workout */
     Route::resource('workout', WorkoutController::class);
+
+    /** Diet Plan */
+    Route::resource('diet-plan', DietPlanController::class);
+
+    /** Attendance */
+    Route::resource('attendance', AttendanceController::class);
 
     Route::delete('admin/images/remove/{id}', [ImageController::class, 'destroy'])->name('images.destroy');    
 

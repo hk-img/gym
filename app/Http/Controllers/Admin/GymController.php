@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
     
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\AssignPlan;
 use App\Models\User;
+use App\Notifications\NewGymNotification;
 use App\Traits\Traits;
 use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
@@ -32,7 +32,10 @@ class GymController extends Controller implements HasMiddleware
             new Middleware(['permission:gym-delete'], only: ['destroy']),
         ];
     }
-   
+
+    /**
+     * List of gym 
+     */
     public function index(Request $request)
     {
         try {
@@ -76,7 +79,7 @@ class GymController extends Controller implements HasMiddleware
                         $changeStatusInactiveRoute = route('admin.gym.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
                         return '<div class="dropdown action-label">
-                                    <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                                    <a href="javacript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false"><i
                                             class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
                                     <div class="dropdown-menu">
@@ -98,7 +101,7 @@ class GymController extends Controller implements HasMiddleware
                     
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
@@ -117,6 +120,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
 
+    /**
+     * Create new gym
+     */
     public function create()
     {
         try {
@@ -129,6 +135,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
 
+    /**
+     * Store new gym
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -148,9 +157,14 @@ class GymController extends Controller implements HasMiddleware
             $user->save();
             $user->assignRole('Gym');
 
-            // if($user){
-            //     $this->uploadMedia($request->file('image'), $user, 'images');
-            // }
+            if($user){
+                // $this->uploadMedia($request->file('image'), $user, 'images');
+
+                // Notify
+                $user->notify(new NewGymNotification($user));
+            }
+
+            
             DB::commit();
         
             return redirect()->route('admin.gym.index')->with('success', 'Gym added successfully.');;
@@ -161,7 +175,7 @@ class GymController extends Controller implements HasMiddleware
             ->with('error', $e->getMessage());
         }
     }
-    
+
     public function show($id)
     {
         try {
@@ -176,6 +190,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
     
+    /**
+     * Edit existing gym
+     */
     public function edit($id)
     {
         try {
@@ -190,6 +207,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
 
+    /**
+     * Update existing gym
+     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -227,6 +247,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
     
+    /**
+     * Delete gym
+     */
     public function destroy($id)
     {
         try {
@@ -241,6 +264,9 @@ class GymController extends Controller implements HasMiddleware
         }
     }
     
+    /**
+     * Change status (Active/ Inactive) of gym
+     */
     public function changeStatus($id,$status)
     {
         try {

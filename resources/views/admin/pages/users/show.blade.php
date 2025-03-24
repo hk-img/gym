@@ -39,7 +39,7 @@
                         <div class="profile-view">
                             <div class="profile-img-wrap">
                                 <div class="profile-img">
-                                    <a href="#"><img alt=""
+                                    <a href="javacript:void(0);"><img alt=""
                                             src="{{ $user->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg') }}"></a>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             {{-- <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal"
-                                    class="edit-icon" href="#"><i class="fa fa-pencil"></i></a></div> --}}
+                                    class="edit-icon" href="javacript:void(0);"><i class="fa fa-pencil"></i></a></div> --}}
                         </div>
                     </div>
                 </div>

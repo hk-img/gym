@@ -329,7 +329,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0001</a></td>
                                                 <td>
-                                                    <h2><a href="#">Global Technologies</a></h2>
+                                                    <h2><a href="javacript:void(0);">Global Technologies</a></h2>
                                                 </td>
                                                 <td>11 Mar 2019</td>
                                                 <td>$380</td>
@@ -340,7 +340,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0002</a></td>
                                                 <td>
-                                                    <h2><a href="#">Delta Infotech</a></h2>
+                                                    <h2><a href="javacript:void(0);">Delta Infotech</a></h2>
                                                 </td>
                                                 <td>8 Feb 2019</td>
                                                 <td>$500</td>
@@ -351,7 +351,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0003</a></td>
                                                 <td>
-                                                    <h2><a href="#">Cream Inc</a></h2>
+                                                    <h2><a href="javacript:void(0);">Cream Inc</a></h2>
                                                 </td>
                                                 <td>23 Jan 2019</td>
                                                 <td>$60</td>
@@ -389,7 +389,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0001</a></td>
                                                 <td>
-                                                    <h2><a href="#">Global Technologies</a></h2>
+                                                    <h2><a href="javacript:void(0);">Global Technologies</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>11 Mar 2019</td>
@@ -398,7 +398,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0002</a></td>
                                                 <td>
-                                                    <h2><a href="#">Delta Infotech</a></h2>
+                                                    <h2><a href="javacript:void(0);">Delta Infotech</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>8 Feb 2019</td>
@@ -407,7 +407,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0003</a></td>
                                                 <td>
-                                                    <h2><a href="#">Cream Inc</a></h2>
+                                                    <h2><a href="javacript:void(0);">Cream Inc</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>23 Jan 2019</td>
@@ -445,7 +445,7 @@
                                             <tr>
                                                 <td>
                                                     <h2 class="table-avatar">
-                                                        <a href="#" class="avatar"><img
+                                                        <a href="javacript:void(0);" class="avatar"><img
                                                                 src="{{asset('assets/img/profiles/avatar-19.jpg')}}"
                                                                 alt="User Image"></a>
                                                         <a href="client-profile.html">Barry Cuda <span>CEO</span></a>
@@ -458,14 +458,14 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-success"></i> Active
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -473,7 +473,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -489,7 +489,7 @@
                                             <tr>
                                                 <td>
                                                     <h2 class="table-avatar">
-                                                        <a href="#" class="avatar"><img
+                                                        <a href="javacript:void(0);" class="avatar"><img
                                                                 src="{{asset('assets/img/profiles/avatar-19.jpg')}}"
                                                                 alt="User Image"></a>
                                                         <a href="client-profile.html">Tressa Wexler
@@ -503,15 +503,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -519,7 +519,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -548,15 +548,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -564,7 +564,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -593,14 +593,14 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-success"></i> Active
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -608,7 +608,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -638,15 +638,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -654,7 +654,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -709,7 +709,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -739,7 +739,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -769,7 +769,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -799,7 +799,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -829,7 +829,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">

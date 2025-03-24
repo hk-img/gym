@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Workout Manager | List')
+@section('page_title', 'Diet Plan Manager | List')
 @push('custom-style')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 @endpush
@@ -10,10 +10,10 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Workout Manager</h3>
+                        <h3 class="page-title">Diet Plan Manager</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Workout Manager</li>
+                            <li class="breadcrumb-item active">Diet Plan Manager</li>
                         </ul>
                     </div>
                 </div>
@@ -42,9 +42,9 @@
                 <div class="col-sm-12">
                     <div class="card mb-0">
                         <div class="card-header d-flex justify-content-between">
-                            <h4 class="card-title mb-0">Workout List</h4>
+                            <h4 class="card-title mb-0">Diet Plan List</h4>
                             <div class="col-auto float-end ms-auto">
-                                <a href="{{route('admin.workout.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Workout</a>
+                                <a href="{{ route('admin.diet-plan.create') }}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Diet Plan</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -53,10 +53,10 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
-                                            <th>Date</th>
+                                            <th>Date & Time</th>
                                             <th>Member Name</th>
-                                            <th>Workout Name</th>
-                                            <th>Total Exercises</th>
+                                            <th>Diet Plan Name</th>
+                                            <th>Total Meals</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -77,33 +77,29 @@
 $(document).ready(function () {
     // Initialize Month & Year Picker
     $('#monthFilter').datepicker({
-        format: "yyyy-mm", // Year-Month format
+        format: "yyyy-mm",
         viewMode: "months",
         minViewMode: "months",
         autoclose: true
     });
 
-    // Set default revenue for the current month on page load
-    let currentMonth = moment().format('YYYY-MM');
-    loadDataTable(currentMonth);
+    loadDataTable();
 
-    // Handle Search Button Click
     $('.btn-search').on('click', function () {
-        let selectedMonth = $('#monthFilter').val(); // Get selected month
+        let selectedMonth = $('#monthFilter').val();
         if (selectedMonth) {
-            loadDataTable(selectedMonth); // Reload DataTable with new filter
+            loadDataTable(selectedMonth);
         } else {
             alert('Please select a month!');
         }
     });
 
-    // Handle Clear Button Click
     $('.btn-clear').on('click', function () {
-        $('#monthFilter').val(''); // Clear input
-        loadDataTable(currentMonth); // Reset table data
+        $('#monthFilter').val('');
+        loadDataTable();
     });
 
-    function loadDataTable(month) {
+    function loadDataTable(month = '') {
         if ($.fn.DataTable.isDataTable('.datatable')) {
             $('.datatable').DataTable().destroy();
         }
@@ -112,16 +108,15 @@ $(document).ready(function () {
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('admin.workout.index') }}",
+                url: "{{ route('admin.diet-plan.index') }}",
                 data: { month: month }
-
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'created_at_formatted', name: 'created_at_formatted' },
                 { data: 'member_name', name: 'member_name' },
-                { data: 'workout_name', name: 'workout_name' },
-                { data: 'total_exercises', name: 'total_exercises' },
+                { data: 'diet_plan_name', name: 'diet_plan_name' },
+                { data: 'total_meals', name: 'total_meals' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });

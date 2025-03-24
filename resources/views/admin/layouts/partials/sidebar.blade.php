@@ -1,29 +1,6 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
-            {{-- <ul class="sidebar-vertical">
-                @if($menus)
-                @foreach ($menus as $menu)
-                    <li class="{{ $menu->url == '#' ? 'submenu' : '' }}">
-                        <a href="{{ $menu->url == '#' ? $menu->url : route($menu->route)  }}"><i class="{{ $menu->icon }}"></i> <span> {{ $menu->name }}</span>
-                        @if($menu->url == '#') 
-                            <span class="menu-arrow"></span>
-                        @endif
-                        </a>
-                        @if ($menu->children->isNotEmpty())
-                            <ul>
-                                @foreach ($menu->children as $child)
-                                    <li><a class="{{Route::is($child->route) ? 'active' : ''}}" href="{{route($child->route)}}">{{ $child->name }}</a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </li>
-                @endforeach
-                @else 
-                
-                @endif
-            </ul> --}}
             <ul class="sidebar-vertical">
 
                 @php
@@ -41,7 +18,7 @@
                 @if(!$isGymManager)
                 <!-- Gym Manager -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-user"></i> <span>Gym Manager</span>
+                    <a href="javacript:void(0);"><i class="la la-user"></i> <span>Gym Manager</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -56,7 +33,7 @@
             @if(!$isSuperAdmin)
                 <!-- User -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-user"></i> <span>User</span>
+                    <a href="javacript:void(0);"><i class="la la-user"></i> <span>User</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -69,7 +46,7 @@
 
                 <!-- Plan -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-tasks"></i> <span>Plan</span>
+                    <a href="javacript:void(0);"><i class="la la-tasks"></i> <span>Plan</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -82,7 +59,7 @@
 
                 <!-- Assign Plan -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-user-check"></i> <span>Assign Plan</span>
+                    <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Assign Plan</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -94,7 +71,7 @@
 
                 <!-- Workout -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-user-check"></i> <span>Workout</span>
+                    <a href="javacript:void(0);"><i class="las la-dumbbell"></i> <span>Workout</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -104,9 +81,33 @@
                     </ul>
                 </li>
 
+                <!-- Diet Plan -->
+                <li class="submenu">
+                    <a href="javacript:void(0);"><i class="las la-apple-alt"></i> <span>Diet Plan</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.diet-plan.create') ? 'active' : ''}}" href="{{route('admin.diet-plan.create')}}">Add</a>
+                        </li>
+                        <li class="px-3"><a class="{{Route::is('admin.diet-plan.index') ? 'active' : ''}}" href="{{route('admin.diet-plan.index')}}">List</a>
+                    </ul>
+                </li>
+
+                <!-- Attendance -->
+                <li class="submenu">
+                    <a href="javacript:void(0);"><i class="las la-calendar"></i> <span>Attendance</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.attendance.create') ? 'active' : ''}}" href="{{route('admin.attendance.create')}}">Add</a>
+                        </li>
+                        <li class="px-3"><a class="{{Route::is('admin.attendance.index') ? 'active' : ''}}" href="{{route('admin.attendance.index')}}">List</a>
+                    </ul>
+                </li>
+
                 <!-- Reports -->
                 <li class="submenu">
-                    <a href="#"><i class="la la-clipboard-list"></i> <span>Reports</span>
+                    <a href="javacript:void(0);"><i class="la la-clipboard-list"></i> <span>Reports</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>

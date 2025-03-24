@@ -36,11 +36,8 @@
                                     <!-- Member Selection -->
                                     <div class="col-md-6">
                                         <label class="form-label">Member <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="member_id" required>
-                                            <option value="">Select Member</option>
-                                            @foreach($members as $member)
-                                                <option value="{{ $member->id }}">{{ $member->name }}</option>
-                                            @endforeach
+                                        <select class="userList form-control" name="member_id" required>
+                                            
                                         </select>
                                         @error('member_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
@@ -103,6 +100,10 @@
 
 @push('custom-script')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
+        });
+
         function resetForm() {
             document.getElementById('workoutForm').reset();
         }

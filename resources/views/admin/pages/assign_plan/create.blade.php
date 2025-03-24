@@ -35,15 +35,6 @@
                             <form action="{{ route('admin.assign-plan.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
-                                {{-- <div class="input-block mb-3 row">
-                                    <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
-                                    <div class="col-md-10">
-                                        <select class="userList form-control" name="user_id" id="userSelect">
-                                        </select>
-                                        @error('user_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
-                                </div> --}}
-                                {{-- @dd($user->id); --}}
                                 <div class="input-block mb-3 row">
                                     <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">

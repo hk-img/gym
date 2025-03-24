@@ -49,6 +49,23 @@ class UserSeeder extends Seeder
         'plan-view',
         'plan-status',
 
+        'workout-list',
+        'workout-create',
+        'workout-edit',
+        'workout-delete',
+        'workout-view',
+
+        'diet-plan-list',
+        'diet-plan-create',
+        'diet-plan-edit',
+        'diet-plan-delete',
+        'diet-plan-view',
+
+        'attendance-list',
+        'attendance-create',
+        'attendance-edit',
+        'attendance-delete',
+
         'membership-renewal',
         'membership-expired'
     ];
@@ -97,7 +114,10 @@ class UserSeeder extends Seeder
             'user-list', 'user-create', 'user-edit', 'user-delete', 'user-view', 'user-status',
             'assign-plan-list', 'assign-plan-create', 'assign-plan-edit', 'assign-plan-delete', 'assign-plan-view', 'assign-plan-status',
             'plan-list', 'plan-create', 'plan-edit', 'plan-delete', 'plan-view', 'plan-status',
-            'membership-list'
+            'workout-list', 'workout-create', 'workout-edit', 'workout-delete', 'workout-view',
+            'diet-plan-list','diet-plan-create','diet-plan-edit','diet-plan-delete','diet-plan-view',
+            'attendance-list','attendance-create','attendance-edit','attendance-delete',
+            'membership-renewal', 'membership-expired'
         ])->pluck('id')->all();
 
         // Assign permissions

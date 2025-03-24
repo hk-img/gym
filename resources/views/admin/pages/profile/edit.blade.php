@@ -26,7 +26,7 @@
                             <div class="profile-view">
                                 <div class="profile-img-wrap">
                                     <div class="profile-img">
-                                        <a href="#"><img alt=""
+                                        <a href="javacript:void(0);"><img alt=""
                                                 src="{{ $user->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg') }}"></a>
                                     </div>
                                 </div>
@@ -48,11 +48,11 @@
                                             <ul class="personal-info">
                                                 <li>
                                                     <div class="title">Phone:</div>
-                                                    <div class="text"><a href="#">9876543210</a></div>
+                                                    <div class="text"><a href="javacript:void(0);">9876543210</a></div>
                                                 </li>
                                                 <li>
                                                     <div class="title">Email:</div>
-                                                    <div class="text"><a href="#"><span class="__cf_email__"
+                                                    <div class="text"><a href="javacript:void(0);"><span class="__cf_email__"
                                                                 data-cfemail="bcd6d3d4d2d8d3d9fcd9c4ddd1ccd0d992dfd3d1">{{ $user->email }}</span></a>
                                                     </div>
                                                 </li>
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="pro-edit"><a data-bs-target="#profile_info" data-bs-toggle="modal"
-                                        class="edit-icon" href="#"><i class="fa fa-pencil"></i></a></div>
+                                        class="edit-icon" href="javacript:void(0);"><i class="fa fa-pencil"></i></a></div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                         <div class="col-md-6 d-flex">
                             <div class="card profile-box flex-fill">
                                 <div class="card-body">
-                                    <h3 class="card-title">Personal Informations <a href="#" class="edit-icon"
+                                    <h3 class="card-title">Personal Informations <a href="javacript:void(0);" class="edit-icon"
                                             data-bs-toggle="modal" data-bs-target="#personal_info_modal"><i
                                                 class="fa fa-pencil"></i></a></h3>
                                     <ul class="personal-info">
@@ -135,7 +135,7 @@
                                         </li>
                                         <li>
                                             <div class="title">Tel</div>
-                                            <div class="text"><a href="#">9876543210</a></div>
+                                            <div class="text"><a href="javacript:void(0);">9876543210</a></div>
                                         </li>
                                         <li>
                                             <div class="title">Nationality</div>
@@ -164,7 +164,7 @@
                         <div class="col-md-6 d-flex">
                             <div class="card profile-box flex-fill">
                                 <div class="card-body">
-                                    <h3 class="card-title">Emergency Contact <a href="#" class="edit-icon"
+                                    <h3 class="card-title">Emergency Contact <a href="javacript:void(0);" class="edit-icon"
                                             data-bs-toggle="modal" data-bs-target="#emergency_contact_modal"><i
                                                 class="fa fa-pencil"></i></a></h3>
                                     <h5 class="section-title">Primary</h5>
@@ -231,7 +231,7 @@
                         <div class="col-md-6 d-flex">
                             <div class="card profile-box flex-fill">
                                 <div class="card-body">
-                                    <h3 class="card-title">Family Informations <a href="#" class="edit-icon"
+                                    <h3 class="card-title">Family Informations <a href="javacript:void(0);" class="edit-icon"
                                             data-bs-toggle="modal" data-bs-target="#family_info_modal"><i
                                                 class="fa fa-pencil"></i></a></h3>
                                     <div class="table-responsive">
@@ -254,13 +254,13 @@
                                                     <td class="text-end">
                                                         <div class="dropdown dropdown-action">
                                                             <a aria-expanded="false" data-bs-toggle="dropdown"
-                                                                class="action-icon dropdown-toggle" href="#"><i
+                                                                class="action-icon dropdown-toggle" href="javacript:void(0);"><i
                                                                     class="material-icons">more_vert</i></a>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a href="#" class="dropdown-item"><i
+                                                                <a href="javacript:void(0);" class="dropdown-item"><i
                                                                         class="fa-solid fa-pencil m-r-5"></i>
                                                                     Edit</a>
-                                                                <a href="#" class="dropdown-item"><i
+                                                                <a href="javacript:void(0);" class="dropdown-item"><i
                                                                         class="fa-regular fa-trash-can m-r-5"></i>
                                                                     Delete</a>
                                                             </div>
@@ -278,7 +278,7 @@
                         <div class="col-md-6 d-flex">
                             <div class="card profile-box flex-fill">
                                 <div class="card-body">
-                                    <h3 class="card-title">Education Informations <a href="#" class="edit-icon"
+                                    <h3 class="card-title">Education Informations <a href="javacript:void(0);" class="edit-icon"
                                             data-bs-toggle="modal" data-bs-target="#education_info"><i
                                                 class="fa fa-pencil"></i></a></h3>
                                     <div class="experience-box">
@@ -319,7 +319,7 @@
                         <div class="col-md-6 d-flex">
                             <div class="card profile-box flex-fill">
                                 <div class="card-body">
-                                    <h3 class="card-title">Experience <a href="#" class="edit-icon"
+                                    <h3 class="card-title">Experience <a href="javacript:void(0);" class="edit-icon"
                                             data-bs-toggle="modal" data-bs-target="#experience_info"><i
                                                 class="fa fa-pencil"></i></a></h3>
                                     <div class="experience-box">
@@ -379,12 +379,12 @@
                                 <div class="card-body">
                                     <div class="dropdown profile-action">
                                         <a aria-expanded="false" data-bs-toggle="dropdown"
-                                            class="action-icon dropdown-toggle" href="#"><i
+                                            class="action-icon dropdown-toggle" href="javacript:void(0);"><i
                                                 class="material-icons">more_vert</i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa-regular fa-trash-can m-r-5"></i>
                                                 Delete</a>
                                         </div>
@@ -411,7 +411,7 @@
                                         <div>Project Leader :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
                                                         alt="" src="assets/img/profiles/avatar-16.jpg"></a>
                                             </li>
                                         </ul>
@@ -420,23 +420,23 @@
                                         <div>Team :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Doe"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Doe"><img
                                                         alt="" src="assets/img/profiles/avatar-02.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Richard Miles"><img
                                                         alt="" src="assets/img/profiles/avatar-09.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Smith"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Smith"><img
                                                         alt="" src="assets/img/profiles/avatar-10.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Mike Litorus"><img
                                                         alt="" src="assets/img/profiles/avatar-05.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" class="all-users">+15</a>
+                                                <a href="javacript:void(0);" class="all-users">+15</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -455,12 +455,12 @@
                                 <div class="card-body">
                                     <div class="dropdown profile-action">
                                         <a aria-expanded="false" data-bs-toggle="dropdown"
-                                            class="action-icon dropdown-toggle" href="#"><i
+                                            class="action-icon dropdown-toggle" href="javacript:void(0);"><i
                                                 class="material-icons">more_vert</i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa-regular fa-trash-can m-r-5"></i>
                                                 Delete</a>
                                         </div>
@@ -488,7 +488,7 @@
                                         <div>Project Leader :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
                                                         alt="" src="assets/img/profiles/avatar-16.jpg"></a>
                                             </li>
                                         </ul>
@@ -497,23 +497,23 @@
                                         <div>Team :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Doe"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Doe"><img
                                                         alt="" src="assets/img/profiles/avatar-02.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Richard Miles"><img
                                                         alt="" src="assets/img/profiles/avatar-09.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Smith"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Smith"><img
                                                         alt="" src="assets/img/profiles/avatar-10.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Mike Litorus"><img
                                                         alt="" src="assets/img/profiles/avatar-05.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" class="all-users">+15</a>
+                                                <a href="javacript:void(0);" class="all-users">+15</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -532,12 +532,12 @@
                                 <div class="card-body">
                                     <div class="dropdown profile-action">
                                         <a aria-expanded="false" data-bs-toggle="dropdown"
-                                            class="action-icon dropdown-toggle" href="#"><i
+                                            class="action-icon dropdown-toggle" href="javacript:void(0);"><i
                                                 class="material-icons">more_vert</i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa-regular fa-trash-can m-r-5"></i>
                                                 Delete</a>
                                         </div>
@@ -564,7 +564,7 @@
                                         <div>Project Leader :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
                                                         alt="" src="assets/img/profiles/avatar-16.jpg"></a>
                                             </li>
                                         </ul>
@@ -573,23 +573,23 @@
                                         <div>Team :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Doe"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Doe"><img
                                                         alt="" src="assets/img/profiles/avatar-02.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Richard Miles"><img
                                                         alt="" src="assets/img/profiles/avatar-09.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Smith"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Smith"><img
                                                         alt="" src="assets/img/profiles/avatar-10.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Mike Litorus"><img
                                                         alt="" src="assets/img/profiles/avatar-05.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" class="all-users">+15</a>
+                                                <a href="javacript:void(0);" class="all-users">+15</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -608,12 +608,12 @@
                                 <div class="card-body">
                                     <div class="dropdown profile-action">
                                         <a aria-expanded="false" data-bs-toggle="dropdown"
-                                            class="action-icon dropdown-toggle" href="#"><i
+                                            class="action-icon dropdown-toggle" href="javacript:void(0);"><i
                                                 class="material-icons">more_vert</i></a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#edit_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa fa-pencil m-r-5"></i> Edit</a>
-                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="#"
+                                            <a data-bs-target="#delete_project" data-bs-toggle="modal" href="javacript:void(0);"
                                                 class="dropdown-item"><i class="fa-regular fa-trash-can m-r-5"></i>
                                                 Delete</a>
                                         </div>
@@ -642,7 +642,7 @@
                                         <div>Project Leader :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Jeffery Lalor"><img
                                                         alt="" src="assets/img/profiles/avatar-16.jpg"></a>
                                             </li>
                                         </ul>
@@ -651,23 +651,23 @@
                                         <div>Team :</div>
                                         <ul class="team-members">
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Doe"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Doe"><img
                                                         alt="" src="assets/img/profiles/avatar-02.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Richard Miles"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Richard Miles"><img
                                                         alt="" src="assets/img/profiles/avatar-09.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="John Smith"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Smith"><img
                                                         alt="" src="assets/img/profiles/avatar-10.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"><img
+                                                <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Mike Litorus"><img
                                                         alt="" src="assets/img/profiles/avatar-05.jpg"></a>
                                             </li>
                                             <li>
-                                                <a href="#" class="all-users">+15</a>
+                                                <a href="javacript:void(0);" class="all-users">+15</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -1008,7 +1008,7 @@
                                 <tr>
                                     <td>4</td>
                                     <td>
-                                        <a href="#" class="table-imgname">
+                                        <a href="javacript:void(0);" class="table-imgname">
                                             <img src="assets/img/mouse.png" class="me-2" alt="Mouse Image">
                                             <span>Logitech Mouse</span>
                                         </a>
@@ -1037,7 +1037,7 @@
                                 <tr>
                                     <td>5</td>
                                     <td>
-                                        <a href="#" class="table-imgname">
+                                        <a href="javacript:void(0);" class="table-imgname">
                                             <img src="assets/img/laptop.png" class="me-2" alt="Laptop Image">
                                             <span>Laptop</span>
                                         </a>
@@ -1066,7 +1066,7 @@
                                 <tr>
                                     <td>6</td>
                                     <td>
-                                        <a href="#" class="table-imgname">
+                                        <a href="javacript:void(0);" class="table-imgname">
                                             <img src="assets/img/laptop.png" class="me-2" alt="Laptop Image">
                                             <span>Laptop</span>
                                         </a>
@@ -1868,7 +1868,7 @@
                                     <div class="input-block mb-3">
                                         <label class="col-form-label">Team Leader</label>
                                         <div class="project-members">
-                                            <a href="#" data-bs-toggle="tooltip" title="Jeffery Lalor"
+                                            <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Jeffery Lalor"
                                                 class="avatar">
                                                 <img src="assets/img/profiles/avatar-16.jpg" alt="User Image">
                                             </a>
@@ -1887,19 +1887,19 @@
                                     <div class="input-block mb-3">
                                         <label class="col-form-label">Team Members</label>
                                         <div class="project-members">
-                                            <a href="#" data-bs-toggle="tooltip" title="John Doe"
+                                            <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Doe"
                                                 class="avatar">
                                                 <img src="assets/img/profiles/avatar-16.jpg" alt="User Image">
                                             </a>
-                                            <a href="#" data-bs-toggle="tooltip" title="Richard Miles"
+                                            <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Richard Miles"
                                                 class="avatar">
                                                 <img src="assets/img/profiles/avatar-09.jpg" alt="User Image">
                                             </a>
-                                            <a href="#" data-bs-toggle="tooltip" title="John Smith"
+                                            <a href="javacript:void(0);" data-bs-toggle="tooltip" title="John Smith"
                                                 class="avatar">
                                                 <img src="assets/img/profiles/avatar-10.jpg" alt="User Image">
                                             </a>
-                                            <a href="#" data-bs-toggle="tooltip" title="Mike Litorus"
+                                            <a href="javacript:void(0);" data-bs-toggle="tooltip" title="Mike Litorus"
                                                 class="avatar">
                                                 <img src="assets/img/profiles/avatar-05.jpg" alt="User Image">
                                             </a>
