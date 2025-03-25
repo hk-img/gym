@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Traits\Traits;
 
 class OptionController extends Controller
@@ -18,7 +17,6 @@ class OptionController extends Controller
 		$this->limit = 10;
 	}
 
-   
 	public function userList(Request $request)
 	{
 		$term = $request->input('term');

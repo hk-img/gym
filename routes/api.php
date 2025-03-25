@@ -19,4 +19,7 @@ Route::middleware('auth:api')->group(function () {
     /** Profile Section API's */
     Route::get('/my-profile', [ProfileController::class, 'myProfile']); 
     Route::post('/update-profile', [ProfileController::class, 'updateProfile']); 
+    
+    Route::get('/get-working-hours', [HomeController::class, 'getWorkingHour']); 
+    Route::get('/get-social-links', [HomeController::class, 'socialLinks']); 
 });
