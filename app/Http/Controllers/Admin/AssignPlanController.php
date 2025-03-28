@@ -152,8 +152,8 @@ class AssignPlanController extends Controller implements HasMiddleware
     public function create(Request $request)
     {
         try {
-            $user = User::find($request->user);
-            // dd($user);
+            $id = base64_decode($request->user);
+            $user = User::find($id);
             return view('admin.pages.assign_plan.create', compact('user')); // Pass user data to the view
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -161,8 +161,6 @@ class AssignPlanController extends Controller implements HasMiddleware
         }
     }
     
-
-
     public function store(Request $request)
     {
         $validated = $request->validate([

@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-sm-6 col-md-3 d-flex gap-3">
                     <div class="d-grid h-25">
-                        <a href="#" class="btn btn-success btn-search text-capitalize">Search</a>
+                        <a href="javacript:void(0);" class="btn btn-success btn-search text-capitalize">Search</a>
                     </div>
                      <div class="d-grid h-25">
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
@@ -63,8 +63,8 @@
                                             <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Expiry Date</th>
                                             <th>Membership Status</th>
+                                            <th>Expiry Date</th>
                                             {{-- <th>Status</th> --}}
                                             <th>Action</th>
                                         </tr>
@@ -90,8 +90,8 @@
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
-            { data: 'end_date', name: 'end_date' },
             { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
+            { data: 'end_date', name: 'end_date' },
             {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];

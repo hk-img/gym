@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AssignPlan;
 use App\Models\User;
+use App\Notifications\NewMemberNotification;
 use App\Traits\Traits;
 use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
@@ -59,7 +60,7 @@ class UserController extends Controller implements HasMiddleware
                     })
                     ->editColumn('name', function ($row) {
                         $name = '<h2 class="table-avatar">
-                            <a href="#" class="avatar">
+                            <a href="javacript:void(0);" class="avatar">
                                 <img src="' . ($row->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg')) . '" alt="User Image">
                             </a>
                             <a>
@@ -102,7 +103,7 @@ class UserController extends Controller implements HasMiddleware
                     //     $changeStatusInactiveRoute = route('admin.users.changeStatus', ['id' => $encodedId, 'status' => '2']);
 
                     //     return '<div class="dropdown action-label">
-                    //                 <a href="#" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                    //                 <a href="javacript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                     //                     data-bs-toggle="dropdown" aria-expanded="false"><i
                     //                         class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
                     //                 <div class="dropdown-menu">
@@ -134,14 +135,14 @@ class UserController extends Controller implements HasMiddleware
                         // </a>' : '';
 
                         $planButton = ($row->membership_status == 'Pending' || $row->membership_status == 'Expired') ?
-                            '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . $row->id . '">
+                            '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . base64_encode($row->id) . '">
                                             <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
                                         </a>'
                             : '';
 
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
-                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         ' . $editButton . '
@@ -204,6 +205,10 @@ class UserController extends Controller implements HasMiddleware
             if ($user) {
                 $this->uploadMedia($request->file('image'), $user, 'images');
             }
+
+            // Notify 
+            $gymOwner = auth()->user();
+            $gymOwner->notify(new NewMemberNotification($user));
             DB::commit();
 
             return redirect()->route('admin.users.index')->with('success', 'Member added successfully.');

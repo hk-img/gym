@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-sm-6 col-md-3 d-flex gap-3">
                     <div class="d-grid h-25">
-                        <a href="#" class="btn btn-success btn-search text-capitalize">Search</a>
+                        <a href="javacript:void(0);" class="btn btn-success btn-search text-capitalize">Search</a>
                     </div>
                     <div class="d-grid h-25">
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>

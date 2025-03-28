@@ -2,8 +2,6 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none">
 
-
-<!-- Mirrored from smarthr.dreamstechnologies.com/laravel/template/public/admin-dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 12 Nov 2024 05:34:38 GMT -->
 <!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
