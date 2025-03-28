@@ -9,7 +9,7 @@
                 <div class="page-header">
                     <div class="row">
                         <div class="col-sm-12">
-                            <h3 class="page-title">Welcome Admin!</h3>
+                            <h3 class="page-title">Welcome {{auth()->user()->name}}!</h3>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item active">Dashboard</li>
                             </ul>
@@ -17,52 +17,44 @@
                     </div>
                 </div>
                 <!-- /Page Header -->
-
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{isset($data) ? $data['customer'] : 0}}</h3>
-                                    <span>Customer</span>
+                    @if(auth()->user()->hasRole('Super Admin'))
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['gym'] : 0}}</h3>
+                                        <span>Gym</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-usd"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>44</h3>
-                                    <span>Clients</span>
+                    @endif
+                    @if(auth()->user()->hasRole('Gym'))
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['member'] : 0}}</h3>
+                                        <span>Member</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa-regular fa-gem"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>37</h3>
-                                    <span>Tasks</span>
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-tasks"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['plan'] : 0}}</h3>
+                                        <span>Plan</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-                        <div class="card dash-widget">
-                            <div class="card-body">
-                                <span class="dash-widget-icon"><i class="fa fa-user"></i></span>
-                                <div class="dash-widget-info">
-                                    <h3>{{isset($data) ? $data['vendor'] : 0}}</h3>
-                                    <span>Vendor</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
 
                 {{-- <div class="row">
@@ -337,7 +329,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0001</a></td>
                                                 <td>
-                                                    <h2><a href="#">Global Technologies</a></h2>
+                                                    <h2><a href="javacript:void(0);">Global Technologies</a></h2>
                                                 </td>
                                                 <td>11 Mar 2019</td>
                                                 <td>$380</td>
@@ -348,7 +340,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0002</a></td>
                                                 <td>
-                                                    <h2><a href="#">Delta Infotech</a></h2>
+                                                    <h2><a href="javacript:void(0);">Delta Infotech</a></h2>
                                                 </td>
                                                 <td>8 Feb 2019</td>
                                                 <td>$500</td>
@@ -359,7 +351,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0003</a></td>
                                                 <td>
-                                                    <h2><a href="#">Cream Inc</a></h2>
+                                                    <h2><a href="javacript:void(0);">Cream Inc</a></h2>
                                                 </td>
                                                 <td>23 Jan 2019</td>
                                                 <td>$60</td>
@@ -397,7 +389,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0001</a></td>
                                                 <td>
-                                                    <h2><a href="#">Global Technologies</a></h2>
+                                                    <h2><a href="javacript:void(0);">Global Technologies</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>11 Mar 2019</td>
@@ -406,7 +398,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0002</a></td>
                                                 <td>
-                                                    <h2><a href="#">Delta Infotech</a></h2>
+                                                    <h2><a href="javacript:void(0);">Delta Infotech</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>8 Feb 2019</td>
@@ -415,7 +407,7 @@
                                             <tr>
                                                 <td><a href="invoice-view.html">#INV-0003</a></td>
                                                 <td>
-                                                    <h2><a href="#">Cream Inc</a></h2>
+                                                    <h2><a href="javacript:void(0);">Cream Inc</a></h2>
                                                 </td>
                                                 <td>Paypal</td>
                                                 <td>23 Jan 2019</td>
@@ -453,7 +445,7 @@
                                             <tr>
                                                 <td>
                                                     <h2 class="table-avatar">
-                                                        <a href="#" class="avatar"><img
+                                                        <a href="javacript:void(0);" class="avatar"><img
                                                                 src="{{asset('assets/img/profiles/avatar-19.jpg')}}"
                                                                 alt="User Image"></a>
                                                         <a href="client-profile.html">Barry Cuda <span>CEO</span></a>
@@ -466,14 +458,14 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-success"></i> Active
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -481,7 +473,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -497,7 +489,7 @@
                                             <tr>
                                                 <td>
                                                     <h2 class="table-avatar">
-                                                        <a href="#" class="avatar"><img
+                                                        <a href="javacript:void(0);" class="avatar"><img
                                                                 src="{{asset('assets/img/profiles/avatar-19.jpg')}}"
                                                                 alt="User Image"></a>
                                                         <a href="client-profile.html">Tressa Wexler
@@ -511,15 +503,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -527,7 +519,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -556,15 +548,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -572,7 +564,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -601,14 +593,14 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-success"></i> Active
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -616,7 +608,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -646,15 +638,15 @@
                                                 <td>
                                                     <div class="dropdown action-label">
                                                         <a class="btn btn-white btn-sm btn-rounded dropdown-toggle"
-                                                            href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            href="javacript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fa-regular fa-circle-dot text-danger"></i>
                                                             Inactive
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-right">
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-success"></i>
                                                                 Active</a>
-                                                            <a class="dropdown-item" href="#"><i
+                                                            <a class="dropdown-item" href="javacript:void(0);"><i
                                                                     class="fa-regular fa-circle-dot text-danger"></i>
                                                                 Inactive</a>
                                                         </div>
@@ -662,7 +654,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -717,7 +709,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -747,7 +739,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -777,7 +769,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -807,7 +799,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
@@ -837,7 +829,7 @@
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="dropdown dropdown-action">
-                                                        <a href="#" class="action-icon dropdown-toggle"
+                                                        <a href="javacript:void(0);" class="action-icon dropdown-toggle"
                                                             data-bs-toggle="dropdown" aria-expanded="false"><i
                                                                 class="material-icons">more_vert</i></a>
                                                         <div class="dropdown-menu dropdown-menu-right">
