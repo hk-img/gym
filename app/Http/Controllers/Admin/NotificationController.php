@@ -25,13 +25,13 @@ class NotificationController extends Controller
         try {
             $request->validate([
                 'send_to' => 'required|in:all,specific',
-                'user_id' => 'nullable|required_if:send_to,specific|exists:users,id',
+                'user_id.*' => 'nullable|required_if:send_to,specific|exists:users,id',
                 'type' => 'required|in:sms,in-app',
                 'title' => 'required|string',
                 'message' => 'required|string'
             ]);
 
-            $users = ($request->send_to === 'all') ? User::where('added_by', auth()->user()->id)->get() : User::where('id', $request->user_id)->get();
+            $users = ($request->send_to === 'all') ? User::where('added_by', auth()->user()->id)->get() : User::whereIn('id', $request->user_id)->get();
 
             foreach ($users as $user) {
                 $user->notify(new UserNotification($request->title, $request->message, $request->type));

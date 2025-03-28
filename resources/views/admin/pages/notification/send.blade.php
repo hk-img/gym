@@ -63,7 +63,7 @@
 
                                 <div class="row g-3 mt-2">
                                     <div class="col-md-6" id="userSelect" style="display: none;">
-                                        <select class="userList form-control" name="user_id">
+                                        <select class="userList form-control" name="user_id[]" multiple>
                                             <!-- User List -->
                                         </select>
                                         @error('user_id') <p class="text-danger text-xs pt-1">{{$message}}</p> @enderror
