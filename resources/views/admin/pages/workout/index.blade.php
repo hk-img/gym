@@ -85,7 +85,7 @@ $(document).ready(function () {
 
     // Set default revenue for the current month on page load
     let currentMonth = moment().format('YYYY-MM');
-    loadDataTable(currentMonth);
+    loadDataTable();
 
     // Handle Search Button Click
     $('.btn-search').on('click', function () {
@@ -100,10 +100,10 @@ $(document).ready(function () {
     // Handle Clear Button Click
     $('.btn-clear').on('click', function () {
         $('#monthFilter').val(''); // Clear input
-        loadDataTable(currentMonth); // Reset table data
+        loadDataTable(); // Reset table data
     });
 
-    function loadDataTable(month) {
+    function loadDataTable(month = null) {
         if ($.fn.DataTable.isDataTable('.datatable')) {
             $('.datatable').DataTable().destroy();
         }
