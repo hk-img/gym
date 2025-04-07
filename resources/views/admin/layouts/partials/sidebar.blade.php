@@ -28,6 +28,18 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- Gym Listing Manager -->
+                <li class="submenu">
+                    <a href="javacript:void(0);"><i class="la la-user"></i> <span>Gym Listing Manager</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li class="px-3"><a class="{{Route::is('admin.gym.gymlist') ? 'active' : ''}}" href="{{route('admin.gym.gymlist')}}">List</a>
+                        </li>
+                    </ul>
+                </li>
+
                 @endif
             
             @if(!$isSuperAdmin)

@@ -43,6 +43,7 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Gym Manager */
     Route::resource('gym', GymController::class);
     Route::get('gym/change-status/{id}/{status}', [GymController::class,'changeStatus'])->name('gym.changeStatus');
+    Route::get('gymList',[GymController::class,'gymlisting'])->name('gym.gymlist');
     
     /** Plan */
     Route::resource('plan', PlanController::class);
