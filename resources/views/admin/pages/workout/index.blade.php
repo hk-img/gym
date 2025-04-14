@@ -20,7 +20,7 @@
             </div>
 
             <!-- Filter Row -->
-            <div class="row filter-row">
+            {{-- <div class="row filter-row">
                 <div class="col-md-4 mb-3">
                     <div class="input-group">
                         <input type="text" id="monthFilter" class="form-control" placeholder="Select Month & Year" readonly>
@@ -35,7 +35,7 @@
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- /Filter Row -->
 
             <div class="row">
@@ -44,7 +44,7 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4 class="card-title mb-0">Workout List</h4>
                             <div class="col-auto float-end ms-auto">
-                                <a href="{{route('admin.workout.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Workout</a>
+                                <a href="{{route('admin.workout.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add / Edit Workout</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -55,8 +55,8 @@
                                             <th>S.No.</th>
                                             <th>Date</th>
                                             <th>Member Name</th>
-                                            <th>Workout Name</th>
-                                            <th>Total Exercises</th>
+                                            {{-- <th>Workout Name</th> --}}
+                                            {{-- <th>Total Exercises</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -120,8 +120,6 @@ $(document).ready(function () {
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'created_at_formatted', name: 'created_at_formatted' },
                 { data: 'member_name', name: 'member_name' },
-                { data: 'workout_name', name: 'workout_name' },
-                { data: 'total_exercises', name: 'total_exercises' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });

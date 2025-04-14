@@ -80,6 +80,9 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Option */
     Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
     Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
+
+    Route::get('usergetdata', [WorkoutController::class,'getdata'])->name('workout.getdata');
+    Route::get('dietdata',[DietPlanController::class,'dietdata'])->name('diet.getdata');
 });
 
 

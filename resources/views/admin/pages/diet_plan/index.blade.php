@@ -20,7 +20,7 @@
             </div>
 
             <!-- Filter Row -->
-            <div class="row filter-row">
+            {{-- <div class="row filter-row">
                 <div class="col-md-4 mb-3">
                     <div class="input-group">
                         <input type="text" id="monthFilter" class="form-control" placeholder="Select Month & Year" readonly>
@@ -35,7 +35,7 @@
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- /Filter Row -->
 
             <div class="row">
@@ -44,7 +44,7 @@
                         <div class="card-header d-flex justify-content-between">
                             <h4 class="card-title mb-0">Diet Plan List</h4>
                             <div class="col-auto float-end ms-auto">
-                                <a href="{{ route('admin.diet-plan.create') }}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Diet Plan</a>
+                                <a href="{{ route('admin.diet-plan.create') }}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add/ Edit Diet Plan</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -55,8 +55,8 @@
                                             <th>S.No.</th>
                                             <th>Date & Time</th>
                                             <th>Member Name</th>
-                                            <th>Diet Plan Name</th>
-                                            <th>Total Meals</th>
+                                            {{-- <th>Diet Plan Name</th>
+                                            <th>Total Meals</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -115,8 +115,8 @@ $(document).ready(function () {
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'created_at_formatted', name: 'created_at_formatted' },
                 { data: 'member_name', name: 'member_name' },
-                { data: 'diet_plan_name', name: 'diet_plan_name' },
-                { data: 'total_meals', name: 'total_meals' },
+                // { data: 'diet_plan_name', name: 'diet_plan_name' },
+                // { data: 'total_meals', name: 'total_meals' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });

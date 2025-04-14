@@ -57,6 +57,8 @@
                                             <th>Purchase Date</th>
                                             <th>Condition</th>
                                             <th>Next Maintenance Date</th>
+                                            <th>Amount</th>
+                                            <th>Bill No</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -117,6 +119,8 @@ $(document).ready(function () {
                 { data: 'purchase_date', name: 'purchase_date' },
                 { data: 'condition', name: 'condition' },
                 { data: 'maintenance_date', name: 'maintenance_date' },
+                { data: 'amount', name: 'amount' },
+                { data: 'bill_no', name: 'bill_no' },
                 { data: 'action', name: 'action', orderable: false, searchable: false },
             ]
         });

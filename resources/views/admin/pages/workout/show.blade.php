@@ -40,10 +40,10 @@
                                                 <div class="title">Member:</div>
                                                 <div class="text">{{ $workout->user->name }}</div>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <div class="title">Workout Name:</div>
                                                 <div class="text">{{ $workout->workout_name }}</div>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <div class="title">Date:</div>
                                                 <div class="text">{{ Carbon\Carbon::parse($workout->date)->format('d M Y') }}</div>
@@ -64,20 +64,18 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Days</th>
                         <th>Exercise Name</th>
-                        <th>Sets</th>
-                        <th>Reps</th>
-                        <th>Weight (kg)</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($workout->exercises as $index => $exercise)
                         <tr>
                             <td>{{ $index + 1 }}</td>
+                            <td>{{ $exercise->days }}</td>
                             <td>{{ $exercise->exercise_name }}</td>
-                            <td>{{ $exercise->sets }}</td>
-                            <td>{{ $exercise->reps }}</td>
-                            <td>{{ $exercise->weight ?? 'N/A' }}</td>
+                            <td>{{ $exercise->description }}</td>
                         </tr>
                     @endforeach
                 </tbody>

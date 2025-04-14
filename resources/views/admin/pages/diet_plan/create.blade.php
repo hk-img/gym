@@ -36,65 +36,55 @@
                                     <!-- Member Selection -->
                                     <div class="col-md-6">
                                         <label class="form-label">Member <span class="text-danger">*</span></label>
-                                        <select class="userList form-control" name="member_id" required>
+                                        <select class="userList form-control extract-data" name="member_id" required>
                                             
                                         </select>
                                         @error('member_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
-
-                                    <!-- Diet Plan Name -->
-                                    <div class="col-md-6">
-                                        <label class="form-label">Diet Plan Name<span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="diet_plan_name" placeholder="Enter Diet Plan Name" required>
-                                        @error('diet_plan_name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
                                 </div>
 
-                                <div class="row g-3 mt-2">
-                                    <!-- Date -->
-                                    <div class="col-md-6">
-                                        <label class="form-label">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" name="date" required>
-                                        @error('date') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
-                                </div>
 
                                 <!-- Dynamic Meal Fields -->
                                 <div class="mt-4">
                                     <h5>Meals</h5>
-                                    <table class="table" id="mealTable">
+                                    <table class="table" id="meal-Table">
                                         <thead>
                                             <tr>
                                                 <th>Meal Type</th>
                                                 <th>Meal Name</th>
-                                                <th>Calories</th>
-                                                <th>Protein (g)</th>
-                                                <th>Carbs (g)</th>
-                                                <th>Fats (g)</th>
-                                                <th>Action</th>
+                                                <th>Meal Description</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="mealTable">
                                             <tr>
-                                                <td>
-                                                    <select name="meals[0][meal_type]" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        <option value="Breakfast">Breakfast</option>
-                                                        <option value="Lunch">Lunch</option>
-                                                        <option value="Dinner">Dinner</option>
-                                                        <option value="Snacks">Snacks</option>
-                                                    </select>
-                                                </td>
+                                                <td>Breakfast</td>
+                                                <input type="hidden" name="meals[0][meal_type]" value="Breakfast" class="form-control" required>
                                                 <td><input type="text" name="meals[0][meal_name]" class="form-control" required></td>
-                                                <td><input type="number" name="meals[0][calories]" class="form-control" required></td>
-                                                <td><input type="number" step="0.1" name="meals[0][protein]" class="form-control" required></td>
-                                                <td><input type="number" step="0.1" name="meals[0][carbs]" class="form-control" required></td>
-                                                <td><input type="number" step="0.1" name="meals[0][fats]" class="form-control" required></td>
-                                                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
+                                                <td><textarea name="meals[0][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Lunch</td>
+                                                <input type="hidden" name="meals[1][meal_type]" value="Lunch" class="form-control" required>
+                                                <td><input type="text" name="meals[1][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[1][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Dinner</td>
+                                                <input type="hidden" name="meals[2][meal_type]" value="Dinner" class="form-control" required>
+                                                <td><input type="text" name="meals[2][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[2][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Snacks</td>
+                                                <input type="hidden" name="meals[3][meal_type]" value="Snacks" class="form-control" required>
+                                                <td><input type="text" name="meals[3][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[3][description]" class="form-control" required></textarea></td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <button type="button" class="btn btn-secondary" id="addMeal">Add Meal</button>
                                 </div>
 
                                 <div class="mt-4">
@@ -108,6 +98,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @push('custom-script')
@@ -119,34 +110,49 @@
         function resetForm() {
             document.getElementById('dietPlanForm').reset();
         }
+    </script>
 
-        document.getElementById('addMeal').addEventListener('click', function() {
-            let table = document.getElementById('mealTable').getElementsByTagName('tbody')[0];
-            let rowCount = table.rows.length;
-            let row = table.insertRow(rowCount);
-            row.innerHTML = `
-                <td>
-                    <select name="meals[${rowCount}][meal_type]" class="form-control" required>
-                        <option value="">Select</option>
-                        <option value="Breakfast">Breakfast</option>
-                        <option value="Lunch">Lunch</option>
-                        <option value="Dinner">Dinner</option>
-                        <option value="Snacks">Snacks</option>
-                    </select>
-                </td>
-                <td><input type="text" name="meals[${rowCount}][meal_name]" class="form-control" required></td>
-                <td><input type="number" name="meals[${rowCount}][calories]" class="form-control" required></td>
-                <td><input type="number" step="0.1" name="meals[${rowCount}][protein]" class="form-control" required></td>
-                <td><input type="number" step="0.1" name="meals[${rowCount}][carbs]" class="form-control" required></td>
-                <td><input type="number" step="0.1" name="meals[${rowCount}][fats]" class="form-control" required></td>
-                <td><button type="button" class="btn btn-danger btn-sm removeMeal"><i class="fa-solid fa-trash"></i></button></td>
-            `;
-        });
+    <script>
+        $(document).ready(function() {
+            $(".extract-data").change(function() {
+                var userId = $(this).val();
+                $.ajax({
+                    url: "{{ route('admin.diet.getdata') }}",
+                    data: {
+                        member_id: userId,
+                    },
+                    success: function(data) {
+                        var meals = data.meal?.meals || [];
+                        if (meals.length > 0) {
 
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('removeMeal')) {
-                event.target.closest('tr').remove();
-            }
+                            // alert('not empty');
+
+                            var tableBody = '';
+
+                            meals.forEach(function(meal, index) {
+                                
+                                tableBody += `
+                            <tr>
+                                <td>${meal.meal_type}</td>
+                                <input type="hidden" name="meals[${index}][meal_type]" value="${meal.meal_type}" class="form-control" required>
+                                <td><input type="text" name="meals[${index}][meal_name]" class="form-control" value="${meal.meal_name}" required></td>
+                                <td><textarea name="meals[${index}][description]" class="form-control" required>${meal.description}</textarea></td>
+                            </tr>`;
+                            });
+
+                            $('#mealTable').html(tableBody);
+                        } else {
+                            // alert('empty');
+                            $('input[name$="[meal_name]"]').val('');
+                            $('textarea[name$="[description]"]').text('');
+                        }
+
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseJSON.message);
+                    }
+                });
+            });
         });
     </script>
 @endpush

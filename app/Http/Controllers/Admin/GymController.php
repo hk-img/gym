@@ -376,11 +376,3 @@ class GymController extends Controller implements HasMiddleware
         }
     }
 }
-
-// $gymAdmins = User::role('gym')
-//             ->withCount([
-//                 'addedUsers as users_count' => function($query){
-//                     $query->role('member');
-//                 }
-//             ])
-//             ->get(['id','name']);

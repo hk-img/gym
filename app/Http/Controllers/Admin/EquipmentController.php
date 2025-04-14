@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-    
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\DietPlan;
@@ -32,10 +32,8 @@ class EquipmentController extends Controller implements HasMiddleware
             new Middleware(['permission:diet-plan-delete'], only: ['destroy']),
         ];
     }
-    
-    /**
-     * Equipment list
-     */
+
+
     public function index(Request $request)
     {
         try {
@@ -59,11 +57,17 @@ class EquipmentController extends Controller implements HasMiddleware
                     ->addColumn('purchase_date_formatted', function ($row) {
                         return \Carbon\Carbon::parse($row->purchase_date)->format('D m, Y');
                     })
-                    ->addColumn('equipment_name', function($row){
+                    ->addColumn('equipment_name', function ($row) {
                         return $row->equipment_name;
                     })
-                    ->addColumn('condition', function($row){
+                    ->addColumn('condition', function ($row) {
                         return ucfirst($row->condition);
+                    })
+                    ->addColumn('amount', function ($row) {
+                        return ucfirst($row->amount);
+                    })
+                    ->addColumn('bill_no', function ($row) {
+                        return ucfirst($row->bill_no);
                     })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
@@ -81,7 +85,7 @@ class EquipmentController extends Controller implements HasMiddleware
                                     </div>
                                 </div>';
                     })
-                    ->rawColumns(['purchase_date_formatted', 'equipment_name', 'condition', 'action'])
+                    ->rawColumns(['purchase_date_formatted', 'equipment_name', 'condition', 'amount', 'bill_no', 'action'])
                     ->make(true);
             }
 
@@ -92,9 +96,7 @@ class EquipmentController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * Create a equipment form
-     */
+
     public function create()
     {
         try {
@@ -106,28 +108,39 @@ class EquipmentController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * Store equipment
-     */
+
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
-            'equipment_name' => 'required|string|max:250',
+            'equipment_name' => 'required|string|max:250|unique:equipment,equipment_name',
             'purchase_date' => 'required|date',
             'condition' => 'required|in:New,Good,Needs Maintenance',
             'maintenance_date' => 'nullable|date|after_or_equal:purchase_date',
+            'amount' => 'required|numeric|gt:0',
+            'bill_no' => 'required|unique:equipment,bill_no',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
+
+
 
         DB::beginTransaction();
         try {
-            // Create new equipment entry
-            Equipment::create([
+            $equipment = Equipment::create([
                 'equipment_name' => $validated['equipment_name'],
                 'purchase_date' => $validated['purchase_date'],
                 'condition' => $validated['condition'],
                 'maintenance_date' => $validated['maintenance_date'] ?? null,
+                'amount' => $validated['amount'],
+                'bill_no' => $validated['bill_no'],
                 'added_by' => auth()->user()->id,
             ]);
+
+
+            if($equipment){
+                $this->uploadMedia($request->file('image'), $equipment, 'images');
+            }
+
 
             DB::commit();
             return redirect()->route('admin.equipment.index')->with('success', 'Equipment added successfully.');
@@ -138,9 +151,7 @@ class EquipmentController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * View diet plan
-     */
+
     // public function show($id)
     // {
     //     try {
@@ -154,34 +165,32 @@ class EquipmentController extends Controller implements HasMiddleware
     //     }
     // }
 
-    /**
-     * Edit an Existing diet plan
-     */
+
     public function edit($id)
     {
         try {
             $id = base64_decode($id);
-             
+
             $equipment = Equipment::findOrFail($id);
-            
-            return view('admin.pages.equipment.edit',compact('equipment'));
+
+            return view('admin.pages.equipment.edit', compact('equipment'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.equipment.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
-    /**
-     * Update an Existing equipment
-     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'equipment_name' => 'required|string|max:250',
+            'equipment_name' => 'required|string|max:250|unique:equipment,equipment_name,'.$id,
             'purchase_date' => 'required|date',
             'condition' => 'required|in:New,Good,Needs Maintenance',
             'maintenance_date' => 'nullable|date|after_or_equal:purchase_date',
+            'amount' => 'required|numeric|gt:0',
+            'bill_no' => 'required|unique:equipment,bill_no,'.$id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1048',
         ]);
 
         DB::beginTransaction();
@@ -195,7 +204,20 @@ class EquipmentController extends Controller implements HasMiddleware
                 'purchase_date' => $validated['purchase_date'],
                 'condition' => $validated['condition'],
                 'maintenance_date' => $validated['maintenance_date'] ?? null,
+                'amount' => $validated['amount'],
+                'bill_no' => $validated['bill_no'],
             ]);
+
+            if ($equipment) {
+                if ($request->hasFile('image')) {
+
+                    if ($equipment->hasMedia('images')) {
+                        $equipment->clearMediaCollection('images'); // Deletes all media in the 'images' collection
+                    }
+
+                    $this->uploadMedia($request->file('image'), $equipment, 'images');
+                }
+            }
 
             DB::commit();
             return redirect()->route('admin.equipment.index')->with('success', 'Equipment updated successfully.');
@@ -214,7 +236,7 @@ class EquipmentController extends Controller implements HasMiddleware
     //     try {
     //         $id = base64_decode($id);
     //         Workout::findOrFail($id)->delete();
-            
+
     //         return redirect()->route('admin.workout.index')->with('success', 'Workout deleted successfully.');
     //     } catch (\Throwable $e) {
     //         Log::error($e->getMessage());
@@ -222,5 +244,5 @@ class EquipmentController extends Controller implements HasMiddleware
     //             ->with('error', 'Something went wrong');
     //     }
     // }
-    
+
 }
