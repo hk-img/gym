@@ -125,7 +125,7 @@
                                         {{-- <label class="form-label">Current Image</label> --}}
                                         <div class="image-container d-inline-block">
                                             <img id="imagePreview"
-                                                src="{{ $data->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ $equipment->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/placeholder.jpg') }}"
                                                 width="150" height="150" class="img-thumbnail">
                                         </div>
                                     </div>
