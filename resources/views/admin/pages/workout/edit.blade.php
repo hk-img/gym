@@ -42,47 +42,32 @@
                                         </select>
                                         @error('member_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Workout Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="workout_name" value="{{ $workout->workout_name }}" required>
-                                        @error('workout_name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
                                 </div>
                                 
-                                <div class="row g-3 mt-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Date <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control" name="date" value="{{ $workout->date }}" required>
-                                        @error('date') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
-                                </div>
 
                                 <div class="mt-4">
                                     <h5>Exercises</h5>
                                     <table class="table" id="exerciseTable">
                                         <thead>
                                             <tr>
+                                                <th>Days</th>
                                                 <th>Exercise Name</th>
-                                                <th>Sets</th>
-                                                <th>Reps</th>
-                                                <th>Weight (kg)</th>
-                                                <th>Action</th>
+                                                <th>Description</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach($workout->exercises as $index => $exercise)
                                                 <tr>
-                                                    <td><input type="text" name="exercises[{{ $index }}][exercise_name]" class="form-control" value="{{ $exercise->exercise_name }}" required></td>
-                                                    <td><input type="number" name="exercises[{{ $index }}][sets]" class="form-control" value="{{ $exercise->sets }}" required></td>
-                                                    <td><input type="number" name="exercises[{{ $index }}][reps]" class="form-control" value="{{ $exercise->reps }}" required></td>
-                                                    <td><input type="number" name="exercises[{{ $index }}][weight]" class="form-control" value="{{ $exercise->weight }}"></td>
-                                                    <td><button type="button" class="btn btn-danger btn-sm removeExercise">X</button></td>
+                                                    <td>{{$exercise->days}}</td>
+                                                    <td>    
+                                                        <input type="hidden" name="exercises[{{ $index }}][days]" class="form-control" value="{{ $exercise->days }}" required>
+                                                        <input type="text" name="exercises[{{ $index }}][exercise_name]" class="form-control" value="{{ $exercise->exercise_name }}" required/>
+                                                    </td>
+                                                    <td><textarea name="exercises[{{ $index }}][description]" class="form-control" required>{{$exercise->description}}</textarea></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <button type="button" class="btn btn-secondary" id="addExercise">Add Exercise</button>
                                 </div>
 
                                 <div class="mt-4">
@@ -100,14 +85,13 @@
 
 @push('custom-script')
     <script>
-        var selectedMemberId = "{{ $dietPlan->user_id ?? '' }}"; 
-        var selectedMemberName = "{{ $dietPlan->user->name ?? '' }}";
+        var selectedMemberId = "{{ $workout->user_id ?? '' }}"; 
+        var selectedMemberName = "{{ $workout->user->name ?? '' }}";
 
         document.addEventListener('DOMContentLoaded', function() {
             initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
         });
 
-        // Preselect the item
         if (selectedMemberId) {
             var option = new Option(selectedMemberName, selectedMemberId, true, true);
             $('.userList').append(option).trigger('change');
@@ -117,23 +101,23 @@
             document.getElementById('workoutForm').reset();
         }
 
-        document.getElementById('addExercise').addEventListener('click', function() {
-            let table = document.getElementById('exerciseTable').getElementsByTagName('tbody')[0];
-            let rowCount = table.rows.length;
-            let row = table.insertRow(rowCount);
-            row.innerHTML = `
-                <td><input type="text" name="exercises[${rowCount}][exercise_name]" class="form-control" required></td>
-                <td><input type="number" name="exercises[${rowCount}][sets]" class="form-control" required></td>
-                <td><input type="number" name="exercises[${rowCount}][reps]" class="form-control" required></td>
-                <td><input type="number" name="exercises[${rowCount}][weight]" class="form-control"></td>
-                <td><button type="button" class="btn btn-danger btn-sm removeExercise">X</button></td>
-            `;
-        });
+        // document.getElementById('addExercise').addEventListener('click', function() {
+        //     let table = document.getElementById('exerciseTable').getElementsByTagName('tbody')[0];
+        //     let rowCount = table.rows.length;
+        //     let row = table.insertRow(rowCount);
+        //     row.innerHTML = `
+        //         <td><input type="text" name="exercises[${rowCount}][exercise_name]" class="form-control" required></td>
+        //         <td><input type="number" name="exercises[${rowCount}][sets]" class="form-control" required></td>
+        //         <td><input type="number" name="exercises[${rowCount}][reps]" class="form-control" required></td>
+        //         <td><input type="number" name="exercises[${rowCount}][weight]" class="form-control"></td>
+        //         <td><button type="button" class="btn btn-danger btn-sm removeExercise">X</button></td>
+        //     `;
+        // });
 
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('removeExercise')) {
-                event.target.closest('tr').remove();
-            }
-        });
+        // document.addEventListener('click', function(event) {
+        //     if (event.target.classList.contains('removeExercise')) {
+        //         event.target.closest('tr').remove();
+        //     }
+        // });
     </script>
 @endpush

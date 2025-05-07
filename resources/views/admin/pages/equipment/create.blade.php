@@ -16,7 +16,8 @@
                         </ul>
                     </div>
                     <div class="col d-flex justify-content-end align-items-center">
-                        <a href="{{ route('admin.equipment.index') }}"><button type="button" class="btn btn-primary me-2">Back</button></a>
+                        <a href="{{ route('admin.equipment.index') }}"><button type="button"
+                                class="btn btn-primary me-2">Back</button></a>
                     </div>
                 </div>
             </div>
@@ -29,22 +30,27 @@
                             <h4 class="card-title mb-0">Add Equipment</h4>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.equipment.store') }}" method="post" id="equipmentForm">
+                            <form action="{{ route('admin.equipment.store') }}" method="post" id="equipmentForm" enctype="multipart/form-data">
                                 @csrf
-                                
+
                                 <div class="row g-3">
                                     <!-- Equipment Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Equipment Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="equipment_name" placeholder="Enter Equipment Name" required>
-                                        @error('equipment_name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        <input type="text" class="form-control" name="equipment_name"
+                                            placeholder="Enter Equipment Name" required>
+                                        @error('equipment_name')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
                                     </div>
 
                                     <!-- Purchase Date -->
                                     <div class="col-md-6">
                                         <label class="form-label">Purchase Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="purchase_date" required>
-                                        @error('purchase_date') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        @error('purchase_date')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -58,20 +64,64 @@
                                             <option value="Good">Good</option>
                                             <option value="Needs Maintenance">Needs Maintenance</option>
                                         </select>
-                                        @error('condition') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        @error('condition')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
                                     </div>
 
                                     <!-- Maintenance Date -->
                                     <div class="col-md-6">
                                         <label class="form-label">Next Maintenance Date</label>
                                         <input type="date" class="form-control" name="maintenance_date">
-                                        @error('maintenance_date') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        @error('maintenance_date')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+                                <div class="row g-3 mt-2">
+                                    <!-- Amount -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Amount <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount"
+                                            onkeypress="return onlyNumbers(event)">
+                                        @error('amount')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Bill No -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Bill No</label>
+                                        <input type="text" class="form-control" name="bill_no" placeholder="Enter Bill">
+                                        @error('bill_no')
+                                            <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Image Upload -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Upload Image <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" name="image" accept="image/*"
+                                        id="imageUpload">
+                                    <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
+                                    @error('image')
+                                        <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                    @enderror
+
+                                    <!-- Image Preview -->
+                                    <div class="mt-2">
+                                        <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail"
+                                            style="max-width: 150px; display: none;">
                                     </div>
                                 </div>
 
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-primary px-4">Save</button>
-                                    <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>
+                                    <button type="button" class="btn btn-secondary px-4"
+                                        onclick="resetForm()">Reset</button>
                                 </div>
                             </form>
                         </div>
@@ -87,5 +137,5 @@
         function resetForm() {
             document.getElementById('equipmentForm').reset();
         }
-    </script>  
+    </script>
 @endpush

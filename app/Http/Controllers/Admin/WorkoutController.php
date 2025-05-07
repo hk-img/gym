@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-    
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Exercise;
@@ -32,7 +32,7 @@ class WorkoutController extends Controller implements HasMiddleware
             new Middleware(['permission:workout-delete'], only: ['destroy']),
         ];
     }
-    
+
     /**
      * Workout list
      */
@@ -40,31 +40,22 @@ class WorkoutController extends Controller implements HasMiddleware
     {
         try {
             if ($request->ajax()) {
-                $query = Workout::with(['user'])->withCount(['exercises']);
+                $query = Workout::with(['user']);
 
-                // Apply date range filter if provided
-                if ($request->month) {
-                    $month = $request->input('month');
-                    $query->whereYear('date', substr($month, 0, 4))
-                    ->whereMonth('date', substr($month, 5, 2));
-                }
-                
-                $query->whereHas('user', function($q){
+
+                $query->whereHas('user', function ($q) {
                     $q->where('added_by', auth()->user()->id);
                 });
 
-                $data = $query->orderBy('date', 'DESC')->get();
+                $data = $query->get();
 
                 return DataTables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('member_name', function($row){
-                        return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
-                    }) 
-                    ->addColumn('total_exercises', function($row){
-                        return $row->exercises_count;
-                    }) 
+                    ->addColumn('member_name', function ($row) {
+                        return $row->user->name . ' ' . '(' . ($row->user->country_code ?? '+91') . ' ' . $row->user->phone . ')' ?? 'N/A';
+                    })
 
-                    ->addColumn('created_at_formatted', function($row){
+                    ->addColumn('created_at_formatted', function ($row) {
                         return \Carbon\Carbon::parse($row->date)->format('d M Y');
                     })
                     ->addColumn('action', function ($row) {
@@ -73,8 +64,8 @@ class WorkoutController extends Controller implements HasMiddleware
                         $viewRoute = route('admin.workout.show', $encodedId);
 
                         // Edit button
-                        $editButton = auth()->user()->can('workout-edit') ?
-                            '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
+                        // $editButton = auth()->user()->can('workout-edit') ?
+                        //     '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
                         // View button
                         $viewButton = auth()->user()->can('workout-view') ?
@@ -85,12 +76,11 @@ class WorkoutController extends Controller implements HasMiddleware
                                     <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false"><i class="material-icons">more_vert</i></a>
                                     <div class="dropdown-menu dropdown-menu-right">
-                                        ' . $editButton . '
                                         ' . $viewButton . '
                                     </div>
                                 </div>';
                     })
-                    ->rawColumns(['created_at_formatted','total_exercises','action'])
+                    ->rawColumns(['created_at_formatted', 'action'])
                     ->make(true);
             }
 
@@ -101,58 +91,95 @@ class WorkoutController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * Create a workout form
-     */
     public function create()
     {
         try {
-            $members = User::whereHas('roles', function($q){
+            $members = User::whereHas('roles', function ($q) {
                 $q->where('name', 'Member');
             })->where('added_by', auth()->user()->id)->get();
-            return view('admin.pages.workout.create',compact('members'));
+            return view('admin.pages.workout.create', compact('members'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.workout.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
-    /**
-     * Store new workout
-     */
+    // public function store(Request $request)
+    // {   
+    //     $validated = $request->validate([
+    //         'member_id' => 'required|exists:users,id|unique:workouts,user_id',
+    //         'exercises' => 'required|array',
+    //         'exercises.*.exercise_name' => 'required|string|max:250',
+    //         'exercises.*.days' => 'required|string|max:250',
+    //         'exercises.*.description' => 'required|string',
+    //     ]);
+
+    //     DB::beginTransaction();
+    //     try {
+    //         $workout = Workout::create([
+    //             'user_id' => $validated['member_id'],
+    //             'added_by' => auth()->user()->id,
+    //         ]);
+
+    //         foreach ($validated['exercises'] as $exercise) {
+    //             Exercise::create([
+    //                 'workout_id' => $workout->id,
+    //                 'exercise_name' => $exercise['exercise_name'],
+    //                 'days' => $exercise['days'],
+    //                 'description' => $exercise['description'],
+    //             ]);
+    //         }
+
+    //         DB::commit();
+    //         return redirect()->route('admin.workout.index')->with('success', 'Workout added successfully.');
+    //     } catch (\Throwable $e) {
+    //         DB::rollBack();
+    //         Log::error($e->getMessage());
+    //         return redirect()->route('admin.workout.index')->with('error', 'Something went wrong.');
+    //     }
+    // }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
             'member_id' => 'required|exists:users,id',
-            'workout_name' => 'required|string|max:250',
-            'date' => 'required|date',
             'exercises' => 'required|array',
             'exercises.*.exercise_name' => 'required|string|max:250',
-            'exercises.*.sets' => 'required|integer|min:1',
-            'exercises.*.reps' => 'required|integer|min:1',
-            'exercises.*.weight' => 'nullable|numeric|min:0',
+            'exercises.*.days' => 'required|string|max:250',
+            'exercises.*.description' => 'required|string',
         ]);
 
         DB::beginTransaction();
         try {
-            // Create workout entry
-            $workout = Workout::create([
-                'user_id' => $validated['member_id'],
-                'workout_name' => $validated['workout_name'],
-                'date' => $validated['date'],
-                'added_by' => auth()->user()->id,
-            ]);
 
-            // Save exercises
-            foreach ($validated['exercises'] as $exercise) {
-                Exercise::create([
-                    'workout_id' => $workout->id,
-                    'exercise_name' => $exercise['exercise_name'],
-                    'sets' => $exercise['sets'],
-                    'reps' => $exercise['reps'],
-                    'weight' => $exercise['weight'] ?? null,
+            $workouts = Workout::where('user_id', $request->member_id)->first();
+            if ($workouts) {
+
+                $workouts->exercises()->delete();
+
+                foreach ($validated['exercises'] as $exercise) {
+                    Exercise::create([
+                        'workout_id' => $workouts->id,
+                        'exercise_name' => $exercise['exercise_name'],
+                        'days' => $exercise['days'],
+                        'description' => $exercise['description'],
+                    ]);
+                }
+            } else {
+                $workout = Workout::create([
+                    'user_id' => $validated['member_id'],
+                    'added_by' => auth()->user()->id,
                 ]);
+
+                foreach ($validated['exercises'] as $exercise) {
+                    Exercise::create([
+                        'workout_id' => $workout->id,
+                        'exercise_name' => $exercise['exercise_name'],
+                        'days' => $exercise['days'],
+                        'description' => $exercise['description'],
+                    ]);
+                }
             }
 
             DB::commit();
@@ -164,9 +191,7 @@ class WorkoutController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * View Workout
-     */
+
     public function show($id)
     {
         try {
@@ -180,68 +205,54 @@ class WorkoutController extends Controller implements HasMiddleware
         }
     }
 
-    
-    /**
-     * Edit an Existing workout
-     */
+
     public function edit($id)
     {
         try {
             $id = base64_decode($id);
-            
-            $members = User::whereHas('roles', function($q){
+
+            $members = User::whereHas('roles', function ($q) {
                 $q->where('name', 'Member');
             })->where('added_by', auth()->user()->id)->get();
-            
+
             $workout = Workout::findOrFail($id);
-            
-            return view('admin.pages.workout.edit',compact('workout','members'));
+
+            return view('admin.pages.workout.edit', compact('workout', 'members'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.workout.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
-    /**
-     * Update an Existing workout
-     */
     public function update(Request $request, $id)
     {
+
         $validated = $request->validate([
             'member_id' => 'required|exists:users,id',
-            'workout_name' => 'required|string|max:250',
-            'date' => 'required|date',
             'exercises' => 'required|array',
             'exercises.*.exercise_name' => 'required|string|max:250',
-            'exercises.*.sets' => 'required|integer|min:1',
-            'exercises.*.reps' => 'required|integer|min:1',
-            'exercises.*.weight' => 'nullable|numeric|min:0',
+            'exercises.*.days' => 'required|string|max:250',
+            'exercises.*.description' => 'required|string',
         ]);
 
         DB::beginTransaction();
         try {
-            // Find workout
+
             $workout = Workout::findOrFail($id);
-            
-            // Update workout details
+
             $workout->update([
                 'user_id' => $validated['member_id'],
-                'workout_name' => $validated['workout_name'],
-                'date' => $validated['date'],
                 'added_by' => auth()->user()->id,
             ]);
-
-            // Remove existing exercises and insert new ones (can be optimized with update logic if needed)
             $workout->exercises()->delete();
 
             foreach ($validated['exercises'] as $exercise) {
                 Exercise::create([
                     'workout_id' => $workout->id,
                     'exercise_name' => $exercise['exercise_name'],
-                    'sets' => $exercise['sets'],
-                    'reps' => $exercise['reps'],
-                    'weight' => $exercise['weight'] ?? null,
+                    'days' => $exercise['days'],
+                    'description' => $exercise['description'],
                 ]);
             }
 
@@ -254,15 +265,12 @@ class WorkoutController extends Controller implements HasMiddleware
         }
     }
 
-    /**
-     * Delete workout
-     */
     // public function destroy($id)
     // {
     //     try {
     //         $id = base64_decode($id);
     //         Workout::findOrFail($id)->delete();
-            
+
     //         return redirect()->route('admin.workout.index')->with('success', 'Workout deleted successfully.');
     //     } catch (\Throwable $e) {
     //         Log::error($e->getMessage());
@@ -270,5 +278,17 @@ class WorkoutController extends Controller implements HasMiddleware
     //             ->with('error', 'Something went wrong');
     //     }
     // }
-    
+
+    public function getdata(Request $request)
+    {
+        try {
+            // dd($request->member_id);
+            $memberId = $request->member_id;
+            $exercise = Workout::with('exercises')->where('user_id', $memberId)->first();
+            return response()->json(['exercise' => $exercise]);
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => 'Something went wrong!'], 500);
+        }
+    }
 }

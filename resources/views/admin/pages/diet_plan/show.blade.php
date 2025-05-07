@@ -40,10 +40,10 @@
                                                 <div class="title">Member:</div>
                                                 <div class="text">{{ $dietPlan->user->name }}</div>
                                             </li>
-                                            <li>
+                                            {{-- <li>
                                                 <div class="title">Diet Plan Name:</div>
                                                 <div class="text">{{ $dietPlan->diet_plan_name }}</div>
-                                            </li>
+                                            </li> --}}
                                             <li>
                                                 <div class="title">Date:</div>
                                                 <div class="text">{{ Carbon\Carbon::parse($dietPlan->date)->format('d M Y') }}</div>
@@ -66,10 +66,7 @@
                         <th>#</th>
                         <th>Meal Type</th>
                         <th>Meal Name</th>
-                        <th>Calories</th>
-                        <th>Protein (g)</th>
-                        <th>Carbs (g)</th>
-                        <th>Fats (g)</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,10 +75,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $meal->meal_type }}</td>
                             <td>{{ $meal->meal_name }}</td>
-                            <td>{{ $meal->calories ?? 'N/A' }}</td>
-                            <td>{{ $meal->protein ?? 'N/A' }}</td>
-                            <td>{{ $meal->carbs ?? 'N/A' }}</td>
-                            <td>{{ $meal->fats ?? 'N/A' }}</td>
+                            <td>{{ $meal->description ?? 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

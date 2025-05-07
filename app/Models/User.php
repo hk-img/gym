@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasFactory, HasApiTokens, Notifiable, HasRoles,InteractsWithMedia, SoftDeletes;
+    use HasFactory, HasApiTokens, Notifiable, HasRoles, InteractsWithMedia, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -64,27 +64,35 @@ class User extends Authenticatable implements HasMedia
     }
 
     // Accessors
-    public function name(): Attribute{
+    public function name(): Attribute
+    {
         return Attribute::make(
-            get: fn ($value) => ucwords($value),
+            get: fn($value) => ucwords($value),
         );
     }
 
-    public function MembershipStatus(): Attribute{
+    public function MembershipStatus(): Attribute
+    {
         return Attribute::make(
-            get: fn ($value) => ucfirst($value),
+            get: fn($value) => ucfirst($value),
         );
     }
-    
+
     // Relations
 
-    public function assignPlan(){
+    public function assignPlan()
+    {
         return $this->hasMany(AssignPlan::class, 'user_id', 'id');
     }
-    
-     // A user can be added by another user (belongsTo self)
-     public function addedBy()
-     {
+
+    // A user can be added by another user (belongsTo self)
+    public function addedBy()
+    {
         return $this->belongsTo(User::class, 'added_by');
-     }
+    }
+    
+    public function addedUsers()
+    {
+        return $this->hasMany(User::class, 'added_by');
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-    
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -43,12 +43,12 @@ class GymController extends Controller implements HasMiddleware
 
                 $query = User::query();
 
-                $query->whereHas('roles' , function($q){
-                    $q->where('name','Gym');
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'Gym');
                 });
-                
+
                 $data = $query->with('media')->latest()->excludeSuperAdmin()->get();
-        
+
                 return DataTables::of($data)
                     ->addIndexColumn() // Adds the iteration column
                     ->addColumn('created_at_formatted', function ($row) {
@@ -64,7 +64,7 @@ class GymController extends Controller implements HasMiddleware
                         return $name;
                     })
                     ->addColumn('phone', function ($row) {
-                        return $row->country_code ?? '+91'.' '.$row->phone;
+                        return $row->country_code ?? '+91' . ' ' . $row->phone;
                     })
 
                     ->addColumn('email', function ($row) {
@@ -81,11 +81,11 @@ class GymController extends Controller implements HasMiddleware
                         return '<div class="dropdown action-label">
                                     <a href="javacript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false"><i
-                                            class="fa-regular fa-circle-dot text-'.$status.'"></i> '.$text.' </a>
+                                            class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . ' </a>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="'.$changeStatusActiveRoute.'"><i
+                                        <a class="dropdown-item" href="' . $changeStatusActiveRoute . '"><i
                                                 class="fa-regular fa-circle-dot text-success"></i> Active</a>
-                                        <a class="dropdown-item" href="'.$changeStatusInactiveRoute.'"><i
+                                        <a class="dropdown-item" href="' . $changeStatusInactiveRoute . '"><i
                                                 class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
                                     </div>
                                 </div>';
@@ -93,12 +93,12 @@ class GymController extends Controller implements HasMiddleware
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.gym.edit', $encodedId);
-                    
+
                         // Edit button
-                        $editButton = auth()->user()->can('gym-edit') ? 
+                        $editButton = auth()->user()->can('gym-edit') ?
                             '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
 
-                    
+
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
                                     <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
@@ -109,14 +109,14 @@ class GymController extends Controller implements HasMiddleware
                                     </div>
                                 </div>';
                     })
-                    ->rawColumns(['name','status', 'action'])
+                    ->rawColumns(['name', 'status', 'action'])
                     ->make(true);
             }
             return view('admin.pages.gym.index');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.dashboard')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -127,11 +127,11 @@ class GymController extends Controller implements HasMiddleware
     {
         try {
             $roles = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name')->all();
-            return view('admin.pages.gym.create',compact('roles'));
+            return view('admin.pages.gym.create', compact('roles'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -149,30 +149,30 @@ class GymController extends Controller implements HasMiddleware
 
         DB::beginTransaction();
         try {
-        
+
             $input = $request->all();
-        
+
             $user = User::create($input);
             $user->gym_id = 'GYM' . str_pad($user->id, 6, '0', STR_PAD_LEFT);
             $user->save();
             $user->assignRole('Gym');
 
-            if($user){
+            if ($user) {
                 // $this->uploadMedia($request->file('image'), $user, 'images');
 
                 // Notify
                 $user->notify(new NewGymNotification($user));
             }
 
-            
+
             DB::commit();
-        
+
             return redirect()->route('admin.gym.index')->with('success', 'Gym added successfully.');;
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
-            ->with('error', $e->getMessage());
+                ->with('error', $e->getMessage());
         }
     }
 
@@ -182,14 +182,14 @@ class GymController extends Controller implements HasMiddleware
             $id = base64_decode($id);
             $user = User::findOrFail($id);
             $lastestPlan = $user->assignPlan()->latest()->first();
-            return view('admin.pages.gym.show',compact('user', 'lastestPlan'));
+            return view('admin.pages.gym.show', compact('user', 'lastestPlan'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
-    
+
     /**
      * Edit existing gym
      */
@@ -198,12 +198,12 @@ class GymController extends Controller implements HasMiddleware
         try {
             $id = base64_decode($id);
             $data = User::excludeSuperAdmin()->findOrFail($id);
-        
-            return view('admin.pages.gym.edit',compact('data'));
+
+            return view('admin.pages.gym.edit', compact('data'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
 
@@ -214,13 +214,13 @@ class GymController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|max:250|unique:users,name',
-            'email' => 'required|email|max:250|unique:users,email,'.$id,
-            'phone' => 'required|digits:10|unique:users,phone,'.$id,
+            'email' => 'required|email|max:250|unique:users,email,' . $id,
+            'phone' => 'required|digits:10|unique:users,phone,' . $id,
         ]);
         DB::beginTransaction();
-        try {        
+        try {
             $input = $request->all();
-        
+
             $user = User::find($id);
             $user->update($input);
 
@@ -236,17 +236,17 @@ class GymController extends Controller implements HasMiddleware
             // }
 
             DB::commit();
-        
+
             return redirect()->route('admin.gym.index')
-                            ->with('success','Gym info updated successfully');
+                ->with('success', 'Gym info updated successfully');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
-            ->with('error', 'Something went wrong');
+                ->with('error', 'Something went wrong');
         }
     }
-    
+
     /**
      * Delete gym
      */
@@ -255,7 +255,7 @@ class GymController extends Controller implements HasMiddleware
         try {
             $id = base64_decode($id);
             User::excludeSuperAdmin()->findOrFail($id)->delete();
-            
+
             return redirect()->route('admin.gym.index')->with('success', 'Gym deleted successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
@@ -263,11 +263,11 @@ class GymController extends Controller implements HasMiddleware
                 ->with('error', 'Something went wrong');
         }
     }
-    
+
     /**
      * Change status (Active/ Inactive) of gym
      */
-    public function changeStatus($id,$status)
+    public function changeStatus($id, $status)
     {
         try {
             // Validate the status to ensure it's either 1 or 2
@@ -281,11 +281,97 @@ class GymController extends Controller implements HasMiddleware
             $user = User::excludeSuperAdmin()->findOrFail($id);
             $user->status = $status;
             $user->save();
-            
+
             return redirect()->route('admin.gym.index')->with('success', 'Status changed successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.gym.index')
+                ->with('error', 'Something went wrong');
+        }
+    }
+
+
+    public function gymlisting(Request $request)
+    {
+        try {
+
+            if ($request->ajax()) {
+
+                $query = User::query();
+
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'Gym');
+                });
+
+                $query->withCount([
+                    'addedUsers as count' => function ($query) {
+                        $query->role('Member');
+                    }
+                ]);
+                
+                $data = $query->with('media')->latest()->excludeSuperAdmin()->get();
+
+                return DataTables::of($data)
+                    ->addIndexColumn() // Adds the iteration column
+                    ->addColumn('created_at_formatted', function ($row) {
+                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                    })
+                    ->editColumn('name', function ($row) {
+                        $name = '<h2 class="table-avatar">
+                            <a>
+                                <span>' . htmlspecialchars($row->name, ENT_QUOTES, 'UTF-8') . '</span>
+                            </a>
+                        </h2>';
+
+                        return $name;
+                    })
+
+                    ->addColumn('status', function ($row) {
+                        $encodedId = base64_encode($row->id);
+                        $status = $row->status == 1 ? 'success' : 'danger';
+                        $text = $row->status == 1 ? 'Active' : 'Inactive';
+                        $changeStatusActiveRoute = route('admin.gym.changeStatus', ['id' => $encodedId, 'status' => '1']);
+                        $changeStatusInactiveRoute = route('admin.gym.changeStatus', ['id' => $encodedId, 'status' => '2']);
+
+                        return '<div class="dropdown action-label">
+                                    <a href="javacript:void(0);" class="btn btn-white btn-sm btn-rounded dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false"><i
+                                            class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . ' </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="' . $changeStatusActiveRoute . '"><i
+                                                class="fa-regular fa-circle-dot text-success"></i> Active</a>
+                                        <a class="dropdown-item" href="' . $changeStatusInactiveRoute . '"><i
+                                                class="fa-regular fa-circle-dot text-danger"></i> Inactive</a>
+                                    </div>
+                                </div>';
+                    })
+                    ->addColumn('action', function ($row) {
+                        $encodedId = base64_encode($row->id);
+                        $editRoute = route('admin.gym.edit', $encodedId);
+
+                        // Edit button
+                        $editButton = auth()->user()->can('gym-edit') ?
+                            '<a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>' : '';
+
+
+                        // Return action buttons with form for deletion
+                        return '<div class="dropdown dropdown-action">
+                                    <a href="javacript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        ' . $editButton . '
+                                        
+                                    </div>
+                                </div>';
+                    })
+                    ->rawColumns(['name', 'status', 'action'])
+                    ->make(true);
+            }
+            return view('admin.pages.gym.gymlist');
+        } catch (\Throwable $e) {
+            dd($e);
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
                 ->with('error', 'Something went wrong');
         }
     }

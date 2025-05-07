@@ -43,6 +43,7 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Gym Manager */
     Route::resource('gym', GymController::class);
     Route::get('gym/change-status/{id}/{status}', [GymController::class,'changeStatus'])->name('gym.changeStatus');
+    Route::get('gymList',[GymController::class,'gymlisting'])->name('gym.gymlist');
     
     /** Plan */
     Route::resource('plan', PlanController::class);
@@ -79,6 +80,9 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Option */
     Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
     Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
+
+    Route::get('usergetdata', [WorkoutController::class,'getdata'])->name('workout.getdata');
+    Route::get('dietdata',[DietPlanController::class,'dietdata'])->name('diet.getdata');
 });
 
 
