@@ -26,17 +26,25 @@
             </ul> --}}
             <ul class="sidebar-vertical">
                 <li class="">
-                    <a href="{{route('admin.dashboard') }}"><i class="la la-cube"></i> <span>Dashboard</span>
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="la la-user"></i> <span>User</span>
+                    <a href="#">
+                        <i class="fas fa-user"></i> <span>User</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
-                        <li><a class="{{Route::is('admin.users.create') ? 'active' : ''}}" href="{{route('admin.users.create')}}">Add</a>
+                        <li>
+                            <a class="{{ Route::is('admin.users.create') ? 'active' : '' }}" href="{{ route('admin.users.create') }}">
+                                Add
+                            </a>
                         </li>
-                        <li><a class="{{Route::is('admin.users.index') ? 'active' : ''}}" href="{{route('admin.users.index')}}">List</a>
+                        <li>
+                            <a class="{{ Route::is('admin.users.index') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                                List
+                            </a>
                         </li>
                     </ul>
                 </li>
