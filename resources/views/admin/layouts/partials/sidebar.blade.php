@@ -99,6 +99,18 @@
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
+                            <li class="submenu">
+                                <a href="javacript:void(0);"> <span>Category</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <ul>
+                                    <li class="px-3"><a class="{{ Route::is('admin.category.create') ? 'active' : '' }}"
+                                            href="{{ route('admin.category.create') }}">Add</a>
+                                    </li>
+                                    <li class="px-3"><a class="{{ Route::is('admin.category.index') ? 'active' : '' }}"
+                                            href="{{ route('admin.category.index') }}">List</a>
+                                </ul>
+                            </li>
                             <li class="px-3"><a class="{{ Route::is('admin.video.create') ? 'active' : '' }}"
                                     href="{{ route('admin.video.create') }}">Add</a>
                             </li>
@@ -147,6 +159,9 @@
                             <li class="px-3"><a class="{{ Route::is('admin.reports.expired') ? 'active' : '' }}"
                                     href="{{ route('admin.reports.expired') }}">Membership Expired</a>
                             </li>
+                            <li class="px-3"><a class="{{ Route::is('admin.reports.pt') ? 'active' : '' }}"
+                                    href="{{ route('admin.reports.pt') }}">Personal Training</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -190,6 +205,20 @@
                             </li>
                             <li class="px-3"><a class="{{ Route::is('admin.equipment.index') ? 'active' : '' }}"
                                     href="{{ route('admin.equipment.index') }}">List</a>
+                        </ul>
+                    </li>
+                    
+                    <li class="submenu">
+                        <a href="javacript:void(0);"><i class="las la-tools"></i><span>Activity</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li class="px-3"><a class="{{ Route::is('admin.activity.create') ? 'active' : '' }}"
+                                    href="{{ route('admin.activity.create') }}">Package</a>
+                            </li>
+                            <li class="px-3"><a class="{{ Route::is('admin.activity-assign') ? 'active' : '' }}"
+                                    href="{{ route('admin.activity-assign-list') }}">Assign</a>
+                            </li>
                         </ul>
                     </li>
 

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Video | List')
+@section('page_title', 'Activity | List')
 @section('content')
     <div class="page-wrapper">
 
@@ -9,7 +9,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Videos</h3>
+                        <h3 class="page-title">Package</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
                             <li class="breadcrumb-item active">List</li>
@@ -24,9 +24,9 @@
                 <div class="col-sm-12">
                     <div class="card mb-0">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Videos List</h4>
+                            <h4 class="card-title mb-0">Package List</h4>
                             <div class="col-auto float-end ms-auto">
-                                <a href="{{route('admin.video.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Video</a>
+                                <a href="{{route('admin.activity-assign')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Assign Package</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -37,8 +37,10 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Date & Time</th>
-                                            <th>Name</th>
-                                            <th>Category</th>
+                                            <th>Title</th>
+                                            <th>Charges</th>
+                                            <th>Duration (per month)</th>
+                                            <th>Description</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -62,14 +64,16 @@
             { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
-            { data: 'category', name: 'category' },
+            { data: 'charges', name: 'charges' },
+            { data: 'duration', name: 'duration' },
+            { data: 'description', name: 'description' },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];
 
         const filterSelectors = [];
 
         document.addEventListener('DOMContentLoaded', function() {
-            initializeDataTable("{{ route('admin.video.index') }}",filterSelectors, userColumns);
+            initializeDataTable("{{ route('admin.activity.index') }}",filterSelectors, userColumns);
         });
     </script>
    

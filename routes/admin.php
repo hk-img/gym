@@ -10,7 +10,9 @@ use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TrainerController;
+use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\VideoPTController;
 use App\Http\Controllers\Admin\AssignPTController;
 use App\Http\Controllers\Admin\GymController;
@@ -71,9 +73,21 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('reports/membership-renewals', [ReportController::class,'membershipRenewals'])->name('reports.renewals');
     Route::get('/admin/reports/revenue', [ReportController::class, 'getMonthlyRevenue'])->name('reports.revenue');
     Route::get('reports/membership-expired', [ReportController::class,'membershipExpired'])->name('reports.expired');
+    Route::get('reports/personal-training', [ReportController::class,'personalTraining'])->name('reports.pt');
 
     /** Workout */
     Route::resource('workout', WorkoutController::class);
+
+    /** category */
+    Route::resource('category', CategoryController::class);
+    
+    /** Activity */
+    Route::resource('activity', ActivityController::class);
+    
+    /** Assign Activity */
+    Route::get('activity-assign', [ActivityController::class,'activityAssign'])->name('activity-assign');
+    Route::get('activity-assign-list', [ActivityController::class,'assignList'])->name('activity-assign-list');
+    Route::post('activity-assign-store', [ActivityController::class,'assignStore'])->name('assign-store');
 
     /** Diet Plan */
     Route::resource('diet-plan', DietPlanController::class);
@@ -94,6 +108,8 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
     Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
     Route::get('trainers-list', [OptionController::class,'trainers'])->name('option.trainers');
+    Route::get('category-list', [OptionController::class,'categoryList'])->name('option.categoryList');
+    Route::get('package-list', [OptionController::class,'packagelist'])->name('option.packagelist');
 
     Route::get('usergetdata', [WorkoutController::class,'getdata'])->name('workout.getdata');
     Route::get('dietdata',[DietPlanController::class,'dietdata'])->name('diet.getdata');
