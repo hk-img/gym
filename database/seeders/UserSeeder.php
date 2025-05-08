@@ -67,7 +67,13 @@ class UserSeeder extends Seeder
         'attendance-delete',
 
         'membership-renewal',
-        'membership-expired'
+        'membership-expired',
+
+        'trainer-list',
+        'trainer-create',
+        'trainer-edit',
+        'trainer-delete',
+        'trainer-view',
     ];
 
 
@@ -102,6 +108,7 @@ class UserSeeder extends Seeder
         $roleAdmin = Role::firstOrCreate(['name' => 'Super Admin']);
         $roleGym = Role::firstOrCreate(['name' => 'Gym']);
         $roleMember = Role::firstOrCreate(['name' => 'Member']);
+        $roleMember = Role::firstOrCreate(['name' => 'Trainer']);
 
         // Permissions for Super Admin
         $adminPermissions = Permission::whereIn('name', [
@@ -117,7 +124,7 @@ class UserSeeder extends Seeder
             'workout-list', 'workout-create', 'workout-edit', 'workout-delete', 'workout-view',
             'diet-plan-list','diet-plan-create','diet-plan-edit','diet-plan-delete','diet-plan-view',
             'attendance-list','attendance-create','attendance-edit','attendance-delete',
-            'membership-renewal', 'membership-expired'
+            'membership-renewal', 'membership-expired','trainer-list','trainer-create','trainer-edit','trainer-delete','trainer-view',
         ])->pluck('id')->all();
 
         // Assign permissions

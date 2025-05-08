@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\TrainerController;
+use App\Http\Controllers\Admin\VideoPTController;
+use App\Http\Controllers\Admin\AssignPTController;
 use App\Http\Controllers\Admin\GymController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\WorkoutController;
@@ -39,6 +42,16 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('users/change-status/{id}/{status}', [UserController::class,'changeStatus'])->name('users.changeStatus');
     Route::get('users/info/{id}', [UserController::class,'userInfo'])->name('users.info');
     Route::get('users/user-renewal-history/{id}', [UserController::class,'userRenewalHistory'])->name('users.userRenewalHistory');
+
+    /** Trainers */
+    Route::resource('trainers', TrainerController::class);
+    
+    /** video */
+    Route::resource('video', VideoPTController::class);
+    
+    /** Assign Plan */
+    Route::resource('assign-pt', AssignPTController::class);
+    Route::get('trainer/info/{id}', [AssignPTController::class,'trainerInfo'])->name('trainer.info');
 
     /** Gym Manager */
     Route::resource('gym', GymController::class);
@@ -80,6 +93,7 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     /** Option */
     Route::get('user-list', [OptionController::class,'userList'])->name('option.userlist');
     Route::get('plan-list', [OptionController::class,'planList'])->name('option.planlist');
+    Route::get('trainers-list', [OptionController::class,'trainers'])->name('option.trainers');
 
     Route::get('usergetdata', [WorkoutController::class,'getdata'])->name('workout.getdata');
     Route::get('dietdata',[DietPlanController::class,'dietdata'])->name('diet.getdata');

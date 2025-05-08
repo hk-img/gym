@@ -30,7 +30,12 @@ class User extends Authenticatable implements HasMedia
         'address',
         'status',
         'otp',
-        'otp_sent_at'
+        'time_slot',
+        'pt_fees',
+        'salary',
+        'experience',
+        'otp_sent_at',
+        'start_date'
     ];
 
     /**

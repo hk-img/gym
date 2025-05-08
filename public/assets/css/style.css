@@ -9118,6 +9118,7 @@ input[type=file].form-control {
 }
 .sidebar-twocol.sidebar .sidebar-right .menu-arrow:before {
   content: "\f105";
+ 
 }
 .sidebar-twocol.sidebar .sub-menu a {
   display: -webkit-box;

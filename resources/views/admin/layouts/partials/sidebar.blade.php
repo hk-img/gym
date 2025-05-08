@@ -1,3 +1,12 @@
+<style>
+    .sidebar .sidebar-menu ul li a .menu-arrow::before,
+.two-col-bar .sidebar-menu ul li a .menu-arrow::before {
+    font-family: 'Font Awesome 5 Free';
+font-weight: 900; /* for solid style */
+content: "\f105";
+}
+</style>
+
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
         <div id="sidebar-menu" class="sidebar-menu">
@@ -57,6 +66,44 @@
                             <li class="px-3"><a class="{{ Route::is('admin.users.index') ? 'active' : '' }}"
                                     href="{{ route('admin.users.index') }}">List</a>
                             </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="submenu">
+                        <a href="javacript:void(0);"><i class="la la-user"></i> <span>Trainers</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li class="px-3"><a class="{{ Route::is('admin.trainers.create') ? 'active' : '' }}"
+                                    href="{{ route('admin.trainers.create') }}">Add</a>
+                            </li>
+                            <li class="px-3"><a class="{{ Route::is('admin.trainers.index') ? 'active' : '' }}"
+                                    href="{{ route('admin.trainers.index') }}">List</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Assign PT</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li class="px-3"><a class="{{ Route::is('admin.assign-pt.create') ? 'active' : '' }}"
+                                    href="{{ route('admin.assign-pt.create') }}">Add</a>
+                            </li>
+                            <li class="px-3"><a class="{{ Route::is('admin.assign-pt.index') ? 'active' : '' }}"
+                                    href="{{ route('admin.assign-pt.index') }}">List</a>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Videos</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li class="px-3"><a class="{{ Route::is('admin.video.create') ? 'active' : '' }}"
+                                    href="{{ route('admin.video.create') }}">Add</a>
+                            </li>
+                            <li class="px-3"><a class="{{ Route::is('admin.video.index') ? 'active' : '' }}"
+                                    href="{{ route('admin.video.index') }}">List</a>
                         </ul>
                     </li>
 

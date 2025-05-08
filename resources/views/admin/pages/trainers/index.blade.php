@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | List')
+@section('page_title', 'Trainers Manager | List')
 @section('content')
     <div class="page-wrapper">
 
@@ -9,7 +9,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Member Manager</h3>
+                        <h3 class="page-title">Trainers Manager</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
                             <li class="breadcrumb-item active">List</li>
@@ -25,9 +25,8 @@
                     <div class="input-block mb-3 form-focus select-focus">
                         <select class="form-control membershipStatus">
                             <option selected disabled>Select Membership Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="active">Active</option>
-                            <option value="expired">Expired</option>
+                            <option value="0">In-Active</option>
+                            <option value="1">Active</option>
                         </select>
                         <label class="focus-label">Membership Status</label>
                     </div>
@@ -48,9 +47,9 @@
                 <div class="col-sm-12">
                     <div class="card mb-0">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Member List</h4>
+                            <h4 class="card-title mb-0">Trainers List</h4>
                             <div class="col-auto float-end ms-auto">
-                                <a href="{{route('admin.users.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Member</a>
+                                <a href="{{route('admin.trainers.create')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Add Trainer</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -63,18 +62,13 @@
                                             <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Membership Status</th>
-                                            <th>PT Status</th>
-                                            <th>Expiry Date</th>
-                                            <th>PT Expiry Date</th>
-                                            <th>Time Slot</th>
-                                            {{-- <th>Status</th> --}}
+                                            <th>Salary</th>
+                                            <th>PT Fees (per month)</th>
+                                            <th>Joining Date</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        
-                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -93,21 +87,19 @@
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
-            { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
-            { data: 'pt_status', name: 'pt_status', orderable: false, searchable: false },
-            { data: 'end_date', name: 'end_date' },
-            { data: 'pt_end_date', name: 'pt_end_date' },
-            { data: 'time_slot', name: 'time_slot' },
-            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
+            { data: 'salary', name: 'salary' },
+            { data: 'pt_fees', name: 'pt_fees' },
+            { data: 'joining_date', name: 'joining_date' },
+            { data: 'status', name: 'status', orderable: false, searchable: false },
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];
 
         const filterSelectors = [
-            { name: 'membership_status', selector: '.membershipStatus'},
+            { name: 'status', selector: '.membershipStatus'},
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
-            initializeDataTable("{{ route('admin.users.index') }}",filterSelectors, userColumns);
+            initializeDataTable("{{ route('admin.trainers.index') }}",filterSelectors, userColumns);
         });
     </script>
     <script>
@@ -118,5 +110,6 @@
             });
         });
     </script>
+    
 @endpush
 

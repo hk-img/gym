@@ -1,0 +1,204 @@
+@extends('admin.layouts.app')
+@section('page_title', 'Assgin PT | Add')
+@section('content')
+    <div class="page-wrapper">
+
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="page-title">Assgin PT</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.assign-pt.index') }}">List</a></li>
+                            <li class="breadcrumb-item active">Add</li>
+                        </ul>
+                    </div>
+                    <div class="col d-flex justify-content-end align-items-center">
+                        <a href="{{ route('admin.assign-pt.index') }}"><button type="button"
+                                class="btn btn-primary me-2">Back</button></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <!-- Form -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Assign PT Form</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('admin.assign-pt.store') }}" method="post" id="myForm" enctype="multipart/form-data">
+                                @csrf
+                                <!-- User -->
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">User<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <select class="userList form-control" name="user_id" id="userSelect">
+                                            <!-- <option value="{{ $user->id ?? '' }}" selected>{{ $user->name ?? 'Select a User' }}</option> -->
+                                        </select>
+                                        @error('user_id') 
+                                            <p class="text-danger text-xs pt-1"> {{$message}} </p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                 <!-- User Info -->
+                                 <div id="userInfo" class="mb-3 row" style="display: none;">
+                                    <label class="col-form-label col-md-2"></label>
+                                    <div class="col-md-10">
+                                        <div class="d-flex gap-4">
+                                            <p><strong>Phone:</strong> <span id="userPhone"></span></p>
+                                            <p><strong>Status:</strong> <span id="userStatus"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Select Plan -->
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">Trainers<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <select class="planList form-control" name="trainer_id" id="planSelect">
+                                        </select>
+                                        @error('trainer_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div>
+
+                                <div class="input-block mb-3 row" >
+                                    <label class="col-form-label col-md-2">Months<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                    <input type="text" class="form-control" placeholder="Enter Month" name="months" 
+                                    oninput="validateMonth(this)">
+                                </div>
+                                </div>
+                                <div class="input-block mb-3 row" >
+                                    <label class="col-form-label col-md-2">Discount<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" id="discount" class="form-control" placeholder="Enter the discount" name="discount" onkeypress="return onlyNumbers(event)" value="{{old('discount')}}">
+
+                                    </div>
+                                </div>
+
+
+                                <!-- Payment Method -->
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">Payment Method<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" name="payment_method" id="paymentMethod">
+                                            <option value="" disabled selected>Select Payment Method</option>
+                                            <option value="online">Online</option>
+                                            <option value="offline">Offline</option>
+                                        </select>
+                                        @error('payment_method') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div>
+
+                                <!-- UTR -->
+                                <div class="input-block mb-3 row" id="utrField" style="display: {{ $errors->has('utr') ? '' : 'none' }};">
+                                    <label class="col-form-label col-md-2">UTR<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="utr" id="utr" class="form-control" placeholder="Enter UTR Number"
+                                            value="{{ old('utr') }}" maxLength="10">
+                                        @error('utr') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>
+                                <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Form -->
+        </div>
+    </div>
+
+@endsection
+@push('custom-script')
+    <script>
+        function resetForm() {
+            document.getElementById('myForm').reset();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
+            initializeSelect2('.planList', "{{ route('admin.option.trainers') }}", 'Select Trainers');
+        });
+
+        $(document).ready(function () {
+            // Fetch user details when a user is selected
+            $('#userSelect').change(function () {
+                let userId = $(this).val();
+                var baseUrl = "{{ route('admin.users.info', ':userId') }}";
+                var url  = baseUrl.replace(':userId',userId);
+                if (userId) {
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: { id: userId },
+                        success: function (user) {
+                            $('#userPhone').text(user.phone);
+                            $('#userStatus').text(user.status);
+                            $('#userInfo').show();
+                        }
+                    });
+                } else {
+                    $('#userInfo').hide();
+                }
+            });
+
+            // Fetch plan details when a plan is selected
+            $('#planSelect').change(function () {
+                let planId = $(this).val();
+                var baseUrl = "{{ route('admin.trainer.info', ':planId') }}";
+                var url  = baseUrl.replace(':planId',planId);
+                if (planId) {
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        data: { id: planId },
+                        success: function (plan) {
+                            $('#planName').text(plan.name);
+                            $('#planDuration').text(plan.duration);
+                            $('#planPrice').text(plan.price);
+                            $('#planInfo').show();
+                        }
+                    });
+                } else {
+                    $('#planInfo').hide();
+                }
+            });
+
+            // Show UTR field only when "Online" is selected
+            $('#paymentMethod').change(function () {
+                if ($(this).val() === "online") {
+                    $('#utrField').show();
+                } else {
+                    $('#utrField').hide();
+                }
+            });
+    });
+    </script>
+    <script>
+        function validateMonth(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove non-digits
+            let numericValue = parseInt(value, 10);
+
+            if (numericValue > 12) {
+                numericValue = 12;
+            } else if (numericValue < 1 && value !== "") {
+                numericValue = 1;
+            }
+
+            input.value = value === "" ? "" : numericValue;
+        }
+    </script>
+@endpush
+

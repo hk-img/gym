@@ -51,5 +51,25 @@ class OptionController extends Controller
 
 		return response()->json($plans);
 	}
+	
+	public function trainers(Request $request)
+	{
+		$term = $request->input('term');
+		
+		$plans = User::where('name', 'LIKE', '%' . $term . '%')
+					->where('status', 1)
+					->where('salary','>',0)
+					->where('added_by', auth()->user()->id)
+					->limit($this->limit)
+					->get()
+					->map(function ($trainer) {
+						return [
+							'id' => $trainer->id,
+							'name' => $trainer->name. ' ( One Month'.')' ." ". '(&#8377;'.''.$trainer->pt_fees.')'
+						];
+					});
+
+		return response()->json($plans);
+	}
 
 }

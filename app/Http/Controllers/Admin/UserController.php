@@ -73,8 +73,14 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('start_date', function ($row) {
                         return $row->start_date != null ? Carbon::parse($row->start_date)->format('d M Y') : 'N/A';
                     })
+                    ->addColumn('pt_end_date', function ($row) {
+                        return $row->pt_end_date != null ? Carbon::parse($row->pt_end_date)->format('d M Y') : 'N/A';
+                    })
                     ->addColumn('phone', function ($row) {
                         return $row->country_code ?? '+91' . ' ' . $row->phone;
+                    })
+                    ->addColumn('time_slot', function ($row) {
+                        return $row->time_slot ?? 'N/A';
                     })
                     ->addColumn('end_date', function ($row) {
                         return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
@@ -86,6 +92,31 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('membership_status', function ($row) {
                         $statusClass = $row->membership_status == 'Pending' ? 'primary' : ($row->membership_status == 'Active' ? 'success' : ($row->membership_status == 'Expired' ? 'danger' : ''));
                         $status = $row->membership_status;
+                        $returnData = '<div class="action-label">
+                                            <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                                <i class="fa-regular fa-circle-dot text-' . $statusClass . '"></i> ' . $status . '
+                                            </a>
+                                        </div>';
+
+
+                        return $returnData;
+                    })->addColumn('pt_status', function ($row) {
+                        $today = Carbon::now();
+                    
+                        $startDate = Carbon::parse($row->start_date);
+                        $endDate = Carbon::parse($row->end_date);
+                    
+                        if ($today->lt($startDate)) {
+                            $status = 'Pending';
+                            $statusClass = 'primary';
+                        } elseif ($today->between($startDate, $endDate)) {
+                            $status = 'Active';
+                            $statusClass = 'success';
+                        } else {
+                            $status = 'Expired';
+                            $statusClass = 'danger';
+                        }
+                    
                         $returnData = '<div class="action-label">
                                             <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
                                                 <i class="fa-regular fa-circle-dot text-' . $statusClass . '"></i> ' . $status . '
@@ -151,7 +182,7 @@ class UserController extends Controller implements HasMiddleware
                                     </div>
                                 </div>';
                     })
-                    ->rawColumns(['name', 'start_date', 'end_date', 'membership_status', 'status', 'action'])
+                    ->rawColumns(['name', 'start_date', 'end_date', 'membership_status', 'status', 'action','pt_status'])
                     ->make(true);
             }
             return view('admin.pages.users.index');
@@ -180,6 +211,7 @@ class UserController extends Controller implements HasMiddleware
             'name' => 'required|max:250',
             'email' => 'nullable|email|max:250',
             'phone' => 'required',
+            'time_slot' => 'required|in:Morning,Evening',
             // 'phone' => 'unique:users,phone_number,NULL,id,added_by,' . $request->added_by,
             'address' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:1048',
@@ -253,6 +285,7 @@ class UserController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'name' => 'required|max:250',
             'phone' => 'required|digits:10',
+            'time_slot' => 'required|in:Morning,Evening',
             // 'phone' => 'required|digits:10|unique:users,phone,' . $id,
             'address' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:1048',

@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('page_title', 'Member Manager | Add')
+@section('page_title', 'Trainers | Add')
 @section('content')
     <div class="page-wrapper">
 
@@ -9,15 +9,15 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Member Manager</h3>
+                        <h3 class="page-title">Trainers</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">List</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.trainers.index') }}">List</a></li>
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
                     <div class="col d-flex justify-content-end align-items-center">
-                        <a href="{{ route('admin.users.index') }}"><button type="button"
+                        <a href="{{ route('admin.trainers.index') }}"><button type="button"
                                 class="btn btn-primary me-2">Back</button></a>
                     </div>
                 </div>
@@ -28,17 +28,17 @@
                 <div class="col-lg-12">
                     <div class="card shadow-lg border-0 rounded-lg">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Member Registration</h4>
+                            <h4 class="card-title mb-0">Trainers Registration</h4>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.users.store') }}" method="post" id="myForm" enctype="multipart/form-data">
+                            <form action="{{ route('admin.trainers.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 
                                 <div class="row g-3">
                                     <!-- Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Member Name" onkeypress="return onlyLetters(event)">
+                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Trainer Name" onkeypress="return onlyLetters(event)">
                                         @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
 
@@ -50,36 +50,32 @@
                                     </div>
                                 </div>
                                 <div class="row g-3 mt-2">
-                                    <!-- Address -->
-                                    <div class="col-md-12">
-                                        <label class="form-label">Address <span class="text-danger">*</span></label>
-                                        <textarea rows="3" class="form-control" name="address" placeholder="Enter Full Address">{{ old('address') }}</textarea>
-                                        @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
-                                    
-                                    <!-- Image Upload -->
+
                                     <div class="col-md-6">
-                                        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
-                                        <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
-                                        <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
-                                        @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                        
-                                        <!-- Image Preview -->
-                                        <div class="mt-2">
-                                            <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail" style="max-width: 150px; display: none;">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Time Slot <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="time_slot" required>
-                                            <option value="">Select Time Slot</option>
-                                            <option value="Morning">Morning</option>
-                                            <option value="Evening">Evening</option>
-                                        </select>
-                                        @error('time_slot') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                        <label class="form-label">Experience <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="experience" placeholder="Enter Experience" value="{{ old('experience') }}">
+                                        @error('experience') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <label class="form-label">Salary <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="salary" placeholder="Enter Salary" value="{{ old('salary') }}">
+                                        @error('salary') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">PT Fees (per month) <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="pt_fees" placeholder="Enter PT Fees" value="{{ old('pt_fees') }}">
+                                        @error('pt_fees') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">Joining Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" name="start_date" value="{{ old('start_date') }}">
+                                        @error('start_date') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                    </div>
                                 </div>
+
                                 
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-primary px-4">Save</button>
