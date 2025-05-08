@@ -29,13 +29,13 @@ Route::middleware('guest')->group(function () {
                 ->name('password.email');
 
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('admin.password.reset');
+                ->name('password.reset');
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','verify_admin'])->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
 

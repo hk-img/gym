@@ -19,25 +19,29 @@
             </div>
             <!-- /Page Header -->
 
-            <!-- Search Filter -->
-            {{-- <div class="row filter-row">
+            <!-- Filter Row -->
+            <div class="row filter-row">
                 <div class="col-sm-6 col-md-3">
                     <div class="input-block mb-3 form-focus select-focus">
-                        <select class="form-control roleList">
+                        <select class="form-control membershipStatus">
+                            <option selected disabled>Select Membership Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="active">Active</option>
+                            <option value="expired">Expired</option>
                         </select>
-                        <label class="focus-label">Role</label>
+                        <label class="focus-label">Membership Status</label>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3 d-flex gap-3">
                     <div class="d-grid h-25">
-                        <a href="#" class="btn btn-success btn-search text-capitalize">Search</a>
+                        <a href="javacript:void(0);" class="btn btn-success btn-search text-capitalize">Search</a>
                     </div>
                      <div class="d-grid h-25">
                         <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
                     </div>
                 </div>
-            </div> --}}
-            <!-- /Search Filter -->
+            </div>
+            <!-- /Filter Row -->
             
             <!-- Table -->
             <div class="row">
@@ -56,11 +60,15 @@
                                     <thead>
                                         <tr>
                                             <th>S.No.</th>
+                                            <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Address</th>
-                                            <th>Created Date & Time</th>
-                                            <th>Status</th>
+                                            <th>Membership Status</th>
+                                            <th>PT Status</th>
+                                            <th>Expiry Date</th>
+                                            <th>PT Expiry Date</th>
+                                            <th>Time Slot</th>
+                                            {{-- <th>Status</th> --}}
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -82,19 +90,33 @@
     <script>
         const userColumns = [
             { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
+            { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
             { data: 'phone', name: 'phone' },
-            { data: 'address', name: 'address' },
-            { data: 'created_at_formatted', name: 'created_at' },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
+            { data: 'pt_status', name: 'pt_status', orderable: false, searchable: false },
+            { data: 'end_date', name: 'end_date' },
+            { data: 'pt_end_date', name: 'pt_end_date' },
+            { data: 'time_slot', name: 'time_slot' },
+            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
             { data: 'action', name: 'action', orderable: false, searchable: false },
         ];
 
         const filterSelectors = [
+            { name: 'membership_status', selector: '.membershipStatus'},
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
             initializeDataTable("{{ route('admin.users.index') }}",filterSelectors, userColumns);
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.assign-plan-btn', function () {
+                let userId = $(this).data('user-id'); 
+                window.location.href = "{{ route('admin.assign-plan.create') }}?user=" + userId;
+            });
+        });
+    </script>
 @endpush
+

@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\CheckStatus;
 use App\Http\Middleware\EvaluateType;
 use App\Http\Middleware\RevalidateBackHistory;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -30,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'verify_admin' => AuthMiddleware::class,
             'revalidate' => RevalidateBackHistory::class,
+            'check_status' => CheckStatus::class,
         ]);
 
         // $middleware->redirectGuestsTo(fn (Request $request) => route('admin.login'));

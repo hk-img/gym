@@ -2,8 +2,6 @@
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none">
 
-
-<!-- Mirrored from smarthr.dreamstechnologies.com/laravel/template/public/admin-dashboard by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 12 Nov 2024 05:34:38 GMT -->
 <!-- Added by HTTrack -->
 <meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
@@ -22,8 +20,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/customstyle.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.2.1/font-awesome-line-awesome/css/all.min.css" integrity="sha512-dC0G5HMA6hLr/E1TM623RN6qK+sL8sz5vB+Uc68J7cBon68bMfKcvbkg6OqlfGHo1nMmcCxO5AinnRTDhWbWsA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @include('admin.layouts.partials.style')
 
     @stack('custom-style')
@@ -124,7 +122,7 @@
                 text: "{{ session('success') }}",
             });
         @endif
-
+        
         // Error Message on Error
         @if(session('error'))
             Swal.fire({
@@ -156,7 +154,7 @@
                         var isAttributeList = $(selector).hasClass('attributeList');
                         var formattedData = data.map(function(item) {
                             if(selector == '.userList'){
-                                var name = `${item.name} ${item.phone ? '- ('+ item.phone +')' : ''} ${item.email ? '- ('+ item.email +')' : ''}`
+                                var name = `${item.name} ${item.phone ? '- ('+ '+91 '+ item.phone +')' : ''} ${item.email ? '- ('+ item.email +')' : ''}`
                             }else{
                                 var name = item.name
                             }
@@ -235,6 +233,7 @@
         }
 
         function initializeDataTable(ajaxUrl,filterSelectors, columnDefinitions) {
+                
             const table = $('.datatable').DataTable({
                 // "bFilter": false
                 "language": {
@@ -278,115 +277,6 @@
             });
         }
 
-        {{-- document.addEventListener('DOMContentLoaded', () => {
-            const editorElement = document.querySelector('#ckeditor');
-            if (editorElement) {
-                const {
-                    ClassicEditor,
-                    Essentials,
-                    Bold,
-                    Italic,
-                    Underline,
-                    Strikethrough,
-                    BlockQuote,
-                    Link,
-                    List,
-                    Table,
-                    MediaEmbed,
-                    Image,
-                    ImageToolbar,
-                    ImageCaption,
-                    ImageStyle,
-                    ImageResize,
-                    TableToolbar,
-                    Alignment,
-                    Heading,
-                    Highlight,
-                    CodeBlock,
-                    Font,
-                    Paragraph,
-                    SourceEditing
-                } = CKEDITOR;
-
-                ClassicEditor
-                    .create(editorElement, {
-                        licenseKey: "{{env('CKEDITOR')}}",
-                        plugins: [
-                            Essentials,
-                            Bold,
-                            Italic,
-                            Underline,
-                            Strikethrough,
-                            BlockQuote,
-                            Link,
-                            List,
-                            Table,
-                            MediaEmbed,
-                            Image,
-                            ImageToolbar,
-                            ImageCaption,
-                            ImageStyle,
-                            ImageResize,
-                            TableToolbar,
-                            Alignment,
-                            Heading,
-                            Highlight,
-                            CodeBlock,
-                            Font,
-                            Paragraph,
-                            SourceEditing
-                        ],
-                        toolbar: [
-                            'undo', 'redo', '|', 
-                            'heading', '|', 
-                            'bold', 'italic', 'underline', 'strikethrough', '|', 
-                            'blockQuote', '|', 
-                            'link', 'insertTable', 'mediaEmbed', '|', 
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                            'alignment', '|',
-                            'highlight', 'codeBlock', '|',
-                            'sourceEditing'
-                        ],
-                        image: {
-                            toolbar: [
-                                'imageTextAlternative', '|',
-                                'imageStyle:full', 'imageStyle:side'
-                            ],
-                            styles: [
-                                'full',
-                                'side'
-                            ],
-                            resizeOptions: [
-                                {
-                                    name: 'resizeImage:original',
-                                    value: null,
-                                    label: 'Original'
-                                },
-                                {
-                                    name: 'resizeImage:50',
-                                    value: '50',
-                                    label: '50%'
-                                },
-                                {
-                                    name: 'resizeImage:75',
-                                    value: '75',
-                                    label: '75%'
-                                }
-                            ]
-                        },
-                        table: {
-                            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-                        }
-                    })
-                    .then(editor => {
-                        window.editor = editor;
-                    })
-                    .catch(error => {
-                        console.error('CKEditor initialization error:', error);
-                    });
-            }
-        }); --}}
-        
         document.addEventListener('DOMContentLoaded', () => {
             const editorElement = document.querySelector('#ckeditor');
             if (editorElement) {

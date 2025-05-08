@@ -24,70 +24,67 @@
             </div>
             <!-- /Page Header -->
 
-
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-lg-12">
-                    <div class="card">
+                    <div class="card shadow-lg border-0 rounded-lg">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Member Registration Form</h4>
+                            <h4 class="card-title mb-0">Member Registration</h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             <form action="{{ route('admin.users.store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
-                                <!-- Name -->
-                                <div class="input-block mb-3 row">
-                                    <label class="col-form-label col-md-2">Name
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-md-10">
-                                        <input type="text" class="form-control" name="name"
-                                            value="{{ old('name') }}" id="name"  placeholder="Enter Member Name">
+                                
+                                <div class="row g-3">
+                                    <!-- Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}" placeholder="Enter Member Name" onkeypress="return onlyLetters(event)">
                                         @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
-                                </div>
 
-                                <!-- Phone -->
-                                <div class="input-block mb-3 row">
-                                    <label class="col-form-label col-md-2">Phone
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-md-10">
-                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Enter Mob. Number"
-                                            value="{{ old('phone') }}" maxLength="10">
+                                    <!-- Phone -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone <span class="text-danger">*</span></label>
+                                        <input type="text" name="phone" class="form-control" placeholder="Enter Mobile Number" onkeypress="return onlyNumbers(event)" value="{{ old('phone') }}" maxLength="10">
                                         @error('phone') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
-                                
-                                <!-- Address -->
-                                <div class="input-block mb-3 row">
-                                    <label class="col-form-label col-md-2">Address<span class="text-danger"> *</span></label>
-                                    <div class="col-md-10">
-                                        <textarea rows="5" cols="5" class="form-control " name="address" placeholder="Enter Full Address" ></textarea>
+                                <div class="row g-3 mt-2">
+                                    <!-- Address -->
+                                    <div class="col-md-12">
+                                        <label class="form-label">Address <span class="text-danger">*</span></label>
+                                        <textarea rows="3" class="form-control" name="address" placeholder="Enter Full Address">{{ old('address') }}</textarea>
                                         @error('address') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
+                                    
+                                    <!-- Image Upload -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Upload Image <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
+                                        <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
+                                        @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        
+                                        <!-- Image Preview -->
+                                        <div class="mt-2">
+                                            <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail" style="max-width: 150px; display: none;">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Time Slot <span class="text-danger">*</span></label>
+                                        <select class="form-control" name="time_slot" required>
+                                            <option value="">Select Time Slot</option>
+                                            <option value="Morning">Morning</option>
+                                            <option value="Evening">Evening</option>
+                                        </select>
+                                        @error('time_slot') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                    </div>
+
                                 </div>
                                 
-                                <!-- Image -->
-                                <div class="input-block mb-3 row">
-                                    <label class="col-form-label col-md-2">Image<span class="text-danger"> *</span></label>
-                                    <div class="col-md-10">
-                                        <div class="custom-file-container" data-upload-id="myFirstImage">
-                                            <label>Upload (Single File) <a href="javascript:void(0)" class="custom-file-container__image-clear"
-                                                    title="Clear Image">x</a></label>
-                                            <label class="custom-file-container__custom-file">
-                                                <input type="file" class="custom-file-container__custom-file__custom-file-input"
-                                                    name="image" accept="image/*">
-                                                <span class="custom-file-container__custom-file__custom-file-control"></span>
-                                            </label>
-                                            <div class="custom-file-container__image-preview"></div>
-                                        </div>
-                                        @error('image') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                    </div>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                                    <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>
                                 </div>
-
-                                <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>
-                                <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>
-
                             </form>
                         </div>
                     </div>
@@ -102,6 +99,16 @@
         function resetForm() {
             document.getElementById('myForm').reset();
         }
+        
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            let reader = new FileReader();
+            reader.onload = function() {
+                let output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        });
     </script>
 @endpush
 
