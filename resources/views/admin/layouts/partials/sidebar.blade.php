@@ -2,8 +2,8 @@
     .sidebar .sidebar-menu ul li a .menu-arrow::before,
 .two-col-bar .sidebar-menu ul li a .menu-arrow::before {
     font-family: 'Font Awesome 5 Free';
-font-weight: 900; /* for solid style */
-content: "\f105";
+    font-weight: 900; /* for solid style */
+    content: "\f105";
 }
 </style>
 
