@@ -2,10 +2,11 @@
             <!-- Logo -->
             <div class="header-left">
                 <a href="{{route('admin.dashboard')}}" class="logo">
-                    <img src="{{asset('assets/img/logo.svg')}}" alt="Logo">
+                    {{-- <img src="{{asset('assets/img/logo.svg')}}" alt="Logo"> --}}
+                    <img src="{{asset('assets/img/gym_logo_white.png')}}" alt="Logo" class="gymlogo">
                 </a>
                 <a href="{{route('admin.dashboard')}}" class="logo collapse-logo">
-                    <img src="{{asset('assets/img/collapse-logo.svg')}}" alt="Logo">
+                    <img src="{{asset('assets/img/collapase_img.png')}}" alt="Logo">
                 </a>
                 <a href="{{route('admin.dashboard')}}" class="logo2">
                     <img src="{{asset('assets/img/logo2.png')}}" width="40" height="40" alt="Logo">
@@ -48,7 +49,7 @@
 
                 <!-- Flag -->
                 {{-- <li class="nav-item dropdown has-arrow flag-nav">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javacript:void(0);" role="button">
                         <img src="{{asset('assets/img/flags/us.png')}}" alt="Flag" height="20">
                         <span>English</span>
                     </a>
@@ -71,7 +72,7 @@
 
                 <!-- Notifications -->
                 {{-- <li class="nav-item dropdown">
-                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a href="javacript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <i class="fa-regular fa-bell"></i> <span class="badge rounded-pill">3</span>
                     </a>
                     <div class="dropdown-menu notifications">
@@ -184,7 +185,7 @@
 
                 <!-- Message Notifications -->
                 {{-- <li class="nav-item dropdown">
-                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a href="javacript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <i class="fa-regular fa-comment"></i><span class="badge rounded-pill">8</span>
                     </a>
                     <div class="dropdown-menu notifications">
@@ -299,7 +300,7 @@
                 <!-- /Message Notifications -->
 
                 <li class="nav-item dropdown has-arrow main-drop">
-                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                    <a href="javacript:void(0);" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                         <span class="user-img"><img src="{{ \Auth::user()->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg') }}" alt="User Image">
                             {{-- <span class="status online"></span> --}}
                         </span>
@@ -311,7 +312,7 @@
                         <form role="form" method="post" action="{{ route('admin.logout') }}" id="logout-form">
                             @csrf
                         </form>
-                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <a class="dropdown-item" href="javacript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     </div>
                 </li>
             </ul>
@@ -319,12 +320,12 @@
 
             <!-- Mobile Menu -->
             <div class="dropdown mobile-user-menu">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
+                <a href="javacript:void(0);" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i
                         class="fa-solid fa-ellipsis-vertical"></i></a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="dropdown-item" href="{{route('admin.profile')}}">My Profile</a>
                     {{-- <a class="dropdown-item" href="settings.html">Settings</a> --}}
-                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <a class="dropdown-item" href="javacript:void(0);" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                 </div>
             </div>
             <!-- /Mobile Menu -->

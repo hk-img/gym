@@ -260,7 +260,7 @@
                             <a class="" href="chat.html">Chat</a>
                         </li>
                         <li class="sub-menu">
-                            <a href="#">Calls <span class="menu-arrow"></span></a>
+                            <a href="javacript:void(0);">Calls <span class="menu-arrow"></span></a>
                             <ul>
                                 <li><a class="" href="voice-call.html">Voice Call</a></li>
                                 <li><a class="" href="video-call.html">Video Call</a></li>
@@ -655,14 +655,14 @@
                     aria-labelledby="v-pills-documentation-tab">
                     <p>Documentation</p>
                     <ul>
-                        <li><a href="#">Documentation </a></li>
+                        <li><a href="javacript:void(0);">Documentation </a></li>
                     </ul>
                 </div>
                 <div class="tab-pane fade" id="v-pills-changelog" role="tabpanel"
                     aria-labelledby="v-pills-changelog-tab">
                     <p>Change Log</p>
                     <ul>
-                        <li><a href="#"><span>Change Log</span> <span class="badge badge-primary ms-auto">v1.7.0</span>
+                        <li><a href="javacript:void(0);"><span>Change Log</span> <span class="badge badge-primary ms-auto">v1.7.0</span>
                             </a></li>
                     </ul>
                 </div>

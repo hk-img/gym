@@ -1,0 +1,158 @@
+@extends('admin.layouts.app')
+@section('page_title', 'Diet Plan | Add')
+@section('content')
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="page-title">Diet Plan</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.diet-plan.index') }}">List</a></li>
+                            <li class="breadcrumb-item active">Add</li>
+                        </ul>
+                    </div>
+                    <div class="col d-flex justify-content-end align-items-center">
+                        <a href="{{ route('admin.diet-plan.index') }}"><button type="button" class="btn btn-primary me-2">Back</button></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card shadow-lg border-0 rounded-lg">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Add Diet Plan</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <form action="{{ route('admin.diet-plan.store') }}" method="post" id="dietPlanForm">
+                                @csrf
+                                
+                                <div class="row g-3">
+                                    <!-- Member Selection -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Member <span class="text-danger">*</span></label>
+                                        <select class="userList form-control extract-data" name="member_id" required>
+                                            
+                                        </select>
+                                        @error('member_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div>
+
+
+                                <!-- Dynamic Meal Fields -->
+                                <div class="mt-4">
+                                    <h5>Meals</h5>
+                                    <table class="table" id="meal-Table">
+                                        <thead>
+                                            <tr>
+                                                <th>Meal Type</th>
+                                                <th>Meal Name</th>
+                                                <th>Meal Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mealTable">
+                                            <tr>
+                                                <td>Breakfast</td>
+                                                <input type="hidden" name="meals[0][meal_type]" value="Breakfast" class="form-control" required>
+                                                <td><input type="text" name="meals[0][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[0][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Lunch</td>
+                                                <input type="hidden" name="meals[1][meal_type]" value="Lunch" class="form-control" required>
+                                                <td><input type="text" name="meals[1][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[1][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Dinner</td>
+                                                <input type="hidden" name="meals[2][meal_type]" value="Dinner" class="form-control" required>
+                                                <td><input type="text" name="meals[2][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[2][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Snacks</td>
+                                                <input type="hidden" name="meals[3][meal_type]" value="Snacks" class="form-control" required>
+                                                <td><input type="text" name="meals[3][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[3][description]" class="form-control" required></textarea></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                                    <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+
+@push('custom-script')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
+        });
+        
+        function resetForm() {
+            document.getElementById('dietPlanForm').reset();
+        }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $(".extract-data").change(function() {
+                var userId = $(this).val();
+                $.ajax({
+                    url: "{{ route('admin.diet.getdata') }}",
+                    data: {
+                        member_id: userId,
+                    },
+                    success: function(data) {
+                        var meals = data.meal?.meals || [];
+                        if (meals.length > 0) {
+
+                            // alert('not empty');
+
+                            var tableBody = '';
+
+                            meals.forEach(function(meal, index) {
+                                
+                                tableBody += `
+                            <tr>
+                                <td>${meal.meal_type}</td>
+                                <input type="hidden" name="meals[${index}][meal_type]" value="${meal.meal_type}" class="form-control" required>
+                                <td><input type="text" name="meals[${index}][meal_name]" class="form-control" value="${meal.meal_name}" required></td>
+                                <td><textarea name="meals[${index}][description]" class="form-control" required>${meal.description}</textarea></td>
+                            </tr>`;
+                            });
+
+                            $('#mealTable').html(tableBody);
+                        } else {
+                            // alert('empty');
+                            $('input[name$="[meal_name]"]').val('');
+                            $('textarea[name$="[description]"]').text('');
+                        }
+
+                    },
+                    error: function(xhr) {
+                        alert(xhr.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
