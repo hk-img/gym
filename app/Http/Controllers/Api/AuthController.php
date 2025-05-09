@@ -146,12 +146,55 @@ class AuthController extends Controller
         }
     }
 
+    public function login(Request $request) {
+        try {
+            $userResult = \App\Models\User::where('username', $request->input('username'))->first();
+    
+            if ($userResult) {
+                if (!\Hash::check($request->password, $userResult->password)) {
+                    return response()->json(["error" => true, "message" => "Invalid Password."], 200);
+                }
+    
+                if ($userResult->status != 1) {
+                    return response()->json(["error" => true, "message" => "User not Verified Yet."], 200);
+                }
+    
+                $token = $userResult->createToken($request->input('username'));
+                $accessToken = $token->accessToken;
+    
+                // Select only required fields
+                $userData = [
+                    'name' => $userResult->name,
+                    'mobile' => $userResult->mobile,
+                    'address' => $userResult->address,
+                    'username' => $userResult->username,
+                    'time_slot' => $userResult->time_slot,
+                    'membership_status' => $userResult->membership_status,
+                ];
+    
+                $response = [
+                    'error' => false,
+                    "message" => 'User Login Successfully.',
+                    'user' => $userData,
+                    'token' => $accessToken
+                ];
+    
+                return response($response, 200);
+            } else {
+                return response()->json(['error' => true, 'message' => 'Invalid Username.'], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json(["error" => true, "message" => $e->getMessage()], 200);
+        }
+    }
+    
     /**
      * Logout user.
      */
     public function logOut()
     {
         Auth::user()->token()->revoke();
-        return ApiResponse::success('Logged out successfully.');
+        return response()->json(['error' => false, 'message' => 'Logged out successfully.'], 200);
+
     }
 }
