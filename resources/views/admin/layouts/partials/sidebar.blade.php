@@ -56,7 +56,7 @@
                 @if (!$isSuperAdmin)
                     <!-- User -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-user"></i> <span>User</span>
+                        <a href="javascript:void(0);"><i class="fas fa-users"></i> <span>User</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -70,7 +70,7 @@
                     </li>
                     
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-user"></i> <span>Trainers</span>
+                        <a href="javascript:void(0);"><i class="fas fa-user-tie"></i> <span>Trainers</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -83,7 +83,8 @@
                         </ul>
                     </li>
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Assign PT</span>
+                        <a href="javascript:void(0);"><i class="la la-chalkboard-teacher"></i> <span>Assign PT</span>
+
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -94,34 +95,37 @@
                                     href="{{ route('admin.assign-pt.index') }}">List</a>
                         </ul>
                     </li>
+                    <!-- Videos -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Videos</span>
+                        <a href="javascript:void(0);"><i class="la la-video"></i> <span>Videos</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
+                            <!-- Video Categories -->
                             <li class="submenu">
-                                <a href="javacript:void(0);"> <span>Category</span>
+                                <a href="javascript:void(0);"> <span>Category</span>
                                     <span class="menu-arrow"></span>
                                 </a>
                                 <ul>
                                     <li class="px-3"><a class="{{ Route::is('admin.category.create') ? 'active' : '' }}"
-                                            href="{{ route('admin.category.create') }}">Add</a>
-                                    </li>
+                                            href="{{ route('admin.category.create') }}">Add</a></li>
                                     <li class="px-3"><a class="{{ Route::is('admin.category.index') ? 'active' : '' }}"
-                                            href="{{ route('admin.category.index') }}">List</a>
+                                            href="{{ route('admin.category.index') }}">List</a></li>
                                 </ul>
                             </li>
+
+                            <!-- Video Add & List -->
                             <li class="px-3"><a class="{{ Route::is('admin.video.create') ? 'active' : '' }}"
-                                    href="{{ route('admin.video.create') }}">Add</a>
-                            </li>
+                                    href="{{ route('admin.video.create') }}">Add</a></li>
                             <li class="px-3"><a class="{{ Route::is('admin.video.index') ? 'active' : '' }}"
-                                    href="{{ route('admin.video.index') }}">List</a>
+                                    href="{{ route('admin.video.index') }}">List</a></li>
                         </ul>
                     </li>
 
+
                     <!-- Plan -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-tasks"></i> <span>Plan</span>
+                        <a href="javascript:void(0);"><i class="la la-tasks"></i> <span>Plan</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -136,7 +140,7 @@
 
                     <!-- Assign Plan -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-user-check"></i> <span>Assign Plan</span>
+                        <a href="javascript:void(0);"><i class="la la-user-plus"></i> <span>Assign Plan</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -145,17 +149,19 @@
                             </li>
                             <li class="px-3"><a class="{{ Route::is('admin.assign-plan.index') ? 'active' : '' }}"
                                     href="{{ route('admin.assign-plan.index') }}">List</a>
+                            </li>
                         </ul>
                     </li>
 
                     <!-- Reports -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="la la-clipboard-list"></i> <span>Reports</span>
+                        <a href="javascript:void(0);"><i class="la la-chart-bar"></i> <span>Reports</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
                             <li class="px-3"><a class="{{ Route::is('admin.reports.renewals') ? 'active' : '' }}"
                                     href="{{ route('admin.reports.renewals') }}">Membership Renewal</a>
+                            </li>
                             <li class="px-3"><a class="{{ Route::is('admin.reports.expired') ? 'active' : '' }}"
                                     href="{{ route('admin.reports.expired') }}">Membership Expired</a>
                             </li>
@@ -165,9 +171,10 @@
                         </ul>
                     </li>
 
+
                     <!-- Workout -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-dumbbell"></i> <span>Workout</span>
+                        <a href="javascript:void(0);"><i class="fas fa-dumbbell"></i> <span>Workout</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -181,7 +188,7 @@
 
                     <!-- Diet Plan -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-apple-alt"></i> <span>Diet Plan</span>
+                        <a href="javascript:void(0);"><i class="las la-apple-alt"></i> <span>Diet Plan</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -190,13 +197,13 @@
                             </li>
                             <li class="px-3"><a class="{{ Route::is('admin.diet-plan.index') ? 'active' : '' }}"
                                     href="{{ route('admin.diet-plan.index') }}">List</a>
+                            </li>
                         </ul>
                     </li>
 
-                    
                     <!-- Equipment -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-tools"></i><span>Equipment</span>
+                        <a href="javascript:void(0);"><i class="las la-dumbbell"></i> <span>Equipment</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -205,11 +212,13 @@
                             </li>
                             <li class="px-3"><a class="{{ Route::is('admin.equipment.index') ? 'active' : '' }}"
                                     href="{{ route('admin.equipment.index') }}">List</a>
+                            </li>
                         </ul>
                     </li>
-                    
+
+                    <!-- Activity -->
                     <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-tools"></i><span>Activity</span>
+                        <a href="javascript:void(0);"><i class="las la-running"></i> <span>Activity</span>
                             <span class="menu-arrow"></span>
                         </a>
                         <ul>
@@ -222,31 +231,6 @@
                         </ul>
                     </li>
 
-                    {{-- <!-- Attendance -->
-                    <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-calendar"></i> <span>Attendance</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul>
-                            <li class="px-3"><a class="{{ Route::is('admin.attendance.create') ? 'active' : '' }}"
-                                    href="{{ route('admin.attendance.create') }}">Add</a>
-                            </li>
-                            <li class="px-3"><a class="{{ Route::is('admin.attendance.index') ? 'active' : '' }}"
-                                    href="{{ route('admin.attendance.index') }}">List</a>
-                        </ul>
-                    </li>
-
-
-                    <!-- Notification -->
-                    <li class="submenu">
-                        <a href="javacript:void(0);"><i class="las la-bell"></i> <span>Notification</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <ul>
-                            <li class="px-3"><a class="{{ Route::is('admin.notifications.form') ? 'active' : '' }}"
-                                    href="{{ route('admin.notifications.form') }}">Send Notification</a>
-                        </ul>
-                    </li> --}}
                 @endif
             </ul>
         </div>

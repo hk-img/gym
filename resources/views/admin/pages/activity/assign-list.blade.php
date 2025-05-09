@@ -1,5 +1,9 @@
 @extends('admin.layouts.app')
 @section('page_title', 'Activity | List')
+@push('custom-style')
+    <!-- Date Range Picker CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+@endpush
 @section('content')
     <div class="page-wrapper">
 
@@ -9,7 +13,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Package</h3>
+                        <h3 class="page-title">Assign Package</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
                             <li class="breadcrumb-item active">List</li>
@@ -18,13 +22,54 @@
                 </div>
             </div>
             <!-- /Page Header -->
+            <div class="row filter-row">
+                <!-- Date Range Filter -->
+                <div class="col-md-6 col-md-3">
+                    <div class="input-group mb-3">
+                        <input type="text" id="dateFilter" class="form-control date_range" placeholder="Select Date Range">
+                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
 
+                <!-- User Type -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="input-block mb-3 form-focus select-focus">
+                        <select class="form-control userType">
+                            <option selected disabled>Select User Type</option>
+                            <option value="new">New</option>
+                            <option value="old">Old</option>
+                        </select>
+                        <label class="focus-label">User Type</label>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="input-block mb-3 form-focus select-focus">
+                        <select class="form-control paymentMethod">
+                            <option selected disabled>Select Payment Method</option>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                        </select>
+                        <label class="focus-label">Payment Method</label>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-3 d-flex gap-3">
+                    <div class="d-grid h-25">
+                        <a href="javacript:void(0);" class="btn btn-success btn-search text-capitalize">Search</a>
+                    </div>
+                     <div class="d-grid h-25">
+                        <button class="btn btn-danger btn-clear text-capitalize">Clear</button>
+                    </div>
+                </div>
+            </div>
             <!-- Table -->
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card mb-0">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Package List</h4>
+                            <h4 class="card-title mb-0">Assign Package List</h4>
                             <div class="col-auto float-end ms-auto">
                                 <a href="{{route('admin.activity-assign')}}" class="btn btn-sm add-btn"><i class="fa fa-plus"></i> Assign Package</a>
                             </div>
@@ -37,11 +82,17 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Date & Time</th>
-                                            <th>Title</th>
-                                            <th>Charges</th>
-                                            <th>Duration (per month)</th>
-                                            <th>Description</th>
-                                            <th>Action</th>
+                                            <th>User Type</th>
+                                            <th>Member Name</th>
+                                            <th>Package Name</th>
+                                            <th>Duration (in months)</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Payment Method</th>
+                                            <th>UTR</th>
+                                            <th>Discount</th>
+                                            {{-- <th>Status</th> --}}
+                                            {{-- <th>Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -59,21 +110,52 @@
 
 @endsection
 @push('custom-script')
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- Date Range Picker JS -->
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
+
+        $('#dateFilter').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('#dateFilter').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $('#dateFilter').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
         const userColumns = [
             { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
             { data: 'created_at_formatted', name: 'created_at' },
-            { data: 'name', name: 'name' },
-            { data: 'charges', name: 'charges' },
+            { data: 'user_type', name: 'user_type' },
+            { data: 'member_name', name: 'member_name' },
+            { data: 'activity', name: 'activity' },
             { data: 'duration', name: 'duration' },
-            { data: 'description', name: 'description' },
-            { data: 'action', name: 'action', orderable: false, searchable: false },
+            { data: 'start_date', name: 'start_date' },
+            { data: 'end_date', name: 'end_date' },
+            { data: 'payment_method', name: 'payment_method' },
+            { data: 'utr', name: 'utr' },
+            { data: 'discount', name: 'discount'},
+            {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}
+            {{-- { data: 'action', name: 'action', orderable: false, searchable: false }, --}}
         ];
 
-        const filterSelectors = [];
+        const filterSelectors = [
+            { name: 'date_range', selector: '.date_range'},
+            { name: 'user_type', selector: '.userType'},
+            { name: 'payment_method', selector: '.paymentMethod'},
+            { name: 'membership_status', selector: '.membershipStatus'},
+        ];
 
         document.addEventListener('DOMContentLoaded', function() {
-            initializeDataTable("{{ route('admin.activity.index') }}",filterSelectors, userColumns);
+            initializeDataTable("{{ route('admin.activity-assign-list') }}",filterSelectors, userColumns);
         });
     </script>
    

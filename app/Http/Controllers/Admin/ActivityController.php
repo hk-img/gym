@@ -242,6 +242,7 @@ class ActivityController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:activities,id',
+            'duration' => 'required',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
@@ -266,24 +267,25 @@ class ActivityController extends Controller
             }
             
            // Get the selected plan
-            $plan = Plan::findOrFail($validated['plan_id']);
+            $plan = Activity::findOrFail($validated['package_id']);
+            
             $days = intval($plan->duration);
 
             // Calculate start_date and end_date
             $startDate = Carbon::now();
             $endDate = $startDate->copy()->addDays($days);
 
-            $input['days'] = $days;
+            $input['duration'] = $request->duration;
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
             $input['user_type'] = $user_type;
             
-            $assignPlan = AssignPlan::create($input);
-            $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);
+            $assignPlan = AssignPackage::create($input);
+            $assignPlan->user()->update(['package_status' => 'active']);
 
             DB::commit();
         
-            return redirect()->route('admin.assign-plan.index')->with('success', 'Plan assigned successfully.');
+            return redirect()->route('admin.activity-assign-list')->with('success', 'Activity assigned successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
@@ -348,9 +350,12 @@ class ActivityController extends Controller
                     })
                     ->addColumn('member_name', function ($row) {
                         return $row->user->name .' '.'('.($row->user->country_code ?? '+91').' '.$row->user->phone.')' ?? 'N/A';
-                    })
+                    }) 
                     ->addColumn('activity', function ($row) {
                         return $row->activity->title;
+                    })
+                    ->addColumn('duration', function ($row) {
+                        return $row->duration;
                     })
                     ->addColumn('start_date', function ($row) {
                         return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025

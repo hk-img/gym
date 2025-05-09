@@ -31,7 +31,7 @@
                             <h4 class="card-title mb-0">Assign</h4>
                         </div>
                         <div class="card-body p-4">
-                        <form action="{{ route('admin.activity-assign') }}" method="post" id="myForm" enctype="multipart/form-data">
+                            <form action="{{ route('admin.assign-store') }}" method="post" id="myForm" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
                                 <div class="input-block mb-3 row">
@@ -55,7 +55,15 @@
                                         @error('package_id') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
-
+                                <div class="mb-3 row">
+                                    <label class="col-form-label col-md-2">Months <span class="text-danger">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" class="form-control" name="duration" placeholder="Enter Month" oninput="validateMonth(this)">
+                                        @error('months')
+                                            <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="input-block mb-3 row" >
                                     <label class="col-form-label col-md-2">Discount<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
@@ -105,6 +113,18 @@
         function resetForm() {
             document.getElementById('myForm').reset();
         }
+
+        // Show UTR field only when "Online" is selected
+        $(document).ready(function () {
+            $('#paymentMethod').change(function () {
+                if ($(this).val() === "online") {
+                    $('#utrField').show();
+                } else {
+                    $('#utrField').hide();
+                }
+            });
+            
+        });
         
         document.addEventListener('DOMContentLoaded', function() {
             initializeSelect2('.userList', "{{ route('admin.option.userlist') }}", 'Select User');
