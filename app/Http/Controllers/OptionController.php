@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use App\Traits\Traits;
 
@@ -70,6 +72,45 @@ class OptionController extends Controller
 					});
 
 		return response()->json($plans);
+	}
+	
+	public function categoryList(Request $request)
+	{
+		$term = $request->input('term');
+		
+		$categoryList = Category::where('title', 'LIKE', '%' . $term . '%')
+					->where('status', 1)
+					->where('added_by', auth()->user()->id)
+					->limit($this->limit)
+					->get()
+					->map(function ($category) {
+						return [
+							'id' => $category->id,
+							'name' => $category->title
+						];
+					});
+
+		return response()->json($categoryList);
+	}
+	
+	public function packagelist(Request $request)
+	{
+		$term = $request->input('term');
+		
+		$packageList = Activity::where('title', 'LIKE', '%' . $term . '%')
+					->where('status', '1')
+					->where('added_by', auth()->user()->id)
+					->limit($this->limit)
+					->get()
+					->map(function ($package) {
+						return [
+							'id' => $package->id,
+							'name' => $package->title
+						];
+					});
+
+
+		return response()->json($packageList);
 	}
 
 }

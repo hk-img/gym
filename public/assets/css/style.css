@@ -7947,7 +7947,7 @@ input[type=file].form-control {
 }
 .form-focus .form-control {
   height: 50px;
-  padding: 21px 12px 6px;
+  padding: 9px 12px 6px !important;
 }
 .form-focus .form-control:focus {
   border-color: #FF902F;
