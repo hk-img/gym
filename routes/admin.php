@@ -44,6 +44,8 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('users/change-status/{id}/{status}', [UserController::class,'changeStatus'])->name('users.changeStatus');
     Route::get('users/info/{id}', [UserController::class,'userInfo'])->name('users.info');
     Route::get('users/user-renewal-history/{id}', [UserController::class,'userRenewalHistory'])->name('users.userRenewalHistory');
+    Route::get('users/user-pt-details/{id}', [UserController::class,'userPTDetail'])->name('users.userPTDetail');
+    Route::get('users/user-package-details/{id}', [UserController::class,'userOackageDetail'])->name('users.userOackageDetail');
 
     /** Trainers */
     Route::resource('trainers', TrainerController::class);

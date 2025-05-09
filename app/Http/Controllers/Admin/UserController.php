@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AssignPackage;
+use App\Models\AssignPT;
 use App\Models\AssignPlan;
 use App\Models\User;
 use App\Notifications\NewMemberNotification;
@@ -82,6 +84,9 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('time_slot', function ($row) {
                         return $row->time_slot ?? 'N/A';
                     })
+                    ->addColumn('username', function ($row) {
+                        return $row->username ?? 'N/A';
+                    })
                     ->addColumn('end_date', function ($row) {
                         return $row->end_date != null ? Carbon::parse($row->end_date)->format('d M Y') : 'N/A';
                     })
@@ -103,8 +108,8 @@ class UserController extends Controller implements HasMiddleware
                     })->addColumn('pt_status', function ($row) {
                         $today = Carbon::now();
                     
-                        $startDate = Carbon::parse($row->start_date);
-                        $endDate = Carbon::parse($row->end_date);
+                        $startDate = Carbon::parse($row->pt_start_date);
+                        $endDate = Carbon::parse($row->pt_end_date);
                     
                         if ($today->lt($startDate)) {
                             $status = 'Pending';
@@ -211,6 +216,7 @@ class UserController extends Controller implements HasMiddleware
             'name' => 'required|max:250',
             'email' => 'nullable|email|max:250',
             'phone' => 'required',
+            'password' => 'required|min:8',
             'time_slot' => 'required|in:Morning,Evening',
             // 'phone' => 'unique:users,phone_number,NULL,id,added_by,' . $request->added_by,
             'address' => 'required',
@@ -220,9 +226,23 @@ class UserController extends Controller implements HasMiddleware
         try {
             
             $input = $request->all();
+            $input['password'] = \Hash::make($input['password']);
             $input['added_by'] = auth()->user()->id;
-            
-            $check = User::where('phone', $request->phone)->where('added_by', auth()->user()->id)->first();
+
+            $name = strtoupper(str_replace(' ', '', $request->name));
+
+            // Calculate how many digits are needed
+            $remainingLength = 8 - strlen($name);
+            $randomNumbers = '';
+
+            if ($remainingLength > 0) {
+                $randomNumbers = substr(str_shuffle('0123456789'), 0, $remainingLength);
+            }
+
+            $username = substr($name . $randomNumbers, 0, 8);
+            $input['username'] = $username;
+
+            $check = User::where('salary', Null)->where('gym_id', Null)->where('phone', $request->phone)->where('added_by', auth()->user()->id)->first();
             
             if ($check) {
                 return redirect()->route('admin.users.index')
@@ -292,6 +312,10 @@ class UserController extends Controller implements HasMiddleware
         ]);
         try {
             $input = $request->all();
+            if(isset($input['password']) && $input['password'] != ''){
+
+                $input['password'] = \Hash::make($input['password']);
+            }
             
             $check = User::where('phone', $request->phone)->where('id', '!=', $id)->where('added_by', auth()->user()->id)->first();
             
@@ -449,6 +473,152 @@ class UserController extends Controller implements HasMiddleware
 
                         return $returnData;
                     })
+                    ->rawColumns(['user_type', 'member_name', 'plan', 'status', 'payment_method', 'membership_status'])
+                    ->make(true);
+            }
+            return view('admin.pages.assign_plan.index');
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Something went wrong');
+        }
+    }
+    
+    public function userPTDetail(Request $request, $id)
+    {
+        try {
+            if ($request->ajax()) {
+
+                $query = AssignPT::query();
+
+                // Filter by user ID
+                if ($id) {
+                    $query->where('user_id', $id);
+                }
+
+                $data = $query->latest()->get();
+
+                return DataTables::of($data)
+                    ->addIndexColumn() // Adds the iteration column
+                    ->addColumn('created_at_formatted', function ($row) {
+                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                    })
+                    ->addColumn('user_type', function ($row) {
+                        $status = $row->user_type == 'new' ? 'success' : 'danger';
+                        $text = $row->user_type;
+
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('member_name', function ($row) {
+                        return $row->user->name . ' ' . '(' . ($row->user->country_code ?? '+91') . ' ' . $row->user->phone . ')' ?? 'N/A';
+                    })
+                    ->addColumn('trainer_name', function ($row) {
+                        return $row->trainer->name;
+                    })->addColumn('duration', function ($row) {
+                        return $row->months;
+                    })
+                    ->addColumn('price', function ($row) {
+
+                        $total = ($row->trainer->pt_fees * $row->months) - $row->discount;
+                        return '₹ ' . number_format($total);;
+                    })
+                    ->addColumn('start_date', function ($row) {
+                        return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
+                    })
+                    ->addColumn('end_date', function ($row) {
+                        return Carbon::parse($row->end_date)->format('d M Y');
+                    })
+                    ->addColumn('payment_method', function ($row) {
+                        $status = $row->payment_method == 'online' ? 'success' : 'danger';
+                        $text = $row->payment_method;
+
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('utr', function ($row) {
+                        return $row->utr ?? 'N/A';
+                    })
+                    
+                    ->rawColumns(['user_type', 'member_name', 'plan', 'status', 'payment_method', 'membership_status'])
+                    ->make(true);
+            }
+            return view('admin.pages.assign_plan.index');
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Something went wrong');
+        }
+    }
+
+    public function userOackageDetail(Request $request, $id)
+    {
+        try {
+            if ($request->ajax()) {
+
+                $query = AssignPackage::query();
+
+                // Filter by user ID
+                if ($id) {
+                    $query->where('user_id', $id);
+                }
+
+                $data = $query->latest()->get();
+
+                return DataTables::of($data)
+                    ->addIndexColumn() // Adds the iteration column
+                    ->addColumn('created_at_formatted', function ($row) {
+                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                    })
+                    ->addColumn('user_type', function ($row) {
+                        $status = $row->user_type == 'new' ? 'success' : 'danger';
+                        $text = $row->user_type;
+
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('member_name', function ($row) {
+                        return $row->user->name . ' ' . '(' . ($row->user->country_code ?? '+91') . ' ' . $row->user->phone . ')' ?? 'N/A';
+                    })
+                    ->addColumn('package_name', function ($row) {
+                        return $row->activity->title;
+                    })->addColumn('duration', function ($row) {
+                        return $row->duration;
+                    })
+                    ->addColumn('price', function ($row) {
+
+                        $total = ($row->activity->charges * $row->duration) - $row->discount;
+                        return '₹ ' . number_format(abs($total));
+                    })
+                    ->addColumn('start_date', function ($row) {
+                        return Carbon::parse($row->start_date)->format('d M Y'); // Example: 03 Mar 2025
+                    })
+                    ->addColumn('end_date', function ($row) {
+                        return Carbon::parse($row->end_date)->format('d M Y');
+                    })
+                    ->addColumn('payment_method', function ($row) {
+                        $status = $row->payment_method == 'online' ? 'success' : 'danger';
+                        $text = $row->payment_method;
+
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $text . '
+                                    </a>
+                                </div>';
+                    })
+                    ->addColumn('utr', function ($row) {
+                        return $row->utr ?? 'N/A';
+                    })
+                    
                     ->rawColumns(['user_type', 'member_name', 'plan', 'status', 'payment_method', 'membership_status'])
                     ->make(true);
             }

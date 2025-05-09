@@ -50,6 +50,28 @@
                                     </div>
                                 </div>
                                 <div class="row g-3 mt-2">
+                                   
+                                    <div class="col-md-6">
+                                        <label class="form-label">Time Slot <span class="text-danger">*</span></label>
+                                        <select class="form-control" name="time_slot" required>
+                                            <option value="">Select Time Slot</option>
+                                            <option value="Morning">Morning</option>
+                                            <option value="Evening">Evening</option>
+                                        </select>
+                                        @error('time_slot') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
+                                    </div>
+
+                                    <div class="col-md-6 position-relative">
+                                        <label class="form-label">Password <span class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" value="{{ old('phone') }}">
+                                            <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                                <i class="la la-eye" id="toggleIcon"></i>
+                                            </span>
+                                        </div>
+                                        @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+
                                     <!-- Address -->
                                     <div class="col-md-12">
                                         <label class="form-label">Address <span class="text-danger">*</span></label>
@@ -58,7 +80,7 @@
                                     </div>
                                     
                                     <!-- Image Upload -->
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <label class="form-label">Upload Image <span class="text-danger">*</span></label>
                                         <input type="file" class="form-control" name="image" accept="image/*" id="imageUpload">
                                         <small class="text-muted">Allowed formats: JPEG, PNG, JPG, WEBP. Max size: 1MB.</small>
@@ -68,15 +90,6 @@
                                         <div class="mt-2">
                                             <img id="imagePreview" src="#" alt="Image Preview" class="img-thumbnail" style="max-width: 150px; display: none;">
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Time Slot <span class="text-danger">*</span></label>
-                                        <select class="form-control" name="time_slot" required>
-                                            <option value="">Select Time Slot</option>
-                                            <option value="Morning">Morning</option>
-                                            <option value="Evening">Evening</option>
-                                        </select>
-                                        @error('time_slot') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
 
                                 </div>
@@ -109,6 +122,21 @@
             }
             reader.readAsDataURL(event.target.files[0]);
         });
+    </script>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById("password");
+            const icon = document.getElementById("toggleIcon");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("la-eye");
+                icon.classList.add("la-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("la-eye-slash");
+                icon.classList.add("la-eye");
+            }
+        }
     </script>
 @endpush
 
