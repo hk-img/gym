@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use \App\Models\Video;
+use \App\Models\Category;
 use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
@@ -15,21 +15,18 @@ use Illuminate\Routing\Controllers\Middleware;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 
-class VideoPTController extends Controller
+class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index(Request $request)
     {
         try {
 
             if ($request->ajax()) {
-                $query = Video::query()
+                $query = Category::query()
                     ->where('added_by', auth()->user()->id)
                     ->latest();
             
-                // Assuming excludeSuperAdmin is a local scope
                 $data = $query->get();
             
                 return DataTables::of($data)
@@ -43,13 +40,11 @@ class VideoPTController extends Controller
                                         <span>' . e($row->title) . '</span>
                                     </a>
                                 </h2>';
-                    })->editColumn('category', function ($row) {
-                        return $row->category->title ?? "N/A";
                     })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
-                        $editRoute = route('admin.video.edit', $encodedId);
-                        $deleteRoute = route('admin.video.destroy', $encodedId);
+                        $editRoute = route('admin.category.edit', $encodedId);
+                        $deleteRoute = route('admin.category.destroy', $encodedId);
                         $playRoute = $row->link;
                     
                         return '<div class="dropdown dropdown-action">
@@ -58,7 +53,6 @@ class VideoPTController extends Controller
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a href="' . $editRoute . '" class="dropdown-item"><i class="fa-solid fa-pencil m-r-5"></i> Edit</a>
-                                        <a target="_blank" href="' . e($playRoute) . '" class="dropdown-item"><i class="fa-solid fa-play m-r-5"></i> Play Video</a>
                                         
                                     </div>
                                 </div>';
@@ -68,7 +62,7 @@ class VideoPTController extends Controller
                     ->make(true);
             }
             
-            return view('admin.pages.video.index');
+            return view('admin.pages.category.index');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
             return redirect()->route('admin.dashboard')
@@ -82,10 +76,10 @@ class VideoPTController extends Controller
     public function create()
     {
         try {
-            return view('admin.pages.video.create');
+            return view('admin.pages.category.create');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.video.index')
+            return redirect()->route('admin.category.index')
                 ->with('error', 'Something went wrong');
         }
     }
@@ -97,8 +91,6 @@ class VideoPTController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:250',
-            'link' => 'required',
-            'category_id' => 'required',
         ]);
 
         try {
@@ -107,27 +99,26 @@ class VideoPTController extends Controller
             $input = $request->all();
             $input['added_by'] = auth()->user()->id;
 
-            $check = Video::where('title', $request->title)
+            $check = Category::where('title', $request->title)
                         ->where('added_by', auth()->user()->id)
                         ->first();
 
             if ($check) {
                 DB::rollBack(); // Not strictly necessary here, but safe
-                return redirect()->route('admin.video.index')
-                                ->with('error', 'Video already exists.');
+                return redirect()->route('admin.category.index')
+                                ->with('error', 'Category already exists.');
             }
 
-            Video::create($input);
+            Category::create($input);
 
             DB::commit(); // ✅ You must commit the transaction
 
-            return redirect()->route('admin.video.index')
-                            ->with('success', 'Video added successfully.');
+            return redirect()->route('admin.category.index')
+                            ->with('success', 'Category added successfully.');
         } catch (\Throwable $e) {
             DB::rollBack(); // Roll back if exception occurs
             Log::error($e->getMessage());
-            return redirect()->route('admin.video.index')
-                            ->with('error', 'Something went wrong.');
+            return $e->getMessage();
         }
     }
 
@@ -147,11 +138,12 @@ class VideoPTController extends Controller
     {
         try {
             $id = base64_decode($id);
-            $data = Video::with(['category'])->findOrFail($id);
-            return view('admin.pages.video.edit', compact('data'));
+            $data = Category::findOrFail($id);
+
+            return view('admin.pages.category.edit', compact('data'));
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.video.index')
+            return redirect()->route('admin.category.index')
                 ->with('error', 'Something went wrong');
         }
     }
@@ -163,27 +155,26 @@ class VideoPTController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:250',
-            'link' => 'required',
         ]);
         try {
             $input = $request->all();
             
-            $check = Video::where('title', $request->title)->where('id', '!=', $id)->where('added_by', auth()->user()->id)->first();
+            $check = Category::where('title', $request->title)->where('id', '!=', $id)->where('added_by', auth()->user()->id)->first();
             
             if ($check) {
-                return redirect()->route('admin.video.index')
-                ->with('error', 'Video already exist');
+                return redirect()->route('admin.category.index')
+                ->with('error', 'Category already exist');
             }
             
             DB::beginTransaction();
             
-            $user = Video::find($id);
+            $user = Category::find($id);
             $user->update($input);
 
             DB::commit();
 
-            return redirect()->route('admin.video.index')
-                ->with('success', 'Video info updated successfully');
+            return redirect()->route('admin.category.index')
+                ->with('success', 'Category info updated successfully');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());
@@ -198,12 +189,12 @@ class VideoPTController extends Controller
     {
         try {
             $id = base64_decode($id);
-            Video::findOrFail($id)->delete();
+            Category::findOrFail($id)->delete();
 
-            return redirect()->route('admin.video.index')->with('success', 'Video deleted successfully.');
+            return redirect()->route('admin.category.index')->with('success', 'Category deleted successfully.');
         } catch (\Throwable $e) {
             Log::error($e->getMessage());
-            return redirect()->route('admin.video.index')
+            return redirect()->route('admin.category.index')
                 ->with('error', 'Something went wrong');
         }
     }

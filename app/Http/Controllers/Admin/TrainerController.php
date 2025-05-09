@@ -81,7 +81,7 @@ class TrainerController extends Controller
                     })
                     ->addColumn('status', function ($row) {
                         $statusClass = $row->status == '1' ? 'Active' : 'Inactive';
-                        $status = $row->status;
+                        $status = $row->status == '1' ? 'success' : 'danger';
                         $returnData = '<div class="action-label">
                                             <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
                                                 <i class="fa-regular fa-circle-dot text-' . $status . '"></i> ' . $statusClass . '
