@@ -62,6 +62,7 @@
                                             <th>S.No.</th>
                                             <th>Date & Time</th>
                                             <th>Name</th>
+                                            <th>User Name</th>
                                             <th>Phone</th>
                                             <th>Membership Status</th>
                                             <th>PT Status</th>
@@ -92,6 +93,7 @@
             { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
             { data: 'created_at_formatted', name: 'created_at' },
             { data: 'name', name: 'name' },
+            { data: 'username', name: 'username' },
             { data: 'phone', name: 'phone' },
             { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
             { data: 'pt_status', name: 'pt_status', orderable: false, searchable: false },

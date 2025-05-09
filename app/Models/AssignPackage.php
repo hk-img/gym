@@ -12,6 +12,7 @@ class AssignPackage extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+
     public function activity(){
         return $this->belongsTo(Activity::class, 'package_id', 'id');
     }

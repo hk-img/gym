@@ -98,6 +98,7 @@
 
         <!-- Member Plan Histort -->
         <div class="table-responsive table-newdatatable">
+            <h3>Membership Details</h3>
             <table class="table table-new custom-table mb-0 datatable">
                 <thead>
                     <tr>
@@ -113,6 +114,52 @@
                         <th>Payment Method</th>
                         <th>UTR</th>
                         <th>Membership Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-newdatatable">
+            <h3>Personal Training Details</h3>
+            <table class="table table-new custom-table mb-0 datatable_1">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Date & Time</th>
+                        <th>User Type</th>
+                        <th>Member Name</th>
+                        <th>Trainer Name</th>
+                        <th>Price</th>
+                        <th>Duration (in month)</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Payment Method</th>
+                        <th>UTR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive table-newdatatable">
+            <h3>Activity Details</h3>
+            <table class="table table-new custom-table mb-0 datatable_2">
+                <thead>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Date & Time</th>
+                        <th>User Type</th>
+                        <th>Member Name</th>
+                        <th>Package Name</th>
+                        <th>Price</th>
+                        <th>Duration (in months)</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Payment Method</th>
+                        <th>UTR</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,6 +200,65 @@
                 { data: 'payment_method', name: 'payment_method' },
                 { data: 'utr', name: 'utr' },
                 { data: 'membership_status', name: 'membership_status' },
+            ]
+        });
+
+        // datatable_1
+
+        if ($.fn.DataTable.isDataTable('.datatable_1')) {
+            $('.datatable_1').DataTable().destroy(); // Destroy previous instance
+        }
+        var userId = "{{$user->id}}";
+        var base_Url = "{{ route('admin.users.userPTDetail', ':userId') }}";
+        var url_pt = base_Url.replace(':userId', userId);
+        $('.datatable_1').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: url_pt,
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
+                { data: 'created_at_formatted', name: 'created_at' },
+                { data: 'user_type', name: 'user_type' },
+                { data: 'member_name', name: 'member_name' },
+                { data: 'trainer_name', name: 'trainer_name' },
+                { data: 'price', name: 'price' },
+                { data: 'duration', name: 'duration' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: 'payment_method', name: 'payment_method' },
+                { data: 'utr', name: 'utr' },
+            ]
+        });
+
+
+        // datatable_2
+
+        if ($.fn.DataTable.isDataTable('.datatable_2')) {
+            $('.datatable_2').DataTable().destroy(); // Destroy previous instance
+        }
+        var userId = "{{$user->id}}";
+        var base_Url = "{{ route('admin.users.userOackageDetail', ':userId') }}";
+        var url_pt = base_Url.replace(':userId', userId);
+        $('.datatable_2').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: url_pt,
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
+                { data: 'created_at_formatted', name: 'created_at' },
+                { data: 'user_type', name: 'user_type' },
+                { data: 'member_name', name: 'member_name' },
+                { data: 'package_name', name: 'package_name' },
+                { data: 'price', name: 'price' },
+                { data: 'duration', name: 'duration' },
+                { data: 'start_date', name: 'start_date' },
+                { data: 'end_date', name: 'end_date' },
+                { data: 'payment_method', name: 'payment_method' },
+                { data: 'utr', name: 'utr' },
             ]
         });
 
