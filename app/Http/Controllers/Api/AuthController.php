@@ -191,25 +191,100 @@ class AuthController extends Controller
     public function myProfile()
     {
         try {
-            $user = auth()->user(); 
+            $user = auth()->user();
 
             if (!$user) {
-                return response()->json(['error' => true, 'message' => 'User not authenticated.'], 200);
+                return response()->json(['error' => true, 'message' => 'User not authenticated.'], 401);
             }
 
-            $user = [
+            $user = \App\Models\User::with([
+                'assignActivity.activity',
+                'assignPT.trainer',
+                'assignPlan.plan'
+            ])->find($user->id);
+
+            // Format assignActivity
+            $assignActivity = $user->assignActivity->transform(function ($val) {
+                return [
+                    'id' => $val->id,
+                    'user_id' => $val->user_id,
+                    'package_id' => $val->package_id,
+                    'duration' => $val->duration,
+                    'discount' => $val->discount,
+                    'start_date' => $val->start_date,
+                    'end_date' => $val->end_date,
+                    'user_type' => $val->user_type,
+                    'payment_method' => $val->payment_method,
+                    'utr' => $val->utr,
+                    'package_name' => optional($val->activity)->title,
+                    'package_charges' => optional($val->activity)->charges,
+                    'package_duration' => optional($val->activity)->duration,
+                ];
+            });
+
+            // Format assignPT
+            $assignPt = $user->assignPT->transform(function ($val) {
+                return [
+                    'id' => $val->id,
+                    'user_id' => $val->user_id,
+                    'trainer_id' => $val->trainer_id,
+                    'months' => $val->months,
+                    'discount' => $val->discount,
+                    'start_date' => $val->start_date,
+                    'end_date' => $val->end_date,
+                    'user_type' => $val->user_type,
+                    'payment_method' => $val->payment_method,
+                    'utr' => $val->utr,
+                    'trainer_name' => optional($val->trainer)->name,
+                    'trainer_phone' => optional($val->trainer)->phone,
+                    'trainer_pt_fees' => optional($val->trainer)->pt_fees,
+                ];
+            });
+
+            // Format assignPlan
+            $assignPlan = $user->assignPlan->transform(function ($val) {
+                return [
+                    'id' => $val->id,
+                    'user_id' => $val->user_id,
+                    'plan_id' => $val->plan_id,
+                    'days' => $val->days,
+                    'discount' => $val->discount,
+                    'start_date' => $val->start_date,
+                    'end_date' => $val->end_date,
+                    'user_type' => $val->user_type,
+                    'membership_status' => $val->membership_status,
+                    'payment_method' => $val->payment_method,
+                    'utr' => $val->utr,
+                    'plan_name' => optional($val->plan)->name,
+                    'plan_duration' => optional($val->plan)->duration,
+                    'plan_price' => optional($val->plan)->price,
+                ];
+            });
+
+            $userData = [
                 'id' => $user->id,
                 'name' => $user->name,
                 'phone' => $user->phone,
-                'profile_image' => $user->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg')
+                'profile_image' => $user->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg'),
+                'assign_activity' => $assignActivity,
+                'assign_p_t' => $assignPt,
+                'assign_plan' => $assignPlan,
             ];
-            
 
-            return response()->json(['error' => false, 'message' => 'Profile details fetched successfully.', 'user' => $user], 200);;
+            return response()->json([
+                'error' => false,
+                'message' => 'Profile details fetched successfully.',
+                'user' => $userData
+            ], 200);
+            
         } catch (\Throwable $e) {
-            return ApiResponse::response(ApiResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
+
     
     /**
      * Logout user.
