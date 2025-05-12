@@ -27,3 +27,11 @@ Route::get('config-clear', function(){
     Artisan::call('config:clear');
     return "Configuration cleared successfully.";
 });
+
+Route::get('/generate-passport-keys', function () {
+    Artisan::call('passport:keys', [
+        '--force' => true,
+    ]);
+    
+    return response()->json(['message' => 'Passport keys generated successfully.']);
+});
