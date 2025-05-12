@@ -62,10 +62,23 @@ class HomeController extends Controller
 
             $workouts = Workout::with(['exercises'])->get();
 
-            // Return API response with fetched data
-            return ApiResponse::success("Workout details fetched successfully.", $workouts);
+            if($workouts->isEmpty()){
+                return response()->json([
+                    'error' => false,
+                    'message' => 'No workout found.'
+                ], 200);
+
+            }
+            
+            return response()->json(['error'=>false,'message'=>"Workout details fetched successfully.", 'data'=>$dietPlan],200);
         } catch (\Throwable $e) {
-            return ApiResponse::response(ApiResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+            DB::rollBack();
+            Log::error('Workout assignment error: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => true,
+                'message' => 'Something went wrong. Please try again.'
+            ], 200);
         }
     }
 
@@ -79,9 +92,15 @@ class HomeController extends Controller
             $dietPlan = DietPlan::with(['meals'])->get();
 
             // Return API response with fetched data
-            return ApiResponse::success("Diet Plan details fetched successfully.", $dietPlan);
+            return response()->json(['error'=>false,'message'=>"Diet Plan fetched successfully.", 'data'=>$dietPlan],200);
         } catch (\Throwable $e) {
-            return ApiResponse::response(ApiResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+            DB::rollBack();
+            Log::error('Plan assignment error: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => true,
+                'message' => 'Something went wrong. Please try again.'
+            ], 200);
         }
     }
 

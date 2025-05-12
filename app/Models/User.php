@@ -88,7 +88,17 @@ class User extends Authenticatable implements HasMedia
 
     public function assignPlan()
     {
-        return $this->hasMany(AssignPlan::class, 'user_id', 'id');
+        return $this->hasMany(AssignPlan::class, 'user_id', 'id')->with('plan');
+    }
+    
+    public function assignPT()
+    {
+        return $this->hasMany(AssignPT::class, 'user_id', 'id')->with('trainer');
+    }
+    
+    public function assignActivity()
+    {
+        return $this->hasMany(AssignPackage::class, 'user_id', 'id')->with('activity');
     }
 
     // A user can be added by another user (belongsTo self)
