@@ -19,7 +19,7 @@
         "spatie/laravel-permission": "^6.4",
         "spatie/laravel-sluggable": "^3.7",
         "yajra/laravel-datatables-oracle": "^11.1"
-    },
+    }, 
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
