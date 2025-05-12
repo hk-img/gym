@@ -102,7 +102,7 @@ class HomeController extends Controller
                 'message' => 'Something went wrong. Please try again.'
             ], 200);
         }
-    } 
+    }
 
     /**
      * Get Assign Plan
