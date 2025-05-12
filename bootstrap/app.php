@@ -9,7 +9,7 @@ use App\Http\Middleware\RevalidateBackHistory;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -35,13 +35,16 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         // $middleware->redirectGuestsTo(fn (Request $request) => route('admin.login'));
-        $middleware->redirectGuestsTo(function (Request $request) {
-            // Check if the request path starts with 'admin'
+       $middleware->redirectGuestsTo(function (Request $request) {
             if (str_starts_with($request->path(), 'admin')) {
                 return route('admin.login');
-            } else {
-                return route('home');
             }
+
+            if ($request->is('api/*')) {
+                return response()->json(['error' => true, 'message' => 'Unauthenticated.'], 401);
+            }
+
+            return route('home'); // Optional fallback
         });
 
         $middleware->redirectUsersTo(function (Request $request) {
