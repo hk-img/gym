@@ -20,7 +20,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/logout', [AuthController::class, 'logOut']); 
     
         /** Profile Section API's */
-        Route::get('/my-profile', [ProfileController::class, 'myProfile']); 
+        Route::get('/my-profile', [AuthController::class, 'myProfile']); 
         Route::post('/update-profile', [ProfileController::class, 'updateProfile']); 
         
         Route::get('/get-working-hours', [HomeController::class, 'getWorkingHour']); 
@@ -31,5 +31,17 @@ Route::middleware('auth:api')->group(function () {
         Route::get('get-workout', [HomeController::class, 'getWorkout']);
 
         Route::get('get-dietplan', [HomeController::class, 'getDietPlan']);
+
+        //trainers
+        Route::get('get-trainers', [HomeController::class, 'getTrainers']);
+        Route::post('assign-pt', [HomeController::class, 'assignPt']);
+
+        //activity
+        Route::get('get-activity', [HomeController::class, 'getActivity']);
+        Route::post('assign-activity', [HomeController::class, 'assignActivity']);
+
+        //plan
+        Route::get('get-plan', [HomeController::class, 'getPlan']);
+        Route::post('assign-plan', [HomeController::class, 'assignPlan']);
     }); 
 });

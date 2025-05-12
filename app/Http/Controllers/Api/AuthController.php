@@ -187,6 +187,29 @@ class AuthController extends Controller
             return response()->json(["error" => true, "message" => $e->getMessage()], 200);
         }
     }
+
+    public function myProfile()
+    {
+        try {
+            $user = auth()->user(); 
+
+            if (!$user) {
+                return response()->json(['error' => true, 'message' => 'User not authenticated.'], 200);
+            }
+
+            $user = [
+                'id' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->phone,
+                'profile_image' => $user->getFirstMediaUrl('images', 'thumb') ?: asset('assets/img/user.jpg')
+            ];
+            
+
+            return response()->json(['error' => false, 'message' => 'Profile details fetched successfully.', 'user' => $user], 200);;
+        } catch (\Throwable $e) {
+            return ApiResponse::response(ApiResponse::HTTP_INTERNAL_SERVER_ERROR, $e->getMessage());
+        }
+    }
     
     /**
      * Logout user.
