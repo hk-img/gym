@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('client_id', 100);
             $table->timestamps();
-        });
+        }); 
     }
 
     /** 
