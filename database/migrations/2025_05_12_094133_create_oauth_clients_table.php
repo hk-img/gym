@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('revoked');
             $table->timestamps();
         });
-    }
+    } 
 
     /**
      * Reverse the migrations.
