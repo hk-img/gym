@@ -16,9 +16,10 @@ use Illuminate\Routing\Controllers\Middleware;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
-
+use App\Traits\Traits;
 class ActivityController extends Controller
 {
+    use Traits;
     
     public function index(Request $request)
     {
@@ -243,18 +244,23 @@ class ActivityController extends Controller
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:activities,id',
             'duration' => 'required',
+            'payment_type' => 'required|in:full,partial',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
                 'nullable',
                 Rule::unique('assign_packages', 'utr')->ignore(null),
             ],
+            'received_amt' => [
+                'required_if:payment_type,partial',
+                'nullable',
+            ],
             'discount' => 'nullable|numeric',
 
         ]);
 
         DB::beginTransaction();
-        try {
+        // try {
             
             $input = $request->all();
             $check = AssignPackage::where('user_id',$request->user_id)->first();
@@ -268,30 +274,49 @@ class ActivityController extends Controller
             
            // Get the selected plan
             $plan = Activity::findOrFail($validated['package_id']);
-            
-            $days = intval($plan->duration);
+            $months = (int) $request->duration;
 
+            if($plan && $request->payment_type == "partial"){
+
+                if($request->received_amt >( $plan->charges * $months)){
+                    return redirect()->back()->with('error', 'Received amount cannot be greater than activity price');
+                }
+            }
             // Calculate start_date and end_date
             $startDate = Carbon::now();
-            $endDate = $startDate->copy()->addDays($days);
+            $endDate = $startDate->copy()->addMonths($months);
 
             $input['duration'] = $request->duration;
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
             $input['user_type'] = $user_type;
+            $input['received_amt'] = $request->received_amt ?? 0;
             
             $assignPlan = AssignPackage::create($input);
             $assignPlan->user()->update(['package_status' => 'active']);
 
+            $dataArray = [
+                'user_id' => $assignPlan->user_id,
+                'table_id' => $assignPlan->id,
+                'type' => 'assign_package',
+                'received_amt' => $assignPlan->received_amt,
+                'balance_amt' => (($plan->charges * $request->duration)-$request->discount)  - $assignPlan->received_amt,
+                'total_amt' => ($plan->charges * $request->duration)-$request->discount,
+                'payment_type' => $assignPlan->payment_type,
+                'status' => 'cleared',
+            ];
+
+            $this->setTransactions($dataArray);
+
             DB::commit();
         
             return redirect()->route('admin.activity-assign-list')->with('success', 'Activity assigned successfully.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            Log::error($e->getMessage());
-            return redirect()->route('admin.assign-plan.index')
-            ->with('error', $e->getMessage());
-        }
+        // } catch (\Throwable $e) {
+        //     DB::rollBack();
+        //     Log::error($e->getMessage());
+        //     return redirect()->route('admin.assign-plan.index')
+        //     ->with('error', $e->getMessage());
+        // }
     }
 
     public function assignList(Request $request)

@@ -153,6 +153,7 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.users.edit', $encodedId);
+                        $transactionRoute = route('admin.users.transactions', $encodedId);
                         $viewRoute = route('admin.users.show', $encodedId);
                         $planRoute = route('admin.assign-plan.create', $encodedId);
 
@@ -174,7 +175,7 @@ class UserController extends Controller implements HasMiddleware
                             '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . base64_encode($row->id) . '">
                                             <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
                                         </a>'
-                            : '';
+                            : '<a href="' . $transactionRoute . '" class="dropdown-item"><i class="fa-solid fa-money-check-dollar m-r-5"></i> Transactions</a>';
 
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -629,4 +630,134 @@ class UserController extends Controller implements HasMiddleware
                 ->with('error', 'Something went wrong');
         }
     }
+
+     public function transactions(Request $request,$id)
+    {
+        
+        try {
+            $id = base64_decode($id);
+            if ($request->ajax()) {
+                
+                $data = \App\Models\Transaction::with(['user'])->where('gym_id',auth()->user()->id)->where('user_id',$request->id)->latest()->get();
+                
+                return DataTables::of($data)
+                    ->addIndexColumn() // Adds the iteration column
+                    ->addColumn('created_at_formatted', function ($row) {
+                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                    })
+                    ->addColumn('type', function ($row) {
+
+                        $status = $row->type;
+                         if($row->type == 'assign_package'){
+                            $status = "Purchase Activity";
+                        }elseif($row->type == 'assign_pt'){
+                            $status = "Purchase PT";
+                        }elseif($row->type == 'assign_plan'){
+                            $status = "Purchase Plan";
+                        }elseif($row->type == 'repayment'){
+                            $status = "Payment Clearification";
+                        }
+                        return $status ?? 'N/A';
+                    })
+                    ->addColumn('payment_type', function ($row) {
+                        return ucfirst($row->payment_type) ?? 'N/A';
+                    })
+                    ->addColumn('received', function ($row) {
+                        return $row->received_amt ?? 'N/A';
+                    })
+                    ->addColumn('balance', function ($row) {
+                        return $row->balance_amt ?? 'N/A';
+                    })
+                    ->addColumn('total', function ($row) {
+                        return $row->total_amt ?? 'N/A';
+                    })
+                    ->addColumn('status', function ($row) {
+                        $statusClass = $row->status == "pending" ? 'danger' : 'success';
+                        $status = ucfirst($row->status);
+
+                        return '<div class="action-label">
+                                    <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                        <i class="fa-regular fa-circle-dot text-' . $statusClass . '"></i> ' . $status . '
+                                    </a>
+                                </div>';
+                    })
+
+                    ->rawColumns(['name', 'status', 'total', 'balance', 'received', 'phone'])
+                    ->make(true);
+            }
+
+            $pendingBalanceSum = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('user_id', $id)
+            ->sum('balance_amt');
+            
+            $openingBalanceSum = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('user_id', $id)->select('received_amt')->first();
+            
+            $closingBalanceSum = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('user_id', $id)->sum('received_amt');
+
+            $user = User::findOrFail($id);
+
+            return view('admin.pages.users.transactions',compact('id','pendingBalanceSum','user','closingBalanceSum','openingBalanceSum'));
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Something went wrong');
+        }
+    }
+
+    public function paymentUsers(Request $request)
+    {
+        // Validate inputs
+        $request->validate([
+            'id' => 'required|exists:users,id',
+            'amount' => 'required|numeric|min:1',
+            'pending_amt' => 'required|numeric|min:0',
+            'payment_type' => 'required|in:full,partial',
+        ]);
+
+        // Get pending transactions
+        $getTransaction = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('status', 'pending')
+            ->where('user_id', $request->id)
+            ->get();
+
+        if ($getTransaction->isEmpty()) {
+            return response()->json(['error' => true, 'message' => 'No Transactions Found.'], 200);
+        }
+
+        // Check if amount is valid
+        if ($request->pending_amt < $request->amount) {
+            return response()->json(['error' => true, 'message' => 'Insufficient balance']);
+        }
+
+        // Update all transactions to balance_amt = 0
+        foreach ($getTransaction as $txn) {
+            $txn->update(['balance_amt' => 0,'status'=>'cleared']);
+        }
+
+        // Prepare data for new transaction
+        $data = [
+            'user_id' => $request->id,
+            'table_id' => 0,
+            'type' => 'repayment',
+            'received_amt' => $request->amount,
+            'balance_amt' => $request->pending_amt - $request->amount,
+            'total_amt' => $request->pending_amt,
+            'payment_type' => $request->payment_type,
+            'payment_method' => $request->payment_method,
+            'utr' => $request->utr,
+            'status' => $request->payment_type === 'partial' ? 'pending' : 'cleared',
+        ];
+
+        // Insert transaction
+        $this->setTransactions($data);
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Success',
+            'data' => $getTransaction
+        ]);
+    }
+
 }

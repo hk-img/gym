@@ -166,12 +166,17 @@ class AssignPlanController extends Controller implements HasMiddleware
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'plan_id' => 'required|exists:plans,id',
+            'payment_type' => 'required|in:full,partial',
             // 'user_type' => 'required|in:new,old',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
                 'nullable',
                 Rule::unique('assign_plans', 'utr')->ignore(null),
+            ],
+            'received_amt' => [
+                'required_if:payment_type,partial',
+                'nullable',
             ],
 
             'discount' => 'nullable|numeric',
@@ -191,8 +196,17 @@ class AssignPlanController extends Controller implements HasMiddleware
                 $user_type = 'new';
             }
             
+            
            // Get the selected plan
             $plan = Plan::findOrFail($validated['plan_id']);
+
+            if($plan && $request->payment_type == "partial"){
+
+                if($request->received_amt > ($plan->price -$request->discount)){
+                    return redirect()->back()->with('error', 'Received amount cannot be greater than plan price');
+                }
+            }
+
             $days = intval($plan->duration);
 
             // Calculate start_date and end_date
@@ -203,10 +217,23 @@ class AssignPlanController extends Controller implements HasMiddleware
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
             $input['user_type'] = $user_type;
-            
+            $input['received_amt'] = $request->received_amt ?? ($plan->price -$request->discount);
+
             $assignPlan = AssignPlan::create($input);
             $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);
 
+            $dataArray = [
+                'user_id' => $assignPlan->user_id,
+                'table_id' => $assignPlan->id,
+                'type' => 'assign_plan',
+                'received_amt' => $assignPlan->received_amt,
+                'balance_amt' => ($plan->price - $request->discount) - $assignPlan->received_amt,
+                'total_amt' => $plan->price - $request->discount,
+                'payment_type' => $assignPlan->payment_type,
+                'status' => 'cleared',
+            ];
+
+            $this->setTransactions($dataArray);
             DB::commit();
         
             return redirect()->route('admin.assign-plan.index')->with('success', 'Plan assigned successfully.');

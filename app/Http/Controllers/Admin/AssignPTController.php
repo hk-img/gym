@@ -16,12 +16,14 @@ use Illuminate\Routing\Controllers\Middleware;
 use Throwable;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Validation\Rule;
+use App\Traits\Traits;
 
 class AssignPTController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    use Traits;
     public function index(Request $request)
     {
         try {
@@ -137,11 +139,16 @@ class AssignPTController extends Controller
             'user_id' => 'required|exists:users,id',
             'trainer_id' => 'required|exists:users,id',
             'months' => 'required',
+            'payment_type' => 'required|in:full,partial',
             'payment_method' => 'required|in:online,offline',
                 'utr' => [
                 'required_if:payment_method,online',
                 'nullable',
                 Rule::unique('assign_p_t_s', 'utr')->ignore(null),
+            ],
+            'received_amt' => [
+                'required_if:payment_type,partial',
+                'nullable',
             ],
 
             'discount' => 'nullable|numeric',
@@ -149,7 +156,7 @@ class AssignPTController extends Controller
         ]);
 
         DB::beginTransaction();
-        try {
+        // try {
 
             $user = User::where('id',$request->user_id)->where('membership_status','pending')->first();
             
@@ -169,9 +176,16 @@ class AssignPTController extends Controller
             
            // Get the selected plan
             $trainer = User::findOrFail($validated['trainer_id']);
-            $startDate = Carbon::parse($request->start_date);
-
             $months = (int) $request->months;
+
+            if($trainer && $request->payment_type == "partial"){
+                
+                if($request->received_amt > ($trainer->pt_fees * $months)){
+                    return redirect()->back()->with('error', 'Received amount cannot be greater than PT price');
+                }
+            }
+            
+            $startDate = Carbon::parse($request->start_date);
 
             $endDate = $startDate->copy()->addMonths($months);
 
@@ -179,19 +193,33 @@ class AssignPTController extends Controller
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
             $input['user_type'] = $user_type;
-            
+            $input['received_amt'] = $request->received_amt ?? 0;
+
             $assignPlan = AssignPT::create($input);
             $assignPlan->user()->update(['pt_start_date' => $startDate, 'pt_end_date' => $endDate]);
 
+            $dataArray = [
+                'user_id' => $assignPlan->user_id,
+                'table_id' => $assignPlan->id,
+                'type' => 'assign_pt',
+                'received_amt' => $assignPlan->received_amt,
+                'balance_amt' => (($trainer->pt_fees * $request->months)-$request->discount)  - $assignPlan->received_amt,
+                'total_amt' => ($trainer->pt_fees * $request->months)-$request->discount,
+                'payment_type' => $assignPlan->payment_type,
+                'status' =>'cleared',
+            ];
+
+            $this->setTransactions($dataArray);
             DB::commit();
         
             return redirect()->route('admin.assign-pt.index')->with('success', 'PT assigned successfully.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            Log::error($e->getMessage());
-            return redirect()->route('admin.assign-pt.index')
-                ->with('error', 'Something went wrong');
-        }
+
+        // } catch (\Throwable $e) {
+        //     DB::rollBack();
+        //     Log::error($e->getMessage());
+        //     return redirect()->route('admin.assign-pt.index')
+        //         ->with('error', 'Something went wrong');
+        // }
     }
 
     /**
