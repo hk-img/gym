@@ -92,7 +92,7 @@ class ReportController extends Controller implements HasMiddleware
                                 </div>';
                     })
                     ->addColumn('created_at_formatted', function($row){
-                        return  $row->created_at->format('Y-m-d H:i:s');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->rawColumns(['member_name','plan','start_date','end_date_formatted','days_remaining','status','created_at_formatted'])
                     ->make(true);
@@ -169,7 +169,7 @@ class ReportController extends Controller implements HasMiddleware
                                 </div>';
                     })
                     ->addColumn('created_at_formatted', function($row){
-                        return  $row->created_at->format('Y-m-d H:i:s');
+                        return  \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
@@ -348,7 +348,7 @@ class ReportController extends Controller implements HasMiddleware
                                 </div>';
                     })
                     ->addColumn('created_at_formatted', function($row){
-                        return  $row->created_at->format('Y-m-d H:i:s');
+                        return  \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->rawColumns(['member_name','trainer_name','price','netamount','start_date','end_date_formatted','days_remaining','status','created_at_formatted'])
                     ->make(true);

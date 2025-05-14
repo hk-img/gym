@@ -89,6 +89,7 @@ class ProfileController extends Controller
      */
     public function updateGymHours(Request $request)
     {
+
         $request->validate([
             'working_hours' => 'required|array',
             'working_hours.*.open_time' => 'required_without:working_hours.*.is_closed|date_format:H:i',
@@ -104,8 +105,8 @@ class ProfileController extends Controller
             GymWorkingHour::updateOrCreate(
                 ['day' => $day, 'gym_id' => $gymId],
                 [
-                    'open_time' => $data['open_time'] ?? null,
-                    'close_time' => $data['close_time'] ?? null,
+                    'open_time' => $data['open_time'] ?? '00:00:00',
+                    'close_time' => $data['close_time'] ?? '00:00:00',
                     'is_closed' => isset($data['is_closed']) ? true : false,
                 ]
             );

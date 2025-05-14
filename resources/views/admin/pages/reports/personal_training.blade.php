@@ -167,14 +167,18 @@
 
         // Handle Clear Button Click
         $('.btn-clear').on('click', function () {
-            location.reload();
-            // $('#monthFilter').val(''); // Clear input
-            // $('#trainerId').val('Select Trainer'); // Clear input
-            // $('#userId').val('Select User'); // Clear input
-            // $('#statusType').val('Select Status'); // Clear input
-            // $('#hideRevenue').show();
-            // fetchMonthlyRevenue(currentMonth); // Reset to current month
-            // loadDataTable(currentMonth); // Reset table data
+            // Clear the input field
+            $('#monthFilter').val('');
+
+            // Reset selects to default first option
+            $('#trainerId').prop('selectedIndex', 0);
+            $('#userId').prop('selectedIndex', 0);
+            $('#statusType').prop('selectedIndex', 0);
+
+            // Show revenue section and reload data
+            $('#hideRevenue').show();
+            fetchMonthlyRevenue(currentMonth);
+            loadDataTable(currentMonth);
         });
 
         function fetchMonthlyRevenue(month,trainerId,userId) {
