@@ -54,6 +54,28 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-id-badge"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['trainers'] : 0}}</h3>
+                                        <span>Trainers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
+                            <div class="card dash-widget">
+                                <div class="card-body">
+                                    <span class="dash-widget-icon"><i class="fa fa-bolt"></i></span>
+                                    <div class="dash-widget-info">
+                                        <h3>{{isset($data) ? $data['activity'] : 0}}</h3>
+                                        <span>Activities</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 </div>
 
