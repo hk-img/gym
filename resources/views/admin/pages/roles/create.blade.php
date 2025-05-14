@@ -64,7 +64,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-primary me-2">Save</button>
-                                <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>   
+                                <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>   
                             </form>
                         </div>
                     </div>

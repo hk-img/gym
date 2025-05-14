@@ -56,7 +56,7 @@ class WorkoutController extends Controller implements HasMiddleware
                     })
 
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->date)->format('d M Y');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);

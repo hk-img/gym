@@ -55,7 +55,7 @@ class DietPlanController extends Controller implements HasMiddleware
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->addColumn('member_name', function ($row) {
                         return $row->user->name . ' ' . '(' . ($row->user->country_code ?? '+91') . ' ' . $row->user->phone . ')' ?? 'N/A';

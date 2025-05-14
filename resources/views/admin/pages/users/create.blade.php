@@ -12,7 +12,7 @@
                         <h3 class="page-title">Member Manager</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
@@ -55,8 +55,8 @@
                                         <label class="form-label">Batch Slot <span class="text-danger">*</span></label>
                                         <select class="form-control" name="time_slot" required>
                                             <option value="">Select Batch Slot</option>
-                                            <option value="Morning">Morning</option>
-                                            <option value="Evening">Evening</option>
+                                            <option value="Morning" {{ old('time_slot') == 'Morning' ? 'selected' : '' }}>Morning</option>
+                                            <option value="Evening" {{ old('time_slot') == 'Evening' ? 'selected' : '' }}>Evening</option>
                                         </select>
                                         @error('time_slot') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
@@ -64,7 +64,7 @@
                                     <div class="col-md-6 position-relative">
                                         <label class="form-label">Password <span class="text-danger">*</span></label>
                                         <div class="input-group">
-                                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" value="{{ old('phone') }}">
+                                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" value="{{ old('password') }}">
                                             <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
                                                 <i class="la la-eye" id="toggleIcon"></i>
                                             </span>

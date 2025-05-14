@@ -61,7 +61,7 @@ class TransactionController extends Controller
                         'id' => $row->id,
                         'user' => $row->user->name ?? 'N/A',
                         'phone' => $row->user->phone ?? 'N/A',
-                        'created_at_formatted' => Carbon::parse($row->created_at)->format('D m, Y h:i:s'),
+                        'created_at_formatted' => Carbon::parse($row->created_at)->format('d D m, Y h:i:s'),
                         'type' => match($row->type) {
                             'assign_package' => 'Purchase Activity',
                             'assign_pt' => 'Purchase PT',

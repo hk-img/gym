@@ -54,10 +54,10 @@
                                 </div>
                             @enderror
                         </div>
-                        <div class="input-block mb-4">
+                        <!-- <div class="input-block mb-4">
                             <input class="form-check-input" name="remember" type="checkbox" id="rememberMe">
                             <label class="col-form-label">Remember me</label>
-                        </div>
+                        </div> -->
                         <div class="input-block mb-4 text-center">
                             <button class="btn btn-primary account-btn" type="submit">Login</button>
                         </div>

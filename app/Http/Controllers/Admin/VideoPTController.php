@@ -35,7 +35,7 @@ class VideoPTController extends Controller
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->created_at)->format('D M, Y h:i:s A');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D M, Y h:i:s A');
                     })
                     ->editColumn('name', function ($row) {
                         return '<h2 class="table-avatar">

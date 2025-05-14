@@ -11,7 +11,7 @@
                         <h3 class="page-title">Diet Plan</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.diet-plan.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.diet-plan.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
@@ -71,17 +71,17 @@
                                             </tr>
 
                                             <tr>
-                                                <td>Dinner</td>
-                                                <input type="hidden" name="meals[2][meal_type]" value="Dinner" class="form-control" required>
-                                                <td><input type="text" name="meals[2][meal_name]" class="form-control" required></td>
-                                                <td><textarea name="meals[2][description]" class="form-control" required></textarea></td>
-                                            </tr>
-
-                                            <tr>
                                                 <td>Snacks</td>
                                                 <input type="hidden" name="meals[3][meal_type]" value="Snacks" class="form-control" required>
                                                 <td><input type="text" name="meals[3][meal_name]" class="form-control" required></td>
                                                 <td><textarea name="meals[3][description]" class="form-control" required></textarea></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Dinner</td>
+                                                <input type="hidden" name="meals[2][meal_type]" value="Dinner" class="form-control" required>
+                                                <td><input type="text" name="meals[2][meal_name]" class="form-control" required></td>
+                                                <td><textarea name="meals[2][description]" class="form-control" required></textarea></td>
                                             </tr>
                                         </tbody>
                                     </table>

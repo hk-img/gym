@@ -266,16 +266,20 @@
             $('.btn-clear').on('click', function () {
                 // Reset all filters
                 filterSelectors.forEach(selector => {
-                    if ($(selector.selector).is('select')) {
-                        $(selector.selector).val('').trigger('change');
+                    const $el = $(selector.selector);
+
+                    if ($el.is('select')) {
+                        // Set to first <option> (default)
+                        $el.prop('selectedIndex', 0).trigger('change');
                     } else {
-                        $(selector.selector).val('');
+                        $el.val('');
                     }
                 });
 
                 // Reload the DataTable
                 table.ajax.reload();
             });
+
         }
 
         document.addEventListener('DOMContentLoaded', () => {
