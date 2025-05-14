@@ -43,7 +43,7 @@
                 <div class="col-md-3">
                     <div class="form-focus">
                         <select id="trainerId" class="form-control userType" style="height: 50px; padding: 9px 10px 6px;">
-                            <option value="" selected disabled>Select Trainer</option>
+                            <option value="" selected>Select Trainer</option>
                             @if(!empty($trainer))
                                 @foreach($trainer as $val)
                                     <option value="{{$val->id}}">{{ ucfirst($val->name) }}</option>
@@ -167,13 +167,14 @@
 
         // Handle Clear Button Click
         $('.btn-clear').on('click', function () {
-            $('#monthFilter').val(''); // Clear input
-            $('#trainerId').val('Select Trainer'); // Clear input
-            $('#userId').val('Select User'); // Clear input
-            $('#statusType').val('Select Status'); // Clear input
-            $('#hideRevenue').show();
-            fetchMonthlyRevenue(currentMonth); // Reset to current month
-            loadDataTable(currentMonth); // Reset table data
+            location.reload();
+            // $('#monthFilter').val(''); // Clear input
+            // $('#trainerId').val('Select Trainer'); // Clear input
+            // $('#userId').val('Select User'); // Clear input
+            // $('#statusType').val('Select Status'); // Clear input
+            // $('#hideRevenue').show();
+            // fetchMonthlyRevenue(currentMonth); // Reset to current month
+            // loadDataTable(currentMonth); // Reset table data
         });
 
         function fetchMonthlyRevenue(month,trainerId,userId) {
