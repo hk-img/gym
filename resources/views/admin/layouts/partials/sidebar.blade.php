@@ -230,6 +230,21 @@
                             </li>
                         </ul>
                     </li>
+                    
+                    <!-- Transactions -->
+                    <li class="submenu">
+                        <a href="javascript:void(0);">
+                            <i class="fa-solid fa-money-check-dollar"></i> <span>Transactions</span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul>
+                            <li class="px-3">
+                                <a class="{{ Route::is('admin.transactions.index') ? 'active' : '' }}"
+                                href="{{ route('admin.transactions.index') }}">List</a>
+                            </li>
+                        </ul>
+                    </li>
+
 
                 @endif
             </ul>

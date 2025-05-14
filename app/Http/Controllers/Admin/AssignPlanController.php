@@ -164,57 +164,90 @@ class AssignPlanController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'plan_id' => 'required|exists:plans,id',
-            // 'user_type' => 'required|in:new,old',
+            'user_id'        => 'required|exists:users,id',
+            'plan_id'        => 'required|exists:plans,id',
+            'payment_type'   => 'required|in:full,partial',
             'payment_method' => 'required|in:online,offline',
-                'utr' => [
+            'utr'            => [
                 'required_if:payment_method,online',
                 'nullable',
                 Rule::unique('assign_plans', 'utr')->ignore(null),
             ],
-
-            'discount' => 'nullable|numeric',
-
+            'received_amt'   => 'required_if:payment_type,partial|nullable|numeric|min:0',
+            'discount'       => 'nullable|numeric|min:0',
         ]);
 
         DB::beginTransaction();
+
         try {
-            
-            $input = $request->all();
-            $check = AssignPlan::where('user_id',$request->user_id)->first();
+            $userId         = $validated['user_id'];
+            $planId         = $validated['plan_id'];
+            $paymentType    = $validated['payment_type'];
+            $paymentMethod  = $validated['payment_method'];
+            $utr            = $validated['utr'] ?? null;
+            $discount       = $validated['discount'] ?? 0;
 
-            if($check){
-                $user_type = 'old';
+            $isOldUser = AssignPlan::where('user_id', $userId)->exists();
+            $userType  = $isOldUser ? 'old' : 'new';
+
+            $plan       = Plan::findOrFail($planId);
+            $planPrice  = $plan->price;
+            $duration   = intval($plan->duration);
+            $totalAmt   = $planPrice - $discount;
+            $receivedAmt = $request->filled('received_amt') ? $request->received_amt : $totalAmt;
+
+            if ($paymentType === 'partial' && $receivedAmt > $totalAmt) {
+                return redirect()->route('admin.assign-plan.create')->with('error', 'Received amount cannot exceed the total payable amount.');
             }
-            else{
-                $user_type = 'new';
+
+            $startDate = now();
+            $endDate   = $startDate->copy()->addDays($duration);
+
+            $assignPlan = AssignPlan::create([
+                'user_id'        => $userId,
+                'plan_id'        => $planId,
+                'payment_type'   => $paymentType,
+                'payment_method' => $paymentMethod,
+                'utr'            => $utr,
+                'received_amt'   => $receivedAmt,
+                'discount'       => $discount,
+                'days'           => $duration,
+                'start_date'     => $startDate,
+                'end_date'       => $endDate,
+                'user_type'      => $userType,
+            ]);
+
+            optional($assignPlan->user())->update([
+                'start_date'        => $startDate,
+                'end_date'          => $endDate,
+                'membership_status' => 'active',
+            ]);
+
+            $transactionBase = [
+                'gym_id'       => auth()->id(),
+                'user_id'      => $userId,
+                'table_id'     => $assignPlan->id,
+                'type'         => 'assign_plan',
+                'received_amt' => $receivedAmt,
+                'balance_amt'  => $totalAmt - $receivedAmt,
+                'total_amt'    => $totalAmt,
+                'payment_type' => $paymentType,
+                'status'       => 'cleared',
+            ];
+
+            foreach (['Cr', 'Dr'] as $status) {
+                $this->setTransactions([...$transactionBase, 'payment_status' => $status]);
             }
-            
-           // Get the selected plan
-            $plan = Plan::findOrFail($validated['plan_id']);
-            $days = intval($plan->duration);
 
-            // Calculate start_date and end_date
-            $startDate = Carbon::now();
-            $endDate = $startDate->copy()->addDays($days);
-
-            $input['days'] = $days;
-            $input['start_date'] = $startDate;
-            $input['end_date'] = $endDate;
-            $input['user_type'] = $user_type;
-            
-            $assignPlan = AssignPlan::create($input);
-            $assignPlan->user()->update(['start_date' => $startDate, 'end_date' => $endDate, 'membership_status' => 'active']);
+            $this->setClosingAmt($userId, auth()->id());
 
             DB::commit();
-        
+
             return redirect()->route('admin.assign-plan.index')->with('success', 'Plan assigned successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
-            return redirect()->route('admin.assign-plan.index')
-            ->with('error', $e->getMessage());
+            Log::error('Plan assignment failed: ' . $e->getMessage());
+            return redirect()->route('admin.assign-plan.index')->with('error', 'An error occurred. Please try again.');
         }
     }
     

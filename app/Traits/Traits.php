@@ -75,4 +75,36 @@ trait Traits
         
         return $ownership;
     }
+
+    public function setTransactions($val){
+
+        $data = new \App\Models\Transaction();
+
+        $data->gym_id = $val['gym_id'];
+        $data->user_id = $val['user_id'];
+        $data->table_id = $val['table_id'];
+        $data->type = $val['type'];
+        $data->received_amt = $val['received_amt'];
+        $data->balance_amt = $val['balance_amt'];
+        $data->total_amt = $val['total_amt'];
+        $data->payment_type = $val['payment_type'];
+        $data->status = $val['status'];
+        $data->payment_status = $val['payment_status'];
+        $data->save();
+
+        return true;
+    }
+
+    public function setClosingAmt($userId,$gymId){
+
+        $data = \App\Models\User::where('id', $userId)->first();
+        $pendingBalanceSum = \App\Models\Transaction::where('gym_id', $gymId)
+            ->where('user_id', $userId)->whereIn('payment_status', ['Cr'])
+            ->sum('balance_amt');
+
+        $data->pending_balance = $pendingBalanceSum ?? 0;
+        $data->save();
+
+        return true;
+    }
 }

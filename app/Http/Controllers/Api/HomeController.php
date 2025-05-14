@@ -154,6 +154,7 @@ class HomeController extends Controller
         DB::beginTransaction();
 
         try {
+            
             $user = User::where('id', $request->user()->id)
                 ->where('membership_status', 'pending')
                 ->first();
