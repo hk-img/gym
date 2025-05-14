@@ -9,7 +9,7 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col">
-                        <h3 class="page-title">Assgin Plan</h3>
+                        <h3 class="page-title">Assign Plan</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.assign-plan.index') }}">List</a></li>
