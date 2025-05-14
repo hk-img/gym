@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\VideoPTController;
@@ -46,6 +47,11 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
     Route::get('users/user-renewal-history/{id}', [UserController::class,'userRenewalHistory'])->name('users.userRenewalHistory');
     Route::get('users/user-pt-details/{id}', [UserController::class,'userPTDetail'])->name('users.userPTDetail');
     Route::get('users/user-package-details/{id}', [UserController::class,'userOackageDetail'])->name('users.userOackageDetail');
+    Route::get('users/user-transactions-details/{id}', [UserController::class,'transactions'])->name('users.transactions');
+    Route::post('users/user-pay', [UserController::class,'paymentUsers'])->name('users.pay');
+
+    /** User */
+    Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
     /** Trainers */
     Route::resource('trainers', TrainerController::class);

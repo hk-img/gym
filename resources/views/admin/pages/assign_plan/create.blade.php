@@ -78,6 +78,34 @@
                                     </div>
                                 </div>
 
+                                <!-- Payment Type -->
+                                <div class="input-block mb-3 row">
+                                    <label class="col-form-label col-md-2">Payment Type<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10 pt-2">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="payment_type" id="paymentTypeFull" value="full" checked>
+                                            <label class="form-check-label" for="paymentTypeFull">Full Payment</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="payment_type" id="paymentTypePartial" value="partial" >
+                                            <label class="form-check-label" for="paymentTypePartial">Partial Payment</label>
+                                        </div>
+                                        @error('payment_type') 
+                                            <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                 <div class="input-block mb-3 row" id="received_amtField" style="display: {{ $errors->has('received_amt') ? '' : 'none' }};">
+                                    <label class="col-form-label col-md-2">Received Amount<span class="text-danger"> *</span></label>
+                                    <div class="col-md-10">
+                                        <input type="text" name="received_amt" id="received_amt" class="form-control" placeholder="Enter Received Amount"
+                                            value="{{ old('received_amt') }}" maxLength="10">
+                                        @error('received_amt') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                    </div>
+                                </div>
+
+
                                 <!-- Plan Info -->
                                 {{-- <div id="planInfo" class="mb-3 row" style="display: none;">
                                     <label class="col-form-label col-md-2"></label>
@@ -125,9 +153,6 @@
                                         @error('utr') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
-
-                                
-
                                 
                                 <!-- Submit Button -->
                                 <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>
@@ -204,6 +229,14 @@
                     $('#utrField').show();
                 } else {
                     $('#utrField').hide();
+                }
+            });
+            
+            $('input[name="payment_type"]').change(function () {
+                if ($(this).val() === "partial") {
+                    $('#received_amtField').show();
+                } else {
+                    $('#received_amtField').hide();
                 }
             });
     });

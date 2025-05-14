@@ -65,10 +65,10 @@
                                             <th>User Name</th>
                                             <th>Phone</th>
                                             <th>Membership Status</th>
-                                            <th>PT Status</th>
                                             <th>Expiry Date</th>
+                                            <th>PT Status</th>
                                             <th>PT Expiry Date</th>
-                                            <th>Time Slot</th>
+                                            <th>Batch Slot</th>
                                             {{-- <th>Status</th> --}}
                                             <th>Action</th>
                                         </tr>
@@ -96,8 +96,8 @@
             { data: 'username', name: 'username' },
             { data: 'phone', name: 'phone' },
             { data: 'membership_status', name: 'membership_status', orderable: false, searchable: false },
-            { data: 'pt_status', name: 'pt_status', orderable: false, searchable: false },
             { data: 'end_date', name: 'end_date' },
+            { data: 'pt_status', name: 'pt_status', orderable: false, searchable: false },
             { data: 'pt_end_date', name: 'pt_end_date' },
             { data: 'time_slot', name: 'time_slot' },
             {{-- { data: 'status', name: 'status', orderable: false, searchable: false }, --}}

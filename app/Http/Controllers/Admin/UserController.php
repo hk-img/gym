@@ -153,6 +153,7 @@ class UserController extends Controller implements HasMiddleware
                     ->addColumn('action', function ($row) {
                         $encodedId = base64_encode($row->id);
                         $editRoute = route('admin.users.edit', $encodedId);
+                        $transactionRoute = route('admin.users.transactions', $encodedId);
                         $viewRoute = route('admin.users.show', $encodedId);
                         $planRoute = route('admin.assign-plan.create', $encodedId);
 
@@ -174,7 +175,7 @@ class UserController extends Controller implements HasMiddleware
                             '<a href="javascript:void(0);" class="dropdown-item assign-plan-btn" data-user-id="' . base64_encode($row->id) . '">
                                             <i class="fa-solid fa-user-plus m-r-5"></i> Assign Plan
                                         </a>'
-                            : '';
+                            : '<a href="' . $transactionRoute . '" class="dropdown-item"><i class="fa-solid fa-money-check-dollar m-r-5"></i> Transactions</a>';
 
                         // Return action buttons with form for deletion
                         return '<div class="dropdown dropdown-action">
@@ -629,4 +630,147 @@ class UserController extends Controller implements HasMiddleware
                 ->with('error', 'Something went wrong');
         }
     }
+
+     public function transactions(Request $request,$id)
+    {
+        
+        try {
+            $id = base64_decode($id);
+            if ($request->ajax()) {
+                $transactions = \App\Models\Transaction::with(['user'])
+                    ->where('gym_id', auth()->user()->id)
+                    ->where('user_id', $request->id)
+                    ->orderBy('created_at', 'asc') // Make sure we sort chronologically
+                    ->get();
+
+                $runningOpening = 0; // start from 0 for the first transaction
+                $formattedData = [];
+
+                foreach ($transactions as $index => $row) {
+                    $received = floatval($row->received_amt ?? 0);
+                    $paymentType = $row->payment_status; // 'Cr' or 'Dr'
+                    $totalAmt = floatval($row->total_amt ?? 0);
+                    $balanceAmt = floatval($row->balance_amt ?? 0);
+                    // Calculate closing balance
+                    if ($paymentType === 'Cr') {
+                        $closing = $runningOpening + $received;
+                    } elseif ($paymentType === 'Dr') {
+                        $closing = $runningOpening - $received;
+                        $received = floatval($row->total_amt ?? 0);
+                        $closing = $runningOpening - $received;
+                    } else {
+                        $closing = $runningOpening; // If unknown type
+                    }
+
+                    // Store computed data
+                    $formattedData[] = [
+                        'id' => $row->id,
+                        'user' => $row->user->name ?? 'N/A',
+                        'created_at_formatted' => \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s'),
+                        'type' => match($row->type) {
+                            'assign_package' => 'Purchase Activity',
+                            'assign_pt' => 'Purchase PT',
+                            'assign_plan' => 'Purchase Plan',
+                            'repayment' => 'Payment Clearification',
+                            default => ucfirst($row->type) ?? 'N/A'
+                        },
+                        'opening' => number_format($runningOpening, 2),
+                        'amount' => number_format($received, 2),
+                        'closing' => number_format($closing, 2),
+                        'total_amt' => number_format($totalAmt, 2),
+                        'balance_amt' => number_format($balanceAmt, 2),
+                        'payment_status' => '<div class="action-label">
+                                                <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                                    <i class="fa-regular fa-circle-dot text-' . ($paymentType == 'Dr' ? 'danger' : 'success') . '"></i> ' . ucfirst($paymentType) . '
+                                                </a>
+                                            </div>',
+                        'status' => '<div class="action-label">
+                                        <a class="btn btn-white btn-sm btn-rounded" href="javascript:void(0);">
+                                            <i class="fa-regular fa-circle-dot text-' . ($row->status == 'pending' ? 'danger' : 'success') . '"></i> ' . ucfirst($row->status) . '
+                                        </a>
+                                    </div>',
+                    ];
+
+                    // Update opening for next row
+                    $runningOpening = $closing;
+                }
+                
+                $formattedData = array_reverse($formattedData);
+                return DataTables::of($formattedData)
+                    ->addIndexColumn()
+                    ->rawColumns(['payment_status', 'status'])
+                    ->make(true);
+            }
+
+
+            $pendingBalanceSum = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('user_id', $id)->whereIn('payment_status', ['Cr'])
+            ->sum('balance_amt');
+
+            $user = User::findOrFail($id);
+
+            return view('admin.pages.users.transactions',compact('id','pendingBalanceSum','user'));
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage());
+            return redirect()->route('admin.dashboard')
+                ->with('error', 'Something went wrong');
+        }
+    }
+
+    public function paymentUsers(Request $request)
+    {
+        // Validate inputs
+        $request->validate([
+            'id' => 'required|exists:users,id',
+            'amount' => 'required|numeric|min:1',
+            'pending_amt' => 'required|numeric|min:0',
+            'payment_type' => 'required|in:full,partial',
+        ]);
+
+        // Get pending transactions
+        $getTransaction = \App\Models\Transaction::where('gym_id', auth()->user()->id)
+            ->where('user_id', $request->id)
+            ->get();
+
+        if ($getTransaction->isEmpty()) {
+            return response()->json(['error' => true, 'message' => 'No Transactions Found.'], 200);
+        }
+
+        // Check if amount is valid
+        if ($request->pending_amt < $request->amount) {
+            return response()->json(['error' => true, 'message' => 'Insufficient balance']);
+        }
+
+        // Update all transactions to balance_amt = 0
+        foreach ($getTransaction as $txn) {
+            $txn->update(['balance_amt' => 0,'status'=>'cleared']);
+        }
+
+        // Prepare data for new transaction
+        $data = [
+            'gym_id'=> auth()->user()->id,
+            'user_id' => $request->id,
+            'table_id' => 0,
+            'type' => 'repayment',
+            'received_amt' => $request->amount,
+            'balance_amt' => $request->pending_amt - $request->amount,
+            'total_amt' => $request->pending_amt,
+            'payment_type' => $request->payment_type,
+            'payment_method' => $request->payment_method,
+            'utr' => $request->utr,
+            'status' => 'cleared',
+            'payment_status' => 'Cr',
+        ];
+
+        // Insert transaction
+        $this->setTransactions($data);
+        $this->setClosingAmt($request->id, auth()->user()->id);
+
+        return response()->json([
+            'error' => false,
+            'message' => 'Payment done successfully.',
+            'data' => $getTransaction
+        ]);
+    }
+
 }
