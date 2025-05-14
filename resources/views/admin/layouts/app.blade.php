@@ -113,7 +113,6 @@
                 }
             });
         }
-
         
         // Success Message on Success
         @if(session('success'))
@@ -123,7 +122,7 @@
                 text: "{{ session('success') }}",
             });
         @endif
-        
+
         // Error Message on Error
         @if(session('error'))
             Swal.fire({
