@@ -67,7 +67,13 @@
                             <div class="d-flex justify-content-between">
                                 
                                 <h4 class="card-title mb-0">Transactions List</h4>
-                                <h4>Total Balance Amount:{{$pendingBalanceSum}}</h4>
+                                <!-- <h4 id="totalBalanceAmount">Total Balance Amount: {{ $pendingBalanceSum }}</h4> -->
+                                <h4>
+                                    Total Balance Amount:
+                                    <span id="totalBalanceAmount" class="@if($pendingBalanceSum > 0) text-danger @else text-success @endif text-bold">
+                                        {{ $pendingBalanceSum > 0 ? '-' . number_format(abs($pendingBalanceSum), 2) : number_format($pendingBalanceSum, 2) }}
+                                    </span>
+                                </h4> 
                             </div>
                         </div>
                         <div class="card-body">
@@ -80,10 +86,10 @@
                                             <th>Date & Time</th>
                                             <th>Name</th>
                                             <th>Phone</th>
-                                            <th>Received Amount</th>
-                                            <th>Balance Amount</th>
-                                            <th>Total Amount</th>
-                                            <th>Type</th>
+                                            <th>Opening Amount</th>
+                                            <th>Amount</th>
+                                            <th>Transaction Type</th>
+                                            <th>Closing Amount</th>
                                             <th>Payment Type</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -139,7 +145,7 @@
         var base_Url = "{{ route('admin.transactions.index') }}";
         var url_pt = base_Url;
 
-        $('.datatable').DataTable({
+        var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
@@ -150,21 +156,26 @@
                     d.status = $('#statusType').val();
                 }
             },
-            destroy: true, // make sure you can reinitialize it
+            destroy: true,
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' },
                 { data: 'created_at_formatted', name: 'created_at' },
-                { data: 'name', name: 'name' },
+                { data: 'user', name: 'user' },
                 { data: 'phone', name: 'phone' },
-                { data: 'received', name: 'received', orderable: false, searchable: false },
-                { data: 'balance', name: 'balance', orderable: false, searchable: false },
-                { data: 'total', name: 'total' },
+                { data: 'opening', name: 'opening', orderable: false, searchable: false },
+                { data: 'amount', name: 'amount', orderable: false, searchable: false },
+                { data: 'payment_status', name: 'payment_status' },
+                { data: 'closing', name: 'closing' },
                 { data: 'type', name: 'type' },
-                { data: 'payment_type', name: 'payment_type' },
                 { data: 'status', name: 'status' },
                 { data: 'action', name: 'action' },
             ]
+        }).on('xhr.dt', function (e, settings, json, xhr) {
+            if (json.pendingBalanceSum !== undefined) {
+                $('#totalBalanceAmount').html('-'+ json.pendingBalanceSum).css('color', json.pendingBalanceSum > '0' ? 'red' : 'green');
+            }
         });
+
 
     </script>
 

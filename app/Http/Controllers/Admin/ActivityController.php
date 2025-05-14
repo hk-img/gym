@@ -243,10 +243,10 @@ class ActivityController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:activities,id',
-            'duration' => 'required',
+            'duration' => 'required|integer',
             'payment_type' => 'required|in:full,partial',
             'payment_method' => 'required|in:online,offline',
-                'utr' => [
+            'utr' => [
                 'required_if:payment_method,online',
                 'nullable',
                 Rule::unique('assign_packages', 'utr')->ignore(null),
@@ -256,68 +256,81 @@ class ActivityController extends Controller
                 'nullable',
             ],
             'discount' => 'nullable|numeric',
-
         ]);
 
         DB::beginTransaction();
-        // try {
-            
-            $input = $request->all();
-            $check = AssignPackage::where('user_id',$request->user_id)->first();
 
-            if($check){
-                $user_type = 'old';
+        try {
+            $userId = $validated['user_id'];
+            $packageId = $validated['package_id'];
+            $months = (int) $validated['duration'];
+            $discount = floatval($validated['discount'] ?? 0);
+            $plan = Activity::select('charges')->findOrFail($packageId);
+            $planCharges = $plan->charges;
+            $totalAmount = ($planCharges * $months) - $discount;
+
+            // Check if user has previous package
+            $user_type = AssignPackage::where('user_id', $userId)->exists() ? 'old' : 'new';
+
+            // Validate partial payment
+            if ($validated['payment_type'] === "partial" && $validated['received_amt'] > $totalAmount) {
+                return redirect()->back()->with('error', 'Received amount cannot be greater than activity price');
             }
-            else{
-                $user_type = 'new';
-            }
-            
-           // Get the selected plan
-            $plan = Activity::findOrFail($validated['package_id']);
-            $months = (int) $request->duration;
 
-            if($plan && $request->payment_type == "partial"){
+            // Dates
+            $startDate = now();
+            $endDate = now()->addMonths($months);
 
-                if($request->received_amt >( $plan->charges * $months)){
-                    return redirect()->back()->with('error', 'Received amount cannot be greater than activity price');
-                }
-            }
-            // Calculate start_date and end_date
-            $startDate = Carbon::now();
-            $endDate = $startDate->copy()->addMonths($months);
+            // Determine received amount
+            $receivedAmt = $validated['received_amt'] ?? $totalAmount;
 
-            $input['duration'] = $request->duration;
-            $input['start_date'] = $startDate;
-            $input['end_date'] = $endDate;
-            $input['user_type'] = $user_type;
-            $input['received_amt'] = $request->received_amt ?? 0;
-            
-            $assignPlan = AssignPackage::create($input);
-            $assignPlan->user()->update(['package_status' => 'active']);
+            // Create package assignment
+            $assignPlan = AssignPackage::create([
+                'user_id' => $userId,
+                'package_id' => $packageId,
+                'duration' => $months,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'payment_type' => $validated['payment_type'],
+                'payment_method' => $validated['payment_method'],
+                'utr' => $validated['utr'] ?? null,
+                'discount' => $discount,
+                'received_amt' => $receivedAmt,
+                'user_type' => $user_type,
+            ]);
 
-            $dataArray = [
-                'user_id' => $assignPlan->user_id,
+            // Update user's package status only if not already active
+            $assignPlan->user()->where('package_status', '!=', 'active')->update(['package_status' => 'active']);
+
+            $commonData = [
+                'gym_id' => auth()->user()->id,
+                'user_id' => $userId,
                 'table_id' => $assignPlan->id,
                 'type' => 'assign_package',
-                'received_amt' => $assignPlan->received_amt,
-                'balance_amt' => (($plan->charges * $request->duration)-$request->discount)  - $assignPlan->received_amt,
-                'total_amt' => ($plan->charges * $request->duration)-$request->discount,
-                'payment_type' => $assignPlan->payment_type,
+                'received_amt' => $receivedAmt,
+                'balance_amt' => $totalAmount - $receivedAmt,
+                'total_amt' => $totalAmount,
+                'payment_type' => $validated['payment_type'],
                 'status' => 'cleared',
             ];
 
-            $this->setTransactions($dataArray);
+            // Create Cr & Dr transactions
+            $this->setTransactions($commonData + ['payment_status' => 'Cr']);
+            $this->setTransactions($commonData + ['payment_status' => 'Dr']);
+
+            // Update closing balance
+            $this->setClosingAmt($userId, auth()->user()->id);
 
             DB::commit();
-        
+
             return redirect()->route('admin.activity-assign-list')->with('success', 'Activity assigned successfully.');
-        // } catch (\Throwable $e) {
-        //     DB::rollBack();
-        //     Log::error($e->getMessage());
-        //     return redirect()->route('admin.assign-plan.index')
-        //     ->with('error', $e->getMessage());
-        // }
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
+
 
     public function assignList(Request $request)
     {

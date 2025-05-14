@@ -193,12 +193,13 @@ class AssignPTController extends Controller
             $input['start_date'] = $startDate;
             $input['end_date'] = $endDate;
             $input['user_type'] = $user_type;
-            $input['received_amt'] = $request->received_amt ?? 0;
+            $input['received_amt'] = $request->received_amt ?? (($trainer->pt_fees * $months) -$request->discount);
 
             $assignPlan = AssignPT::create($input);
             $assignPlan->user()->update(['pt_start_date' => $startDate, 'pt_end_date' => $endDate]);
 
             $dataArray = [
+                'gym_id'=> auth()->user()->id,
                 'user_id' => $assignPlan->user_id,
                 'table_id' => $assignPlan->id,
                 'type' => 'assign_pt',
@@ -207,9 +208,26 @@ class AssignPTController extends Controller
                 'total_amt' => ($trainer->pt_fees * $request->months)-$request->discount,
                 'payment_type' => $assignPlan->payment_type,
                 'status' =>'cleared',
+                'payment_status' => 'Cr',
             ];
 
             $this->setTransactions($dataArray);
+
+            $dataArray = [
+                'gym_id'=> auth()->user()->id,
+                'user_id' => $assignPlan->user_id,
+                'table_id' => $assignPlan->id,
+                'type' => 'assign_pt',
+                'received_amt' => $assignPlan->received_amt,
+                'balance_amt' => (($trainer->pt_fees * $request->months)-$request->discount)  - $assignPlan->received_amt,
+                'total_amt' => ($trainer->pt_fees * $request->months)-$request->discount,
+                'payment_type' => $assignPlan->payment_type,
+                'status' =>'cleared',
+                'payment_status' => 'Dr',
+            ];
+
+            $this->setTransactions($dataArray);
+            $this->setClosingAmt($assignPlan->user_id, auth()->user()->id);
             DB::commit();
         
             return redirect()->route('admin.assign-pt.index')->with('success', 'PT assigned successfully.');

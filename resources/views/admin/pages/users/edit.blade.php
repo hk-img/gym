@@ -74,9 +74,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Time Slot <span class="text-danger">*</span></label>
+                                    <label class="form-label">Batch Slot <span class="text-danger">*</span></label>
                                     <select class="form-control" name="time_slot">
-                                        <option value="">Select Time Slot</option>
+                                        <option value="">Select Batch Slot</option>
                                         <option value="Morning" {{ $data->time_slot == 'Morning' ? 'selected' : '' }}>Morning</option>
                                         <option value="Evening" {{ $data->time_slot == 'Evening' ? 'selected' : '' }}>Evening</option>
                                     </select>

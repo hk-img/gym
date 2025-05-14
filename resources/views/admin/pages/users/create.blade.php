@@ -52,9 +52,9 @@
                                 <div class="row g-3 mt-2">
                                    
                                     <div class="col-md-6">
-                                        <label class="form-label">Time Slot <span class="text-danger">*</span></label>
+                                        <label class="form-label">Batch Slot <span class="text-danger">*</span></label>
                                         <select class="form-control" name="time_slot" required>
-                                            <option value="">Select Time Slot</option>
+                                            <option value="">Select Batch Slot</option>
                                             <option value="Morning">Morning</option>
                                             <option value="Evening">Evening</option>
                                         </select>

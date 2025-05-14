@@ -43,24 +43,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Balance Info -->
-                                        <div class="col-md-6 text-md-end">
-                                            <div class="d-flex flex-column align-items-md-end">
-                                                <div class="mb-2">
-                                                    <h6 class="mb-1 text-muted">Opening Balance</h6>
-                                                    <h5 class="text-success fw-bold mb-0">
-                                                        ₹{{ number_format($openingBalanceSum->received_amt ?? 0, 2) }}
-                                                    </h5>
-                                                </div>
-                                                <div>
-                                                    <h6 class="mb-1 text-muted">Closing Balance</h6>
-                                                    <h5 class="text-danger fw-bold mb-0">
-                                                        ₹{{ number_format($closingBalanceSum ?? 0, 2) }}
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -78,7 +60,12 @@
                             <div class="d-flex justify-content-between">
                                 
                                 <h4 class="card-title mb-0">Transactions List</h4>
-                                <h4>Total Balance Amount:{{$pendingBalanceSum}}</h4>
+                                <h4>
+                                    Total Balance Amount:
+                                    <span class="@if($pendingBalanceSum > 0) text-danger @else text-success @endif text-bold">
+                                        {{ $pendingBalanceSum > 0 ? '-' . number_format(abs($pendingBalanceSum), 2) : number_format($pendingBalanceSum, 2) }}
+                                    </span>
+                                </h4>                            
                             </div>
                             <div class="col-auto float-end ms-auto">
                                 <a href="javascript:void(0);" class="btn btn-sm add-btn payAmount"><i class="fa fa-plus"></i> Pay</a>
@@ -92,10 +79,10 @@
                                         <tr>
                                             <th>S.No.</th>
                                             <th>Date & Time</th>
-                                            <th>Received Amount</th>
-                                            <th>Balance Amount</th>
-                                            <th>Total Amount</th>
-                                            <th>Type</th>
+                                            <th>Opening Amount</th>
+                                            <th>Amount</th>
+                                            <th>Transaction Type</th>
+                                            <th>Closing Amount</th>
                                             <th>Payment Type</th>
                                             <th>Status</th>
                                         </tr>
@@ -272,11 +259,11 @@
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex' }, // Iteration column
                 { data: 'created_at_formatted', name: 'created_at' },
-                { data: 'received', name: 'received', orderable: false, searchable: false },
-                { data: 'balance', name: 'balance', orderable: false, searchable: false },
-                { data: 'total', name: 'total' },
+                { data: 'opening', name: 'opening', orderable: false, searchable: false },
+                { data: 'amount', name: 'amount', orderable: false, searchable: false },
+                { data: 'payment_status', name: 'payment_status' },
+                { data: 'closing', name: 'closing' },
                 { data: 'type', name: 'type' },
-                { data: 'payment_type', name: 'payment_type' },
                 { data: 'status', name: 'status' },
             ]
         });
