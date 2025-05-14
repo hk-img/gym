@@ -12,7 +12,7 @@
                         <h3 class="page-title">Trainers</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.trainers.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.trainers.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
@@ -53,21 +53,22 @@
 
                                     <div class="col-md-6">
                                         <label class="form-label">Experience <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="experience" placeholder="Enter Experience" value="{{ old('experience') }}">
+                                        <input type="text" class="form-control only-numeric" name="experience" placeholder="Enter Experience" value="{{ old('experience') }}">
                                         @error('experience') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Salary <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="salary" placeholder="Enter Salary" value="{{ old('salary') }}">
+                                        <input type="text" class="form-control only-numeric" name="salary" placeholder="Enter Salary" value="{{ old('salary') }}">
                                         @error('salary') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">PT Fees (per month) <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="pt_fees" placeholder="Enter PT Fees" value="{{ old('pt_fees') }}">
+                                        <input type="text" class="form-control only-numeric" name="pt_fees" placeholder="Enter PT Fees" value="{{ old('pt_fees') }}">
                                         @error('pt_fees') <p class="text-danger text-xs pt-1"> {{$message}} </p> @enderror
                                     </div>
+
 
                                     <div class="col-md-6">
                                         <label class="form-label">Joining Date <span class="text-danger">*</span></label>
@@ -92,6 +93,17 @@
 @endsection
 @push('custom-script')
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const numericFields = document.querySelectorAll('.only-numeric');
+
+            numericFields.forEach(input => {
+                input.addEventListener('input', function () {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                }); 
+            });
+        });
+    </script>
+    <script>
         function resetForm() {
             document.getElementById('myForm').reset();
         }
@@ -105,6 +117,7 @@
             }
             reader.readAsDataURL(event.target.files[0]);
         });
+
     </script>
 @endpush
 

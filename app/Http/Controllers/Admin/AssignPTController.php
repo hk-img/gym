@@ -66,7 +66,7 @@ class AssignPTController extends Controller
                 return DataTables::of($data)
                     ->addIndexColumn() // Adds the iteration column
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->addColumn('user_type', function ($row) {
                         $status = $row->user_type == 'new' ? 'success' : 'danger';

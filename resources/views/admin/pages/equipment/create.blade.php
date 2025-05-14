@@ -11,7 +11,7 @@
                         <h3 class="page-title">Equipment</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.equipment.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.equipment.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
@@ -71,7 +71,7 @@
 
                                     <!-- Maintenance Date -->
                                     <div class="col-md-6">
-                                        <label class="form-label">Next Maintenance Date</label>
+                                        <label class="form-label">Next Maintenance Date <span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" name="maintenance_date">
                                         @error('maintenance_date')
                                             <p class="text-danger text-xs pt-1"> {{ $message }} </p>
@@ -93,7 +93,7 @@
 
                                     <!-- Bill No -->
                                     <div class="col-md-6">
-                                        <label class="form-label">Bill No</label>
+                                        <label class="form-label">Bill No <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" name="bill_no" placeholder="Enter Bill">
                                         @error('bill_no')
                                             <p class="text-danger text-xs pt-1"> {{ $message }} </p>

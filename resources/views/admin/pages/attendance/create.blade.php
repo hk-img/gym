@@ -11,7 +11,7 @@
                         <h3 class="page-title">Attendance</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.attendance.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.attendance.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>

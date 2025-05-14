@@ -12,7 +12,7 @@
                         <h3 class="page-title">Assign Plan</h3>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('admin.assign-plan.index') }}">List</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="{{ route('admin.assign-plan.index') }}">List</a></li> -->
                             <li class="breadcrumb-item active">Add</li>
                         </ul>
                     </div>
@@ -156,7 +156,7 @@
                                 
                                 <!-- Submit Button -->
                                 <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>
-                                <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>
+                                <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>
 
                             </form>
                         </div>

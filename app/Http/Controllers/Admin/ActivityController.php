@@ -36,7 +36,7 @@ class ActivityController extends Controller
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->created_at)->format('D M, Y h:i:s A');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D M, Y h:i:s A');
                     })
                     ->editColumn('name', function ($row) {
                         return '<h2 class="table-avatar">
@@ -255,7 +255,7 @@ class ActivityController extends Controller
                 'required_if:payment_type,partial',
                 'nullable',
             ],
-            'discount' => 'nullable|numeric',
+            'discount' => 'required|numeric',
         ]);
 
         DB::beginTransaction();
@@ -374,7 +374,7 @@ class ActivityController extends Controller
                 return DataTables::of($data)
                     ->addIndexColumn() // Adds the iteration column
                     ->addColumn('created_at_formatted', function ($row) {
-                        return \Carbon\Carbon::parse($row->created_at)->format('D m, Y h:i:s');
+                        return \Carbon\Carbon::parse($row->created_at)->format('d D m, Y h:i:s');
                     })
                     ->addColumn('user_type', function ($row) {
                         $status = $row->user_type == 'new' ? 'success' : 'danger';

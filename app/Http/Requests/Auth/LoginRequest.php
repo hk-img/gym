@@ -32,6 +32,18 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'The email field is required.',
+            'email.string'   => 'The email must be a valid string.',
+            'email.email'    => 'Please enter a valid email address.',
+            
+            'password.required' => 'The password field is required.',
+            'password.string'   => 'The password must be a valid string.',
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *
@@ -44,8 +56,10 @@ class LoginRequest extends FormRequest
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
+            $userExists = \App\Models\User::where('email', $this->email)->exists();
+
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                $userExists ? 'password' : 'email' => trans('auth.failed'),
             ]);
         }
 

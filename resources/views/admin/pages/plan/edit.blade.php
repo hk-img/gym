@@ -12,7 +12,7 @@
                     <h3 class="page-title">Plan Manager</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.plan.index') }}">List</a></li>
+                        <!-- <li class="breadcrumb-item"><a href="{{ route('admin.plan.index') }}">List</a></li> -->
                         <li class="breadcrumb-item active">Edit</li>
                     </ul>
                 </div>

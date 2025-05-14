@@ -23,7 +23,6 @@
                 </div>
             </div>
             <!-- /Page Header -->
-
             <div class="row justify-content-center">
                 <div class="col-lg-12">
                     <div class="card shadow-lg border-0 rounded-lg">
@@ -59,7 +58,7 @@
                                     <label class="col-form-label col-md-2">Months <span class="text-danger">*</span></label>
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" name="duration" placeholder="Enter Month" oninput="validateMonth(this)">
-                                        @error('months')
+                                        @error('duration')
                                             <p class="text-danger text-xs pt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -68,7 +67,9 @@
                                     <label class="col-form-label col-md-2">Discount<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
                                         <input type="text" id="discount" class="form-control" placeholder="Enter the discount" name="discount" onkeypress="return onlyNumbers(event)" value="{{old('discount')}}">
-
+                                        @error('discount')
+                                            <p class="text-danger text-xs pt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -125,7 +126,7 @@
 
                                 <!-- Submit Button -->
                                 <button type="submit" class="btn btn-primary me-2" value="submit">Save</button>
-                                <button type="button" class="btn btn-light" onclick="resetForm()">Reset</button>
+                                <button type="button" class="btn btn-secondary px-4" onclick="resetForm()">Reset</button>
 
                             </form>
                         </div>

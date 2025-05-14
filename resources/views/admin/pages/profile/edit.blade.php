@@ -98,33 +98,48 @@
                                         <div class="col-sm-4">
                                             <div class="input-block mb-3">
                                                 <label class="col-form-label">{{ $day }} <span class="text-danger">*</span></label>
+
                                                 <div class="input-group">
                                                     <span class="input-group-text">Open</span>
-                                                    <input type="time" name="working_hours[{{ $day }}][open_time]" 
-                                                        value="{{ old('working_hours.' . $day . '.open_time', isset($workingHours[$index]) ? \Carbon\Carbon::parse($workingHours[$index]->open_time)->format('H:i') : '')  }}"
-                                                        class="form-control @error('working_hours.' . $day . '.open_time') is-invalid @enderror">
+                                                    <input type="time" 
+                                                        name="working_hours[{{ $day }}][open_time]" 
+                                                        value="{{ old('working_hours.' . $day . '.open_time', isset($workingHours[$index]) ? \Carbon\Carbon::parse($workingHours[$index]->open_time)->format('H:i') : '') }}"
+                                                        class="form-control @error('working_hours.' . $day . '.open_time') is-invalid @enderror"
+                                                        data-day="{{ $day }}"
+                                                        {{ old('working_hours.' . $day . '.is_closed', isset($workingHours[$index]) && $workingHours[$index]->is_closed) ? 'disabled' : '' }}>
+                                                    
                                                     @error('working_hours.' . $day . '.open_time')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+
                                                 <div class="input-group mt-2">
                                                     <span class="input-group-text">Close</span>
-                                                    <input type="time" name="working_hours[{{ $day }}][close_time]" 
-                                                        value="{{ old('working_hours.' . $day . '.close_time', isset($workingHours[$index]) ? \Carbon\Carbon::parse($workingHours[$index]->close_time)->format('H:i') : '')  }}"
-                                                        class="form-control @error('working_hours.' . $day . '.close_time') is-invalid @enderror">
+                                                    <input type="time" 
+                                                        name="working_hours[{{ $day }}][close_time]" 
+                                                        value="{{ old('working_hours.' . $day . '.close_time', isset($workingHours[$index]) ? \Carbon\Carbon::parse($workingHours[$index]->close_time)->format('H:i') : '') }}"
+                                                        class="form-control @error('working_hours.' . $day . '.close_time') is-invalid @enderror"
+                                                        data-day="{{ $day }}"
+                                                        {{ old('working_hours.' . $day . '.is_closed', isset($workingHours[$index]) && $workingHours[$index]->is_closed) ? 'disabled' : '' }}>
+                                                    
                                                     @error('working_hours.' . $day . '.close_time')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
+
                                                 <div class="form-check mt-2">
-                                                    <input type="checkbox" name="working_hours[{{ $day }}][is_closed]" 
-                                                        class="form-check-input" id="closed_{{ $day }}" 
-                                                        {{ old('working_hours.' . $day . '.is_closed', isset($workingHours[$index]) && $workingHours[$index]->is_closed ? 'checked' : '') }}>
+                                                    <input type="checkbox" 
+                                                        name="working_hours[{{ $day }}][is_closed]" 
+                                                        class="form-check-input closed-checkbox" 
+                                                        id="closed_{{ $day }}" 
+                                                        data-day="{{ $day }}"
+                                                        {{ old('working_hours.' . $day . '.is_closed', isset($workingHours[$index]) && $workingHours[$index]->is_closed) ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="closed_{{ $day }}">Closed</label>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
+
                                 </div>
                                 <div class="submit-section">
                                     <button class="btn btn-primary submit-btn" type="submit">Save Changes</button>
@@ -272,6 +287,16 @@
 @endsection
 @push('custom-script')
     <script>
+
+        $(document).ready(function () {
+            $('.closed-checkbox').on('change', function () {
+                const day = $(this).data('day');
+                const isChecked = $(this).is(':checked');
+
+                $(`.time-input[data-day="${day}"]`).prop('disabled', isChecked);
+            });
+        });
+        
         $(document).ready(function() {
              $('#profileUpdateForm').on('submit', function(e) {
                 e.preventDefault();
