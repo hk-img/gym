@@ -7,7 +7,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
-
+use Carbon\Carbon;  
+use Mail;
 class PasswordResetLinkController extends Controller
 {
     /**
@@ -23,26 +24,39 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
-            'email' => ['required', 'email', 'exists:users,email'], // Optional: check if email exists
-        ], [
-            'email.exists' => 'We couldn\'t find a user with that email address.',
+            'email' => ['required', 'email', 'exists:users,email'],
         ]);
 
-        // Attempt to send the reset link to the user's email
-        $status = Password::sendResetLink($request->only('email'));
+        // Generate a reset token
+        $token = \Str::random(64);
 
-        // Handle the response status
-        if ($status === Password::RESET_LINK_SENT) {
-            return back()->with('status', trans($status));
-        }
+        // Store the token in the password_resets table
+        \DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $request->email],
+            [
+                'email' => $request->email,
+                'token' => bcrypt($token),
+                'created_at' => Carbon::now()
+            ]
+        );
 
-        return back()
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => trans($status)]);
+        // Create reset URL with plain token
+        $resetUrl = url(route('admin.password.reset', ['token' => $token, 'email' => $request->email], false));
+
+        // Send email
+        Mail::send('emails.reset-password', [
+            'email' => $request->email,
+            'resetUrl' => $resetUrl,
+            'messageText' => 'You requested a password reset. Click the button below to reset your password.'
+        ], function ($mail) use ($request) {
+            $mail->to($request->email)
+                    ->subject('Password Reset Request - GYM');
+        });
+
+        return back()->with('status', 'Password reset link has been sent to your email.');
     }
 
 }

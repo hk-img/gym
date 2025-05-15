@@ -23,7 +23,9 @@
                 </div>
             </div>
             <!-- /Page Header -->
-
+            @if (session('status_error'))
+                <div class="alert alert-danger text-center mb-3">{{ session('success') }}</div>
+            @endif
             <!-- Form -->
             <div class="row">
                 <div class="col-lg-12">

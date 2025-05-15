@@ -125,7 +125,4 @@ Route::middleware(['auth','verify_admin','revalidate','check_status'])->group(fu
 });
 
 
-Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-                ->name('password.reset')->middleware('guest');
-
 require __DIR__.'/auth.php';
