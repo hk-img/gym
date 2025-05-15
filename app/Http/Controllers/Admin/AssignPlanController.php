@@ -197,7 +197,7 @@ class AssignPlanController extends Controller implements HasMiddleware
             $receivedAmt = $request->filled('received_amt') ? $request->received_amt : $totalAmt;
 
             if ($paymentType === 'partial' && $receivedAmt > $totalAmt) {
-                return redirect()->route('admin.assign-plan.create')->with('error', 'Received amount cannot exceed the total payable amount.');
+                return back()->with('status_error', 'Received amount cannot exceed the total payable amount.');
             }
 
             $startDate = now();

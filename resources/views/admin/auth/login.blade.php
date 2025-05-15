@@ -9,7 +9,11 @@
                 <a href="javascript:void(0);"><img src="{{asset('assets/img/gym_logo.png')}}" alt="Dreamguy's Technologies"></a>
             </div>
             <!-- /Account Logo -->
-
+                @if (session('status'))
+                    <div class="alert alert-success text-center mb-3">
+                        {{ session('status') }}
+                    </div>
+                @endif
             <div class="account-box">
                 <div class="account-wrapper">
                     <h3 class="account-title">Login</h3>
