@@ -192,12 +192,21 @@ class AssignPlanController extends Controller implements HasMiddleware
 
             $plan       = Plan::findOrFail($planId);
             $planPrice  = $plan->price;
+
+            if ($paymentType === 'partial' && ($planPrice*$plan->duration) < $discount) {
+                return response()->json([
+                    'message' => 'Discount amount cannot exceed the plan price.'
+                ], 422);    
+            }
+            
             $duration   = intval($plan->duration);
             $totalAmt   = $planPrice - $discount;
             $receivedAmt = $request->filled('received_amt') ? $request->received_amt : $totalAmt;
 
             if ($paymentType === 'partial' && $receivedAmt > $totalAmt) {
-                return back()->with('status_error', 'Received amount cannot exceed the total payable amount.');
+                return response()->json([
+                    'message' => 'Received amount cannot exceed the total payable amount.'
+                ], 422);    
             }
 
             $startDate = now();
@@ -243,7 +252,11 @@ class AssignPlanController extends Controller implements HasMiddleware
 
             DB::commit();
 
-            return redirect()->route('admin.assign-plan.index')->with('success', 'Plan assigned successfully.');
+            return response()->json([
+                    'message' => 'Plan assigned successfully.',
+                    "url"=>url('admin/assign-plan')
+            ], 200);    
+
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error('Plan assignment failed: ' . $e->getMessage());

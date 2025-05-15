@@ -24,7 +24,9 @@
             </div>
             <!-- /Page Header -->
             @if (session('status_error'))
-                <div class="alert alert-danger text-center mb-3">{{ session('success') }}</div>
+                <div class="alert alert-danger">
+                    {{ session('status_error') }}
+                </div>
             @endif
             <!-- Form -->
             <div class="row">
@@ -34,7 +36,7 @@
                             <h4 class="card-title mb-0">Assign Plan Form</h4>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.assign-plan.store') }}" method="post" id="myForm" enctype="multipart/form-data">
+                            <form id="assignForm" action="{{ route('admin.assign-plan.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
                                 <div class="input-block mb-3 row">
@@ -98,11 +100,13 @@
                                     </div>
                                 </div>
 
-                                 <div class="input-block mb-3 row" id="received_amtField" style="display: {{ $errors->has('received_amt') ? '' : 'none' }};">
+                                <div class="input-block mb-3 row" id="received_amtField" style="display: {{ $errors->has('received_amt') ? '' : 'none' }};">
                                     <label class="col-form-label col-md-2">Received Amount<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
-                                        <input type="text" name="received_amt" id="received_amt" class="form-control" placeholder="Enter Received Amount"
-                                            value="{{ old('received_amt') }}" maxLength="10">
+                                        <input type="text" name="received_amt" id="received_amt"
+                                            class="form-control" placeholder="Enter Received Amount"
+                                            value="{{ old('received_amt') }}" maxLength="10"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                                         @error('received_amt') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>
@@ -241,7 +245,8 @@
                     $('#received_amtField').hide();
                 }
             });
-    });
+        });
+
     </script>
 @endpush
 

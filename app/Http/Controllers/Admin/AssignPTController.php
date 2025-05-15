@@ -161,7 +161,8 @@ class AssignPTController extends Controller
             $user = User::where('id',$request->user_id)->where('membership_status','pending')->first();
             
             if($user){
-                return redirect()->route('admin.assign-pt.create')->with('error', 'Membership expired successfully.');
+                return response()->json(['message'=>'Membership expired successfully.'],422);
+                // return redirect()->route('admin.assign-pt.create')->with('error', 'Membership expired successfully.');
             }
 
             $input = $request->all();
@@ -181,7 +182,9 @@ class AssignPTController extends Controller
             if($trainer && $request->payment_type == "partial"){
                 
                 if($request->received_amt > ($trainer->pt_fees * $months)){
-                    return redirect()->back()->with('error', 'Received amount cannot be greater than PT price');
+                    return response()->json([
+                        'message' => 'Received amount cannot exceed the total payable amount.'
+                    ], 422);    
                 }
             }
             
@@ -229,8 +232,13 @@ class AssignPTController extends Controller
             $this->setTransactions($dataArray);
             $this->setClosingAmt($assignPlan->user_id, auth()->user()->id);
             DB::commit();
+
+            return response()->json([
+                    'message' => 'PT assigned successfully.',
+                    "url"=>url('admin/assign-pt')
+            ], 200);  
         
-            return redirect()->route('admin.assign-pt.index')->with('success', 'PT assigned successfully.');
+            // return redirect()->route('admin.assign-pt.index')->with('success', 'PT assigned successfully.');
 
         // } catch (\Throwable $e) {
         //     DB::rollBack();

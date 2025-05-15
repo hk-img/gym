@@ -274,7 +274,11 @@ class ActivityController extends Controller
 
             // Validate partial payment
             if ($validated['payment_type'] === "partial" && $validated['received_amt'] > $totalAmount) {
-                return redirect()->back()->with('error', 'Received amount cannot be greater than activity price');
+
+                return response()->json([
+                    'message' => 'Discount amount cannot exceed the activity price.'
+                ], 422); 
+                // return redirect()->back()->with('error', 'Received amount cannot be greater than activity price');
             }
 
             // Dates
@@ -323,7 +327,12 @@ class ActivityController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.activity-assign-list')->with('success', 'Activity assigned successfully.');
+            return response()->json([
+                    'message' => 'Activity assigned successfully.',
+                    "url"=>url('admin/activity-assign-list')
+            ], 200);
+
+            // return redirect()->route('admin.activity-assign-list')->with('success', 'Activity assigned successfully.');
         } catch (\Throwable $e) {
             DB::rollBack();
             Log::error($e->getMessage());

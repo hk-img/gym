@@ -30,7 +30,7 @@
                             <h4 class="card-title mb-0">Assign</h4>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('admin.assign-store') }}" method="post" id="myForm" enctype="multipart/form-data">
+                            <form action="{{ route('admin.assign-store') }}" method="post" id="assignForm" enctype="multipart/form-data">
                                 @csrf
                                 <!-- User -->
                                 <div class="input-block mb-3 row">
@@ -95,8 +95,10 @@
                                  <div class="input-block mb-3 row" id="received_amtField" style="display: {{ $errors->has('received_amt') ? '' : 'none' }};">
                                     <label class="col-form-label col-md-2">Received Amount<span class="text-danger"> *</span></label>
                                     <div class="col-md-10">
-                                        <input type="text" name="received_amt" id="received_amt" class="form-control" placeholder="Enter Received Amount"
-                                            value="{{ old('received_amt') }}" maxLength="10">
+                                        <input type="text" name="received_amt" id="received_amt"
+                                            class="form-control" placeholder="Enter Received Amount"
+                                            value="{{ old('received_amt') }}" maxLength="10"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '')">
                                         @error('received_amt') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                     </div>
                                 </div>

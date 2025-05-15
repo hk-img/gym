@@ -76,182 +76,183 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card-group m-b-30">
-                                    @php
-                                        $currentMonthMembers = isset($data['member_current_month']) ? $data['member_current_month'] : 0;
-                                        $totalMembers = isset($data['member']) ? $data['member'] : 0;
-                                        $percentage = $totalMembers > 0 ? ($currentMonthMembers / $totalMembers) * 100 : 0;
-                                    @endphp
+                        <div class="col-md-12">
+                            <div class="card-group m-b-30 gap-2">
+                                @php
+                                    $currentMonthMembers = isset($data['member_current_month']) ? $data['member_current_month'] : 0;
+                                    $totalMembers = isset($data['member']) ? $data['member'] : 0;
+                                    $percentage = $totalMembers > 0 ? ($currentMonthMembers / $totalMembers) * 100 : 0;
+                                @endphp
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <div>
-                                                    <span class="d-block">New Members (current month)</span>
-                                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <div>
+                                                <span class="d-block">New Members (current month)</span>
                                             </div>
-                                            <h3 class="mb-3">{{ $currentMonthMembers }}</h3>
-                                            <div class="progress height-five mb-2">
-                                                <div class="progress-bar bg-primary" 
-                                                    role="progressbar" 
-                                                    style="width: {{ number_format($percentage, 2) }}%" 
-                                                    aria-valuenow="{{ number_format($percentage, 0) }}"
-                                                    aria-valuemin="0" 
-                                                    aria-valuemax="100">
-                                                </div>
-                                            </div>
-                                            <p class="mb-0">Overall Members {{ $totalMembers }}</p>
                                         </div>
+                                        <h3 class="mb-3">{{ $currentMonthMembers }}</h3>
+                                        <div class="progress height-five mb-2">
+                                            <div class="progress-bar bg-primary" 
+                                                role="progressbar" 
+                                                style="width: {{ number_format($percentage, 2) }}%" 
+                                                aria-valuenow="{{ number_format($percentage, 0) }}"
+                                                aria-valuemin="0" 
+                                                aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                        <p class="mb-0">Overall Members {{ $totalMembers }}</p>
                                     </div>
+                                </div>
 
-                                    @php
-                                        $current = isset($data['current_month']) ? $data['current_month'] : 0;
-                                        $previous = isset($data['previous_month']) ? $data['previous_month'] : 0;
+                                @php
+                                    $current = !empty($data['current_month']) && isset($data['current_month']) ? $data['current_month'] : 0;
+                                    $previous = !empty($data['previous_month']) && isset($data['previous_month']) ? $data['previous_month'] : 0;
 
-                                        if ($previous > 0) {
-                                            $percentageChange = (($current - $previous) / $previous) * 100;
-                                        } elseif ($current > 0) {
-                                            $percentageChange = 100;
-                                        } else {
-                                            $percentageChange = 0;
-                                        }
+                                    if ($previous > 0) {
+                                        $percentageChange = (($current - $previous) / $previous) * 100;
+                                    } elseif ($current > 0) {
+                                        $percentageChange = 100;
+                                    } else {
+                                        $percentageChange = 0;
+                                    }
 
+                                    // Safe division
+                                    if (max($current, $previous) > 0) {
                                         $progressWidth = min(100, max(0, round(($current / max($current, $previous)) * 100)));
-                                    @endphp
+                                    } else {
+                                        $progressWidth = 0;
+                                    }
+                                @endphp
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <div>
-                                                    <span class="d-block">Earning (current month)</span>
-                                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <div>
+                                                <span class="d-block">Earning (current month)</span>
                                             </div>
-
-                                            <h3 class="mb-3">₹{{ $current }}</h3>
-
-                                            <div class="progress height-five mb-2">
-                                                <div class="progress-bar bg-primary"
-                                                    role="progressbar"
-                                                    style="width: {{ $progressWidth }}%"
-                                                    aria-valuenow="{{ $progressWidth }}"
-                                                    aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-
-                                            <p class="mb-0">Previous Month <span class="text-muted">₹{{ $previous }}</span></p>
                                         </div>
+
+                                        <h3 class="mb-3">₹{{ $current }}</h3>
+
+                                        <div class="progress height-five mb-2">
+                                            <div class="progress-bar bg-primary"
+                                                role="progressbar"
+                                                style="width: {{ $progressWidth }}%"
+                                                aria-valuenow="{{ $progressWidth }}"
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+
+                                        <p class="mb-0">Previous Month <span class="text-muted">₹{{ $previous }}</span></p>
                                     </div>
+                                </div>
 
 
-                                    @php
-                                        $current = isset($data['current_month_income']) ? $data['current_month_income'] : 0;
-                                        $previous = isset($data['previous_month_income']) ? $data['previous_month_income'] : 0;
+                                @php
+                                    $current = isset($data['current_month_income']) ? $data['current_month_income'] : 0;
+                                    $previous = isset($data['previous_month_income']) ? $data['previous_month_income'] : 0;
 
-                                        if ($previous > 0) {
-                                            $percentageChange = (($current - $previous) / $previous) * 100;
-                                        } elseif ($current > 0) {
-                                            $percentageChange = 100; // No previous value but current exists
-                                        } else {
-                                            $percentageChange = 0;
-                                        }
+                                    if ($previous > 0) {
+                                        $percentageChange = (($current - $previous) / $previous) * 100;
+                                    } elseif ($current > 0) {
+                                        $percentageChange = 100; // No previous value but current exists
+                                    } else {
+                                        $percentageChange = 0;
+                                    }
 
-                                        $progressWidth = min(100, max(0, round($percentageChange))); // Limit 0–100 for bar
-                                    @endphp
+                                    $progressWidth = min(100, max(0, round($percentageChange))); // Limit 0–100 for bar
+                                @endphp
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between mb-3">
-                                                <div>
-                                                    <span class="d-block">Total Pending Amount</span>
-                                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <div>
+                                                <span class="d-block">Total Pending Amount</span>
                                             </div>
-                                            <h3 class="mb-3">₹{{ $current }}</h3>
-
-                                            <div class="progress height-five mb-2">
-                                                <div class="progress-bar bg-primary"
-                                                    role="progressbar"
-                                                    style="width: {{ $progressWidth }}%"
-                                                    aria-valuenow="{{ $progressWidth }}"
-                                                    aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-
-                                            <p class="mb-0">Previous Month <span class="text-muted">₹{{ $previous }}</span></p>
                                         </div>
+                                        <h3 class="mb-3">₹{{ $current }}</h3>
+
+                                        <div class="progress height-five mb-2">
+                                            <div class="progress-bar bg-primary"
+                                                role="progressbar"
+                                                style="width: {{ $progressWidth }}%"
+                                                aria-valuenow="{{ $progressWidth }}"
+                                                aria-valuemin="0"
+                                                aria-valuemax="100"></div>
+                                        </div>
+
+                                        <p class="mb-0">Previous Month <span class="text-muted">₹{{ $previous }}</span></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 d-flex">
-                                <div class="card card-table flex-fill">
-                                    <div class="card-header">
-                                        <h3 class="card-title mb-0">Clients (current month)</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table custom-table mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Email</th>
-                                                        <th>Status</th>
-                                                        <th class="text-end">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if(!empty($data['members_list']))
-                                                        @foreach($data['members_list'] as $member)  
-                                                            <tr>
-                                                                <td>
-                                                                    <h2 class="table-avatar">
-                                                                        <a href="javascript:void(0);" class="avatar">
-                                                                            <img src="{{ $member->getFirstMediaUrl('images', 'thumb') }}" 
-                                                                                alt="User Image"
-                                                                                onerror="this.onerror=null; this.src='{{ asset('assets/img/user.jpg') }}';">
+                        <div class="col-md-12 d-flex">
+                            <div class="card card-table flex-fill">
+                                <div class="card-header">
+                                    <h3 class="card-title mb-0">Clients (current month)</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table custom-table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Status</th>
+                                                    <th class="text-end">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if(!empty($data['members_list']))
+                                                    @foreach($data['members_list'] as $member)  
+                                                        <tr>
+                                                            <td>
+                                                                <h2 class="table-avatar">
+                                                                    <a href="javascript:void(0);" class="avatar">
+                                                                        <img src="{{ $member->getFirstMediaUrl('images', 'thumb') }}" 
+                                                                            alt="User Image"
+                                                                            onerror="this.onerror=null; this.src='{{ asset('assets/img/user.jpg') }}';">
+                                                                    </a>
+                                                                    <a href="client-profile.html">{{ ucfirst($member->name) }}</a>
+                                                                </h2>
+                                                            </td>
+                                                            <td>
+                                                                {{$member->phone}}
+                                                            </td>
+                                                            <td>
+                                                                <div class="dropdown action-label">
+                                                                    <a class="btn btn-white btn-sm btn-rounded"
+                                                                        href="javacript:void(0);">
+                                                                        <i class="fa-regular fa-circle-dot text-success"></i> {{$member->membership_status}}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="text-end">
+                                                                <div class="dropdown dropdown-action">
+                                                                    <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                        <i class="material-icons">more_vert</i>
+                                                                    </a>
+                                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                                        <a href="{{ route('admin.users.show', base64_encode($member->id)) }}" class="dropdown-item">
+                                                                            <i class="fa-solid fa-eye me-2"></i> View
                                                                         </a>
-                                                                        <a href="client-profile.html">{{ ucfirst($member->name) }}</a>
-                                                                    </h2>
-                                                                </td>
-                                                                <td>
-                                                                    {{$member->phone}}
-                                                                </td>
-                                                                <td>
-                                                                    <div class="dropdown action-label">
-                                                                        <a class="btn btn-white btn-sm btn-rounded"
-                                                                            href="javacript:void(0);">
-                                                                            <i class="fa-regular fa-circle-dot text-success"></i> {{$member->membership_status}}
-                                                                        </a>
+                                                                        {{-- Add more actions if needed --}}
+                                                                        {{-- <a href="#" class="dropdown-item"><i class="fa-solid fa-edit me-2"></i> Edit</a> --}}
+                                                                        {{-- <a href="#" class="dropdown-item text-danger"><i class="fa-solid fa-trash me-2"></i> Delete</a> --}}
                                                                     </div>
-                                                                </td>
-                                                                <td class="text-end">
-                                                                    <div class="dropdown dropdown-action">
-                                                                        <a href="javascript:void(0);" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                            <i class="material-icons">more_vert</i>
-                                                                        </a>
-                                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                                            <a href="{{ route('admin.users.show', base64_encode($member->id)) }}" class="dropdown-item">
-                                                                                <i class="fa-solid fa-eye me-2"></i> View
-                                                                            </a>
-                                                                            {{-- Add more actions if needed --}}
-                                                                            {{-- <a href="#" class="dropdown-item"><i class="fa-solid fa-edit me-2"></i> Edit</a> --}}
-                                                                            {{-- <a href="#" class="dropdown-item text-danger"><i class="fa-solid fa-trash me-2"></i> Delete</a> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
+                                                                </div>
+                                                            </td>
 
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <div class="card-footer">
-                                        <a href="{{route('admin.users.index')}}">View all clients</a>
-                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <a href="{{route('admin.users.index')}}">View all clients</a>
                                 </div>
                             </div>
                         </div>

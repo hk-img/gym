@@ -549,6 +549,46 @@
 
 
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#assignForm').on('submit', function(e) {
+                e.preventDefault(); 
+
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = form.serialize();
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                        });
+                        
+                        setTimeout(() => {
+                            window.location.href=response.url;
+                        }, 1000);
+                        form[0].reset(); // Reset form
+                    },
+                    error: function(xhr) {
+                        // Show error message
+                        let err = xhr.responseJSON?.message || 'Something went wrong.';
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: err,
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 
